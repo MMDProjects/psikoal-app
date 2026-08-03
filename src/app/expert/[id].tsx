@@ -14,18 +14,15 @@ import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { EmptyState } from '@/core/components/molecules/EmptyState'
 import { RatingRow } from '@/core/components/molecules/RatingRow'
 import { StatPill } from '@/core/components/molecules/StatPill'
-import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { useRefresh } from '@/core/hooks'
 import { getFullName, getInitials } from '@/core/utils/personName'
 import { formatDate } from '@/core/utils/formatDate'
 import { SESSION_TYPE_LABELS } from '@/domains/listing'
-import { useAuthStore } from '@/domains/auth'
 import { useExpertProfileQuery, useExpertReviewsQuery } from '@/domains/expert'
 
 export default function ExpertProfileScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const router = useRouter()
-  const role = useAuthStore((s) => s.role)
 
   const expertQuery = useExpertProfileQuery(id ?? '')
   const { data: expert, isLoading, isError } = expertQuery
@@ -33,11 +30,8 @@ export default function ExpertProfileScreen() {
   const reviews = reviewsQuery.data
   const { isRefreshing, onRefresh } = useRefresh(expertQuery, reviewsQuery)
   const insets = useSafeAreaInsets()
-  const bottomBarHeight = 56 + insets.bottom
 
   const initials = expert?.initials ?? getInitials(expert)
-
-  const canOffer = role === 'client' && (expert?.acceptsOffers ?? false)
 
   return (
     <View className="flex-1 bg-surface-base dark:bg-dark-bg">
@@ -80,7 +74,7 @@ export default function ExpertProfileScreen() {
       {!isLoading && !isError && expert && (
         <>
           <ScrollView
-            contentContainerStyle={{ paddingTop: insets.top + 8, paddingBottom: canOffer ? bottomBarHeight + 16 : 48 }}
+            contentContainerStyle={{ paddingTop: insets.top + 8, paddingBottom: 48 }}
             showsVerticalScrollIndicator={false}
             refreshControl={<AppRefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
           >
@@ -238,12 +232,6 @@ export default function ExpertProfileScreen() {
               </>
             )}
           </ScrollView>
-
-          {canOffer && (
-            <BottomActionBar
-              actions={[{ label: 'Teklif İste', onPress: () => router.push(`/offer/new?expertId=${id}` as never) }]}
-            />
-          )}
         </>
       )}
     </View>

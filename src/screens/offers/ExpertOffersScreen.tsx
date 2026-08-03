@@ -13,6 +13,7 @@ import { EmptyState } from '@/core/components/molecules/EmptyState'
 import { HeaderActions } from '@/core/components/molecules/HeaderActions'
 import { useRefresh } from '@/core/hooks'
 import { formatDate } from '@/core/utils/formatDate'
+import { useUnreadNotificationCount } from '@/domains/notification'
 import { useExpertOffersQuery, OFFER_STATUS_CONFIG } from '@/domains/offer'
 
 import type { OfferStatus } from '@/domains/offer'
@@ -34,12 +35,13 @@ export function ExpertOffersScreen() {
 
   const offers = offersQuery.data?.data ?? []
   const offerCount = offersQuery.data?.meta.total ?? 0
+  const unreadCount = useUnreadNotificationCount()
 
   return (
     <View className="flex-1 bg-surface-base dark:bg-dark-bg">
       <HeaderActions
         actions={[
-          { icon: 'Bell', accessibilityLabel: 'Bildirimler', onPress: () => router.push('/notifications') },
+          { icon: 'Bell', accessibilityLabel: 'Bildirimler', badgeCount: unreadCount, onPress: () => router.push('/notifications') },
         ]}
       />
 

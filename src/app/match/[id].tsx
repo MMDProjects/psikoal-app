@@ -1,4 +1,4 @@
-import { ScrollView, View } from 'react-native'
+import { Alert, ScrollView, View } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -12,11 +12,12 @@ import { Text } from '@/core/components/atoms/Text'
 import { BackButton } from '@/core/components/molecules/BackButton'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { EmptyState } from '@/core/components/molecules/EmptyState'
+import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { useRefresh } from '@/core/hooks'
 import { formatDate } from '@/core/utils/formatDate'
 import { AssessmentResultSummary } from '@/domains/assessment'
 import { SESSION_TYPE_LABELS } from '@/domains/listing'
-import { useMatchDetailQuery, MATCH_STATUS_CONFIG } from '@/domains/match'
+import { useMatchDetailQuery, useReleaseMatchMutation, MATCH_STATUS_CONFIG } from '@/domains/match'
 import { OFFER_STATUS_CONFIG } from '@/domains/offer'
 
 export default function MatchDetailScreen() {
@@ -27,6 +28,24 @@ export default function MatchDetailScreen() {
   const { data: match, isLoading, isError } = matchQuery
   const { isRefreshing, onRefresh } = useRefresh(matchQuery)
   const insets = useSafeAreaInsets()
+
+  const { mutate: releaseMatch, isPending: isReleasing } = useReleaseMatchMutation()
+
+  const handleRelease = () => {
+    if (!match) return
+    Alert.alert(
+      'Eşleşmeyi Sonlandır',
+      'Eşleşme sonlandırma iki tarafın onayını gerektirir. Sonlandırma talebiniz karşı tarafa iletilecek. Devam etmek istiyor musunuz?',
+      [
+        { text: 'Vazgeç', style: 'cancel' },
+        {
+          text: 'Sonlandır',
+          style: 'destructive',
+          onPress: () => releaseMatch({ matchId: match.id }),
+        },
+      ]
+    )
+  }
 
   const statusCfg      = match ? MATCH_STATUS_CONFIG[match.status] : null
   const clientInitials = match?.client.initials ?? ''
@@ -75,7 +94,10 @@ export default function MatchDetailScreen() {
 
       {!isLoading && !isError && match && (
         <ScrollView
-          contentContainerStyle={{ paddingTop: insets.top + 8, paddingBottom: 48 }}
+          contentContainerStyle={{
+            paddingTop: insets.top + 8,
+            paddingBottom: match?.status === 'ACTIVE' ? 56 + insets.bottom + 16 : 48,
+          }}
           showsVerticalScrollIndicator={false}
           refreshControl={<AppRefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
         >
@@ -252,6 +274,18 @@ export default function MatchDetailScreen() {
             </>
           )}
         </ScrollView>
+      )}
+
+      {!isLoading && !isError && match?.status === 'ACTIVE' && (
+        <BottomActionBar
+          actions={[{
+            label: 'Eşleşmeyi Sonlandır',
+            loadingLabel: 'Sonlandırılıyor...',
+            onPress: handleRelease,
+            variant: 'danger',
+            isLoading: isReleasing,
+          }]}
+        />
       )}
     </View>
   )

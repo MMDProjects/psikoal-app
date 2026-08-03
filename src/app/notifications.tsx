@@ -1,4 +1,4 @@
-import { ScrollView, useColorScheme, View } from 'react-native'
+import { Pressable, ScrollView, useColorScheme, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
@@ -9,7 +9,12 @@ import { BackButton } from '@/core/components/molecules/BackButton'
 import { EmptyState } from '@/core/components/molecules/EmptyState'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { useRefresh } from '@/core/hooks'
-import { useNotificationsQuery, NOTIFICATION_TYPE_CONFIG } from '@/domains/notification'
+import {
+  useNotificationsQuery,
+  useMarkNotificationReadMutation,
+  useMarkAllNotificationsReadMutation,
+  NOTIFICATION_TYPE_CONFIG,
+} from '@/domains/notification'
 
 export default function NotificationsScreen() {
   const insets = useSafeAreaInsets()
@@ -18,6 +23,10 @@ export default function NotificationsScreen() {
   const { data, isLoading, isError, refetch } = notificationsQuery
   const { isRefreshing, onRefresh } = useRefresh(notificationsQuery)
   const notifications = data?.data ?? []
+  const unreadCount = data?.meta.unreadCount ?? 0
+
+  const { mutate: markRead } = useMarkNotificationReadMutation()
+  const { mutate: markAllRead, isPending: isMarkingAll } = useMarkAllNotificationsReadMutation()
 
   return (
     <View className="flex-1 bg-surface-base dark:bg-dark-bg">
@@ -30,6 +39,21 @@ export default function NotificationsScreen() {
         refreshControl={<AppRefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
       >
         <ScreenTitle title="Bildirimler" />
+
+        {unreadCount > 0 && !isLoading && !isError && (
+          <Pressable
+            onPress={() => markAllRead()}
+            disabled={isMarkingAll}
+            className="flex-row items-center justify-end gap-1.5 px-4 pb-2 active:opacity-70"
+            accessibilityRole="button"
+            accessibilityLabel="Tümünü okundu işaretle"
+          >
+            <Icon name="CheckCheck" size={14} color="#0EA5E9" />
+            <Text variant="caption" className="text-sky-600 dark:text-sky-400 font-semibold">
+              Tümünü okundu işaretle
+            </Text>
+          </Pressable>
+        )}
 
         {isLoading ? (
           <View>
@@ -53,7 +77,12 @@ export default function NotificationsScreen() {
             return (
               <View key={notif.id}>
                 {index > 0 && <View className="mx-4 h-px bg-neutral-200 dark:bg-neutral-800" />}
-                <View className="flex-row items-start gap-3 px-4 py-4">
+                <Pressable
+                  onPress={() => { if (!notif.read) markRead(notif.id) }}
+                  className="flex-row items-start gap-3 px-4 py-4 active:opacity-70"
+                  accessibilityRole="button"
+                  accessibilityLabel={notif.read ? notif.title : `${notif.title}, okunmadı`}
+                >
                   {!notif.read && (
                     <View className="absolute left-1.5 top-6 w-1.5 h-1.5 rounded-full bg-sky-500" />
                   )}
@@ -71,7 +100,7 @@ export default function NotificationsScreen() {
                       {notif.timeLabel}
                     </Text>
                   </View>
-                </View>
+                </Pressable>
               </View>
             )
           })

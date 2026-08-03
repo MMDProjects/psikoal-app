@@ -1,4 +1,5 @@
 import { Alert, ScrollView, View } from 'react-native'
+import { useRouter } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Divider } from '@/core/components/atoms/Divider'
@@ -6,9 +7,16 @@ import { Text } from '@/core/components/atoms/Text'
 import { BackButton } from '@/core/components/molecules/BackButton'
 import { MenuRow } from '@/core/components/molecules/MenuRow'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
+import { useFreezeAccountMutation, useDeleteAccountMutation } from '@/domains/auth'
 
 export default function PrivacyScreen() {
   const insets = useSafeAreaInsets()
+  const router = useRouter()
+
+  const { mutate: freezeAccount, isPending: isFreezing } = useFreezeAccountMutation()
+  const { mutate: deleteAccount, isPending: isDeleting } = useDeleteAccountMutation()
+
+  const goToLogin = () => router.replace('/(auth)/login')
 
   const handleFreeze = () => {
     Alert.alert(
@@ -16,7 +24,14 @@ export default function PrivacyScreen() {
       'Hesabın geçici olarak devre dışı bırakılacak, istediğin zaman tekrar giriş yaparak aktifleştirebilirsin. Devam etmek istiyor musun?',
       [
         { text: 'Vazgeç', style: 'cancel' },
-        { text: 'Dondur', style: 'destructive', onPress: () => {} },
+        {
+          text: 'Dondur',
+          style: 'destructive',
+          onPress: () => freezeAccount(undefined, {
+            onSuccess: goToLogin,
+            onError: () => Alert.alert('İşlem Başarısız', 'Hesap dondurulamadı. Lütfen tekrar deneyin.'),
+          }),
+        },
       ]
     )
   }
@@ -36,7 +51,14 @@ export default function PrivacyScreen() {
               'Hesabını silmek istediğinden emin misin? Bu işlem geri alınamaz.',
               [
                 { text: 'Vazgeç', style: 'cancel' },
-                { text: 'Hesabımı Sil', style: 'destructive', onPress: () => {} },
+                {
+                  text: 'Hesabımı Sil',
+                  style: 'destructive',
+                  onPress: () => deleteAccount(undefined, {
+                    onSuccess: goToLogin,
+                    onError: () => Alert.alert('İşlem Başarısız', 'Hesap silinemedi. Lütfen tekrar deneyin.'),
+                  }),
+                },
               ]
             )
           },
@@ -48,6 +70,8 @@ export default function PrivacyScreen() {
   const handlePrivacyPolicy = () => {
     Alert.alert('Gizlilik Politikası', 'Bu özellik yakında aktif olacak.')
   }
+
+  const isBusy = isFreezing || isDeleting
 
   return (
     <View className="flex-1 bg-surface-base dark:bg-dark-bg">
@@ -64,8 +88,17 @@ export default function PrivacyScreen() {
             Hesap Yönetimi
           </Text>
         </View>
-        <MenuRow icon="PauseCircle" label="Hesabımı Dondur" onPress={handleFreeze} />
-        <MenuRow icon="Trash2" label="Hesabımı Sil" danger onPress={handleDelete} />
+        <MenuRow
+          icon="PauseCircle"
+          label={isFreezing ? 'Donduruluyor...' : 'Hesabımı Dondur'}
+          onPress={isBusy ? () => {} : handleFreeze}
+        />
+        <MenuRow
+          icon="Trash2"
+          label={isDeleting ? 'Siliniyor...' : 'Hesabımı Sil'}
+          danger
+          onPress={isBusy ? () => {} : handleDelete}
+        />
 
         <Divider spacing="none" className="mx-4 mt-4" />
 

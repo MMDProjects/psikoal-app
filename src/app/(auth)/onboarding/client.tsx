@@ -1,82 +1,37 @@
 import { useState } from 'react'
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native'
-import { useMutation } from '@tanstack/react-query'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Icon } from '@/core/components/atoms/Icon'
 import { Text } from '@/core/components/atoms/Text'
-import { BackButton } from '@/core/components/molecules/BackButton'
 import { InputField } from '@/core/components/molecules/InputField'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { cn } from '@/core/utils/cn'
-import { post } from '@/lib/api'
-import { tokenStorage } from '@/lib/storage'
-import { useAuthStore } from '@/domains/auth'
-import { LoginResponseSchema } from '@/domains/auth'
-
-type AcceptInviteData = {
-  inviteToken: string
-  password: string
-  kvkkConsent: boolean
-}
-
-function useAcceptInviteMutation() {
-  const { setAuth } = useAuthStore()
-
-  return useMutation({
-    mutationFn: async (data: AcceptInviteData) => {
-      const raw = await post('/auth/accept-invite', data)
-      return LoginResponseSchema.parse(raw)
-    },
-    onSuccess: async ({ user, tokens }) => {
-      await tokenStorage.setAccessToken(tokens.accessToken)
-      await tokenStorage.setRefreshToken(tokens.refreshToken)
-      setAuth(user, tokens.accessToken, tokens.refreshToken)
-    },
-  })
-}
+import { useAuthStore, useUpdateProfileMutation } from '@/domains/auth'
 
 export default function ClientOnboardingScreen() {
   const router = useRouter()
   const insets = useSafeAreaInsets()
-  const { token: inviteToken } = useLocalSearchParams<{ token?: string }>()
-  const { mutate: acceptInvite, isPending, error } = useAcceptInviteMutation()
+  const user = useAuthStore((s) => s.user)
+  const { mutate: updateProfile, isPending, error } = useUpdateProfileMutation()
 
-  const [password, setPassword] = useState('')
-  const [passwordConfirm, setPasswordConfirm] = useState('')
+  const [phone, setPhone] = useState('')
+  const [city, setCity] = useState('')
   const [kvkkAccepted, setKvkkAccepted] = useState(false)
-  const [passwordError, setPasswordError] = useState<string | undefined>()
   const [kvkkError, setKvkkError] = useState<string | undefined>()
 
-  const validate = (): boolean => {
-    let valid = true
-    if (password.length < 8) {
-      setPasswordError('Şifre en az 8 karakter olmalı')
-      valid = false
-    } else if (password !== passwordConfirm) {
-      setPasswordError('Şifreler eşleşmiyor')
-      valid = false
-    } else {
-      setPasswordError(undefined)
-    }
+  const onSubmit = () => {
     if (!kvkkAccepted) {
       setKvkkError('Devam etmek için KVKK metnini onaylamalısınız')
-      valid = false
-    } else {
-      setKvkkError(undefined)
+      return
     }
-    return valid
-  }
+    setKvkkError(undefined)
 
-  const onSubmit = () => {
-    if (!validate()) return
-    if (!inviteToken) return
-
-    acceptInvite(
-      { inviteToken, password, kvkkConsent: true },
+    updateProfile(
+      { phone: phone || null, city: city || null },
       { onSuccess: () => router.replace('/(tabs)') }
     )
   }
@@ -84,33 +39,11 @@ export default function ClientOnboardingScreen() {
   const apiErrorMessage = error instanceof Error ? error.message : undefined
   const bottomBarHeight = 56 + insets.bottom
 
-  if (!inviteToken) {
-    return (
-      <View className="flex-1 bg-sky-500 dark:bg-sky-950" style={{ overflow: 'hidden' }}>
-        <DecorCircles />
-        <BackButton />
-        <View className="flex-1 items-center justify-center px-6 gap-4">
-          <View className="w-20 h-20 rounded-full bg-white items-center justify-center">
-            <Icon name="AlertCircle" size={36} color="#DC2626" />
-          </View>
-          <Text variant="heading" align="center" className="text-white">Geçersiz Davet Bağlantısı</Text>
-          <Text variant="body" align="center" className="text-sky-100">
-            Bu bağlantı geçersiz veya süresi dolmuş. Psikologunuzdan yeni bir davet bağlantısı isteyin.
-          </Text>
-        </View>
-        <BottomActionBar
-          actions={[{ label: 'Girişe Dön', onPress: () => router.replace('/(auth)/login'), variant: 'inverse' }]}
-        />
-      </View>
-    )
-  }
-
   return (
     <View className="flex-1 bg-sky-500 dark:bg-sky-950" style={{ overflow: 'hidden' }}>
       <DecorCircles />
-      <BackButton />
 
-      <ScreenTitle title="Daveti Kabul Et" topInset titleClassName="text-white" />
+      <ScreenTitle title="Profilini Tamamla" topInset titleClassName="text-white" />
 
       <KeyboardAvoidingView
         className="flex-1"
@@ -126,33 +59,34 @@ export default function ClientOnboardingScreen() {
             <View className="w-16 h-16 rounded-full bg-white items-center justify-center">
               <Icon name="CheckCircle" size={32} color="#0EA5E9" />
             </View>
-            <Text variant="heading" align="center" className="text-white">Hoş Geldiniz!</Text>
+            <Text variant="heading" align="center" className="text-white">
+              {user?.firstName ? `Hoş Geldin, ${user.firstName}!` : 'Hoş Geldiniz!'}
+            </Text>
             <Text variant="body" align="center" className="text-sky-100">
-              Psikologunuz sizi PsikoAl&apos;a davet etti. Şifrenizi belirleyerek hesabınızı aktive edin.
+              Birkaç bilgi ile profilinizi tamamlayın. Bu bilgiler yalnızca eşleştiğiniz uzmanla,
+              sizin izin verdiğiniz ölçüde paylaşılır.
             </Text>
           </View>
 
           <View className="gap-4 mt-2">
             <InputField
               tone="onBrand"
-              label="Şifre"
-              placeholder="En az 8 karakter"
-              isSecure
-              value={password}
-              onChangeText={(v) => { setPassword(v); setPasswordError(undefined) }}
-              errorMessage={password !== passwordConfirm && passwordConfirm ? 'Şifreler eşleşmiyor' : undefined}
-              isRequired
+              label="Telefon"
+              placeholder="05XX XXX XX XX"
+              keyboardType="phone-pad"
+              value={phone}
+              onChangeText={setPhone}
+              hint="İsteğe bağlı"
             />
 
             <InputField
               tone="onBrand"
-              label="Şifre Tekrar"
-              placeholder="Şifrenizi tekrar girin"
-              isSecure
-              value={passwordConfirm}
-              onChangeText={(v) => { setPasswordConfirm(v); setPasswordError(undefined) }}
-              errorMessage={passwordError}
-              isRequired
+              label="Şehir"
+              placeholder="Yaşadığınız şehir"
+              autoCapitalize="words"
+              value={city}
+              onChangeText={setCity}
+              hint="İsteğe bağlı"
             />
 
             <Pressable
@@ -199,13 +133,20 @@ export default function ClientOnboardingScreen() {
         </ScrollView>
 
         <BottomActionBar
-          actions={[{
-            label: 'Hesabımı Aktive Et',
-            onPress: onSubmit,
-            variant: 'inverse',
-            isLoading: isPending,
-            loadingLabel: 'Aktive ediliyor...',
-          }]}
+          actions={[
+            {
+              label: 'Şimdilik Atla',
+              onPress: () => router.replace('/(tabs)'),
+              variant: 'inverseGhost',
+            },
+            {
+              label: 'Devam Et',
+              onPress: onSubmit,
+              variant: 'inverse',
+              isLoading: isPending,
+              loadingLabel: 'Kaydediliyor...',
+            },
+          ]}
         />
       </KeyboardAvoidingView>
     </View>

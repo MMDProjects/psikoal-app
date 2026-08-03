@@ -15,6 +15,7 @@ import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { useRefresh } from '@/core/hooks'
 import { getFullName, getInitials } from '@/core/utils/personName'
 import { useAuthStore } from '@/domains/auth'
+import { useExpertApprovalGate } from '@/domains/expert'
 import {
   useListingDetailQuery,
   useCloseListingMutation,
@@ -45,6 +46,7 @@ export default function ListingDetailScreen() {
   )
 
   const { mutate: closeListing, isPending: isClosing } = useCloseListingMutation()
+  const { canAct: canSendOffer, isPendingApproval } = useExpertApprovalGate()
 
   const handleClose = () => {
     if (!id) return
@@ -244,7 +246,18 @@ export default function ListingDetailScreen() {
             })()}
           </ScrollView>
 
-          {listing.status === 'OPEN' && (
+          {listing.status === 'OPEN' && !isClient && !canSendOffer && (
+            <BottomActionBar>
+              <View className="flex-row items-center justify-center gap-2 bg-amber-100 dark:bg-amber-900 rounded-full h-14 px-4">
+                <Icon name="Clock" size={16} color="#D97706" />
+                <Text variant="label" className="text-amber-700 dark:text-amber-200 font-semibold" numberOfLines={1}>
+                  {isPendingApproval ? 'Profiliniz admin onayı bekliyor' : 'Profiliniz onaylanmadı'}
+                </Text>
+              </View>
+            </BottomActionBar>
+          )}
+
+          {listing.status === 'OPEN' && (isClient || canSendOffer) && (
             !isClient && hasAlreadySentOffer ? (
               <BottomActionBar>
                 <View className="flex-row items-center justify-center gap-2 bg-price-subtle border border-price-muted dark:bg-green-950 dark:border-green-900 rounded-full h-14">

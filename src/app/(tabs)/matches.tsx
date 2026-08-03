@@ -12,6 +12,7 @@ import { SegmentedControl } from '@/core/components/molecules/SegmentedControl'
 import { useRefresh } from '@/core/hooks'
 import { useAuthStore } from '@/domains/auth'
 import { useMatchesQuery, MatchRow } from '@/domains/match'
+import { useUnreadNotificationCount } from '@/domains/notification'
 
 type MatchTab = 'active' | 'past'
 
@@ -31,15 +32,16 @@ export default function MatchesScreen() {
   const { isLoading, isError, refetch } = matchesQuery
   const { isRefreshing, onRefresh } = useRefresh(matchesQuery)
   const displayed = matchesQuery.data?.data ?? []
+  const unreadCount = useUnreadNotificationCount()
 
   return (
     <View className="flex-1 bg-surface-base dark:bg-dark-bg">
       <HeaderActions
         actions={
           isExpert
-            ? [{ icon: 'Bell', accessibilityLabel: 'Bildirimler', onPress: () => router.push('/notifications') }]
+            ? [{ icon: 'Bell', accessibilityLabel: 'Bildirimler', badgeCount: unreadCount, onPress: () => router.push('/notifications') }]
             : [
-                { icon: 'Bell', accessibilityLabel: 'Bildirimler', onPress: () => router.push('/notifications') },
+                { icon: 'Bell', accessibilityLabel: 'Bildirimler', badgeCount: unreadCount, onPress: () => router.push('/notifications') },
                 { icon: 'Plus', accessibilityLabel: 'Yeni İlan Oluştur', onPress: () => router.push('/listing/new') },
               ]
         }

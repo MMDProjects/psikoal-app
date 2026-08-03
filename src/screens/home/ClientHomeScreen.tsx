@@ -15,6 +15,7 @@ import { useAssessmentListQuery, useMyAssessmentResultsQuery } from '@/domains/a
 import { useAuthStore } from '@/domains/auth'
 import { useCategoriesQuery } from '@/domains/category'
 import { useMyListingsQuery } from '@/domains/listing'
+import { useUnreadNotificationCount } from '@/domains/notification'
 import { useBlogListQuery, BlogCarousel } from '@/domains/blog'
 
 import { HomeHero } from './HomeHero'
@@ -48,6 +49,7 @@ export function ClientHomeScreen() {
 
   const blogsQuery = useBlogListQuery({ limit: 3 })
   const blogs = blogsQuery.data?.data ?? []
+  const unreadCount = useUnreadNotificationCount()
 
   const { isRefreshing, onRefresh } = useRefresh(
     categoriesQuery,
@@ -62,7 +64,7 @@ export function ClientHomeScreen() {
     <View className="flex-1 bg-surface-base dark:bg-dark-bg">
       <HeaderActions
         actions={[
-          { icon: 'Bell', accessibilityLabel: 'Bildirimler', onPress: () => router.push('/notifications') },
+          { icon: 'Bell', accessibilityLabel: 'Bildirimler', badgeCount: unreadCount, onPress: () => router.push('/notifications') },
           { icon: 'Plus', accessibilityLabel: 'Yeni İlan Oluştur', onPress: () => goToNewListing() },
         ]}
       />

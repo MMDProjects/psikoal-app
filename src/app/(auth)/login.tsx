@@ -168,12 +168,12 @@ export default function LoginScreen() {
                   <Text variant="caption" className="text-sky-100">Profil tamamlama akışı</Text>
                 </Pressable>
                 <Pressable
-                  onPress={() => quickOnboard('danisan@psikoal.com', '/(auth)/onboarding/client?token=demo-davet')}
+                  onPress={() => quickOnboard('danisan@psikoal.com', '/(auth)/onboarding/client')}
                   disabled={isPending}
                   className="flex-1 bg-sky-600 dark:bg-sky-900 rounded-xl py-3 items-center active:bg-sky-700 dark:active:bg-sky-800"
                 >
                   <Text variant="caption" className="font-semibold text-white">Onboard Danışan</Text>
-                  <Text variant="caption" className="text-sky-100">Davet kabul akışı</Text>
+                  <Text variant="caption" className="text-sky-100">Profil tamamlama akışı</Text>
                 </Pressable>
               </View>
 

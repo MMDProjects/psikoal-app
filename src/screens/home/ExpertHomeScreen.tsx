@@ -13,6 +13,7 @@ import { useRefresh } from '@/core/hooks'
 import { useSuggestionsQuery, SuggestionSlide } from '@/domains/suggestion'
 import { useAuthStore } from '@/domains/auth'
 import { useMatchesQuery } from '@/domains/match'
+import { useUnreadNotificationCount } from '@/domains/notification'
 import { useExpertOffersQuery } from '@/domains/offer'
 import {
   useListingListQuery,
@@ -37,6 +38,7 @@ export function ExpertHomeScreen() {
 
   const matchesQuery = useMatchesQuery()
   const activeMatchCount = matchesQuery.data?.meta.activeCount ?? 0
+  const unreadCount = useUnreadNotificationCount()
 
   const [filters, setFilters] = useState<ListingListFilters>({})
   const [filterPriceLabels, setFilterPriceLabels] = useState<string[]>([])
@@ -67,7 +69,7 @@ export function ExpertHomeScreen() {
     <View className="flex-1 bg-surface-base dark:bg-dark-bg">
       <HeaderActions
         actions={[
-          { icon: 'Bell', accessibilityLabel: 'Bildirimler', onPress: () => router.push('/notifications') },
+          { icon: 'Bell', accessibilityLabel: 'Bildirimler', badgeCount: unreadCount, onPress: () => router.push('/notifications') },
         ]}
       />
 

@@ -112,7 +112,8 @@ export default function SettingsScreen() {
     {
       title: 'FİNANS',
       items: [
-        { icon: 'CreditCard', label: 'Cüzdanım', onPress: () => router.push('/payment/packages' as never) },
+        { icon: 'Wallet',     label: 'Cüzdanım',        onPress: () => router.push('/payment/wallet' as never) },
+        { icon: 'CreditCard', label: 'Seans Paketleri', onPress: () => router.push('/payment/packages' as never) },
       ],
     },
     communitySection,
@@ -145,7 +146,7 @@ export default function SettingsScreen() {
         </View>
 
         <View className="px-4 py-4 flex-row items-center gap-4">
-          <Avatar size="xl" initials={initials} isVerified={isExpert} />
+          <Avatar size="xl" initials={initials} isVerified={user?.isVerified ?? false} />
           <View className="flex-1 gap-1">
             <Text variant="subheading" className="font-semibold dark:text-[#F5F5F7]">
               {getFullName(user) || 'Kullanıcı'}

@@ -12,6 +12,7 @@ import { BackButton } from '@/core/components/molecules/BackButton'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { InputField } from '@/core/components/molecules/InputField'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
+import { useExpertApprovalGate } from '@/domains/expert'
 import { useSendOfferMutation, SendOfferSchema } from '@/domains/offer'
 
 import type { SendOfferRequest } from '@/domains/offer'
@@ -21,6 +22,7 @@ export default function NewOfferScreen() {
   const { listingId } = useLocalSearchParams<{ listingId?: string }>()
 
   const { mutate: sendOffer, isPending, error } = useSendOfferMutation()
+  const { canAct: canSendOffer, isPendingApproval } = useExpertApprovalGate()
 
   const {
     control,
@@ -51,6 +53,31 @@ export default function NewOfferScreen() {
   }
 
   const apiError = error instanceof Error ? error.message : undefined
+
+  if (!canSendOffer) {
+    return (
+      <View className="flex-1 bg-sky-500 dark:bg-sky-950" style={{ overflow: 'hidden' }}>
+        <DecorCircles />
+        <BackButton />
+        <View className="flex-1 items-center justify-center px-6 gap-4">
+          <View className="w-20 h-20 rounded-full bg-white items-center justify-center">
+            <Icon name="Clock" size={36} color="#D97706" />
+          </View>
+          <Text variant="heading" align="center" className="text-white">
+            {isPendingApproval ? 'Profiliniz Onay Bekliyor' : 'Profiliniz Onaylanmadı'}
+          </Text>
+          <Text variant="body" align="center" className="text-sky-100">
+            {isPendingApproval
+              ? 'Profiliniz admin onayından geçtikten sonra ilanlara teklif gönderebilirsiniz.'
+              : 'Profil başvurunuz onaylanmadı. Destek ekibiyle iletişime geçebilirsiniz.'}
+          </Text>
+        </View>
+        <BottomActionBar
+          actions={[{ label: 'Geri Dön', onPress: () => router.back(), variant: 'inverse' }]}
+        />
+      </View>
+    )
+  }
 
   if (!listingId) {
     return (

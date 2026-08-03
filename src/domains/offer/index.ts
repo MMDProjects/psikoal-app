@@ -17,6 +17,3 @@ export {
 } from './schemas/offer.schema'
 
 export type { OfferStatus, Offer, SendOfferRequest } from './types/offer.types'
-
-export { OfferCard } from './components/OfferCard'
-export type { OfferCardProps } from './components/OfferCard'

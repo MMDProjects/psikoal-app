@@ -16,11 +16,6 @@ import { formatDate } from '@/core/utils/formatDate'
 import { useRefresh } from '@/core/hooks'
 import { useClientProfileQuery, MATCH_STATUS_CONFIG } from '@/domains/client'
 
-const REGISTRATION_TYPE_LABELS: Record<string, string> = {
-  invited: 'Platforma davet edildi',
-  self:    'Kendi kaydoldu',
-}
-
 export default function ClientDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const router = useRouter()
@@ -109,13 +104,7 @@ export default function ClientDetailScreen() {
             </Text>
             <View className="flex-row items-center gap-2">
               {statusCfg && <Badge label={statusCfg.label} variant={statusCfg.variant} />}
-              {client.matchCode ? (
-                <Text variant="caption" color="tertiary">Kod: {client.matchCode}</Text>
-              ) : null}
             </View>
-            <Text variant="caption" color="secondary">
-              {REGISTRATION_TYPE_LABELS[client.registrationType] ?? client.registrationType}
-            </Text>
           </View>
 
           {client.notes ? (

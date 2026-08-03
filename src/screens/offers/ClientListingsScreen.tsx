@@ -11,6 +11,7 @@ import { EmptyState } from '@/core/components/molecules/EmptyState'
 import { HeaderActions } from '@/core/components/molecules/HeaderActions'
 import { useRefresh } from '@/core/hooks'
 import { useMyListingsQuery, ListingCard } from '@/domains/listing'
+import { useUnreadNotificationCount } from '@/domains/notification'
 
 import type { ListingStatus } from '@/domains/listing'
 
@@ -31,12 +32,13 @@ export function ClientListingsScreen() {
   const { isRefreshing, onRefresh } = useRefresh(myListingsQuery)
 
   const listings = myListingsQuery.data?.data ?? []
+  const unreadCount = useUnreadNotificationCount()
 
   return (
     <View className="flex-1 bg-surface-base dark:bg-dark-bg">
       <HeaderActions
         actions={[
-          { icon: 'Bell', accessibilityLabel: 'Bildirimler', onPress: () => router.push('/notifications') },
+          { icon: 'Bell', accessibilityLabel: 'Bildirimler', badgeCount: unreadCount, onPress: () => router.push('/notifications') },
           { icon: 'Plus', accessibilityLabel: 'Yeni İlan Oluştur', onPress: () => router.push('/listing/new') },
         ]}
       />

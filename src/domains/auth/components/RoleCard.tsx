@@ -54,7 +54,7 @@ export function RoleCard({ role, selected, onPress }: RoleCardProps) {
           className={selected ? 'text-neutral-500 dark:text-neutral-500' : 'text-sky-100'}
         >
           {isExpert
-            ? 'Danışanlarınızı platforma davet edin'
+            ? 'İlanlara teklif verin, danışan edinin'
             : 'Psikolog bulun ve terapi alın'}
         </Text>
       </View>
