@@ -34,6 +34,42 @@ export const NOTIFICATION_TYPE_CONFIG: Record<NotificationType, NotificationType
     iconColorLight: '#D97706',
     iconColorDark: '#FCD34D',
   },
+  LISTING_APPROVED: {
+    icon: 'CheckCircle2',
+    bgClass: 'bg-green-100 dark:bg-green-900',
+    iconColorLight: '#16A34A',
+    iconColorDark: '#4ADE80',
+  },
+  LISTING_REJECTED: {
+    icon: 'XCircle',
+    bgClass: 'bg-red-100 dark:bg-red-900',
+    iconColorLight: '#DC2626',
+    iconColorDark: '#F87171',
+  },
+  EXPERT_APPROVED: {
+    icon: 'BadgeCheck',
+    bgClass: 'bg-green-100 dark:bg-green-900',
+    iconColorLight: '#16A34A',
+    iconColorDark: '#4ADE80',
+  },
+  EXPERT_REJECTED: {
+    icon: 'XCircle',
+    bgClass: 'bg-red-100 dark:bg-red-900',
+    iconColorLight: '#DC2626',
+    iconColorDark: '#F87171',
+  },
+  REVIEW_APPROVED: {
+    icon: 'MessageSquareText',
+    bgClass: 'bg-green-100 dark:bg-green-900',
+    iconColorLight: '#16A34A',
+    iconColorDark: '#4ADE80',
+  },
+  REVIEW_REJECTED: {
+    icon: 'MessageSquareText',
+    bgClass: 'bg-red-100 dark:bg-red-900',
+    iconColorLight: '#DC2626',
+    iconColorDark: '#F87171',
+  },
   SYSTEM: {
     icon: 'Bell',
     bgClass: 'bg-neutral-100 dark:bg-neutral-800',

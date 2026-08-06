@@ -4,6 +4,12 @@ export const NotificationTypeSchema = z.enum([
   'OFFER_RECEIVED',
   'OFFER_ACCEPTED',
   'LISTING_EXPIRING',
+  'LISTING_APPROVED',
+  'LISTING_REJECTED',
+  'EXPERT_APPROVED',
+  'EXPERT_REJECTED',
+  'REVIEW_APPROVED',
+  'REVIEW_REJECTED',
   'SYSTEM',
 ])
 

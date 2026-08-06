@@ -13,6 +13,7 @@ import {
   useNotificationsQuery,
   useMarkNotificationReadMutation,
   useMarkAllNotificationsReadMutation,
+  usePushTokenRegistration,
   NOTIFICATION_TYPE_CONFIG,
 } from '@/domains/notification'
 
@@ -24,6 +25,10 @@ export default function NotificationsScreen() {
   const { isRefreshing, onRefresh } = useRefresh(notificationsQuery)
   const notifications = data?.data ?? []
   const unreadCount = data?.meta.unreadCount ?? 0
+
+  // PsikoAl kuralı: push izni ilk login'de değil, kullanıcı ilk bildirimiyle
+  // karşılaştığında istenir — bu yüzden liste dolu olduğunda tetiklenir.
+  usePushTokenRegistration(!isLoading && notifications.length > 0)
 
   const { mutate: markRead } = useMarkNotificationReadMutation()
   const { mutate: markAllRead, isPending: isMarkingAll } = useMarkAllNotificationsReadMutation()

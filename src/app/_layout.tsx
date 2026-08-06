@@ -14,6 +14,7 @@ import { useColorScheme } from 'nativewind'
 import * as SplashScreen from 'expo-splash-screen'
 
 import { AppProviders } from '@/core/components/templates/AppProviders'
+import '@/domains/notification/pushNotificationHandler'
 import { registerUnauthenticatedHandler } from '@/lib/api'
 import { useThemeStore } from '@/store/themeStore'
 
