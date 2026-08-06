@@ -20,9 +20,9 @@ export const OfferSchema = z.object({
     clientId: z.string().uuid(),
     city:     z.string().optional(),
     clientDisplayName: z.string().optional(),
+    // Eşleşme öncesi danışanın tam adı hiç gönderilmez — bkz. clientDisplayName.
     client: z.object({
       id:        z.string().uuid(),
-      fullName:  z.string(),
       initials:  z.string().optional(),
       avatarUrl: z.string().url().nullable().optional(),
     }).optional(),

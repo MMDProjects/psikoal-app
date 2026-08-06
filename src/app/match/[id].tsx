@@ -16,6 +16,7 @@ import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { useRefresh } from '@/core/hooks'
 import { formatDate } from '@/core/utils/formatDate'
 import { AssessmentResultSummary } from '@/domains/assessment'
+import { useAuthStore } from '@/domains/auth'
 import { SESSION_TYPE_LABELS } from '@/domains/listing'
 import { useMatchDetailQuery, useReleaseMatchMutation, MATCH_STATUS_CONFIG } from '@/domains/match'
 import { OFFER_STATUS_CONFIG } from '@/domains/offer'
@@ -23,6 +24,7 @@ import { OFFER_STATUS_CONFIG } from '@/domains/offer'
 export default function MatchDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const router = useRouter()
+  const role = useAuthStore((s) => s.role)
 
   const matchQuery = useMatchDetailQuery(id ?? '')
   const { data: match, isLoading, isError } = matchQuery
@@ -30,6 +32,9 @@ export default function MatchDetailScreen() {
   const insets = useSafeAreaInsets()
 
   const { mutate: releaseMatch, isPending: isReleasing } = useReleaseMatchMutation()
+
+  const viewerReleasedAt = role === 'client' ? match?.clientReleasedAt : match?.expertReleasedAt
+  const isWaitingForOtherParty = match?.status === 'ACTIVE' && Boolean(viewerReleasedAt)
 
   const handleRelease = () => {
     if (!match) return
@@ -276,7 +281,18 @@ export default function MatchDetailScreen() {
         </ScrollView>
       )}
 
-      {!isLoading && !isError && match?.status === 'ACTIVE' && (
+      {!isLoading && !isError && match?.status === 'ACTIVE' && isWaitingForOtherParty && (
+        <BottomActionBar>
+          <View className="flex-row items-center justify-center gap-2 bg-amber-100 dark:bg-amber-900 rounded-full h-14 px-4">
+            <Icon name="Clock" size={16} color="#D97706" />
+            <Text variant="label" className="text-amber-700 dark:text-amber-200 font-semibold" numberOfLines={1}>
+              Karşı tarafın onayı bekleniyor
+            </Text>
+          </View>
+        </BottomActionBar>
+      )}
+
+      {!isLoading && !isError && match?.status === 'ACTIVE' && !isWaitingForOtherParty && (
         <BottomActionBar
           actions={[{
             label: 'Eşleşmeyi Sonlandır',

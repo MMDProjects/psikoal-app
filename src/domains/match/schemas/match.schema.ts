@@ -11,6 +11,8 @@ export const MatchSchema = z.object({
   status:          MatchStatusSchema,
   createdAt:       z.string().datetime(),
   createdAtRelative: z.string().optional(),
+  clientReleasedAt: z.string().datetime().nullable().optional(),
+  expertReleasedAt: z.string().datetime().nullable().optional(),
   client: z.object({
     id:       z.string().uuid(),
     fullName: z.string(),
