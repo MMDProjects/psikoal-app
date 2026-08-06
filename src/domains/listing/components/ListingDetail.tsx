@@ -14,20 +14,19 @@ import type { Listing } from '../types/listing.types'
 
 export type ListingDetailProps = {
   listing: Listing
-  viewerRole: 'expert' | 'client'
   className?: string
 }
 
-export function ListingDetail({ listing, viewerRole, className }: ListingDetailProps) {
+export function ListingDetail({ listing, className }: ListingDetailProps) {
   const statusConfig = LISTING_STATUS_CONFIG[listing.status]
 
   const createdDate = formatDate(listing.createdAt, 'long')
 
   const clientInitials = listing.client?.initials ?? '?'
 
-  const clientName = viewerRole === 'expert'
-    ? (listing.clientDisplayName ?? 'Danışan')
-    : (listing.client?.fullName ?? 'Danışan')
+  // Backend maskeleme kararını zaten viewer'a göre veriyor (sahibine tam ad, uzmana
+  // maskeli ad); frontend viewerRole'e göre ayrıca dallanmaz.
+  const clientName = listing.clientDisplayName ?? 'Danışan'
 
   const sessionLabel = SESSION_TYPE_LABELS[listing.preferredSessionType] ?? listing.preferredSessionType
 
@@ -60,6 +59,17 @@ export function ListingDetail({ listing, viewerRole, className }: ListingDetailP
             </View>
           ) : null}
         </View>
+
+        {listing.status === 'REJECTED_BY_ADMIN' && listing.rejectionReason ? (
+          <View className="bg-red-50 dark:bg-red-950 rounded-xl px-4 py-3 gap-1">
+            <Text variant="caption" className="font-semibold text-red-600 dark:text-red-300">
+              İlanınız reddedildi
+            </Text>
+            <Text variant="caption" className="text-red-600 dark:text-red-300">
+              {listing.rejectionReason}
+            </Text>
+          </View>
+        ) : null}
       </View>
 
       <View className="mx-4 h-px bg-neutral-200 dark:bg-neutral-800" />

@@ -1,18 +1,20 @@
 import { z } from 'zod'
 
-export const ListingStatusSchema = z.enum(['OPEN', 'MATCHED', 'CLOSED', 'EXPIRED'])
+export const ListingStatusSchema = z.enum(['PENDING_APPROVAL', 'OPEN', 'MATCHED', 'CLOSED', 'EXPIRED', 'REJECTED_BY_ADMIN'])
 
 export const ListingSchema = z.object({
   id:                   z.string().uuid(),
   clientId:             z.string().uuid(),
+  // Eşleşme öncesi danışanın tam adı hiç gönderilmez (bkz. clientDisplayName) —
+  // client nesnesi kasıtlı olarak yalnızca kimlik/initials/avatar taşır, fullName yoktur.
   client: z.object({
     id:        z.string().uuid(),
-    fullName:  z.string(),
     initials:  z.string().optional(),
     avatarUrl: z.string().url().nullable().optional(),
     createdAt: z.string().datetime().optional(),
   }).optional(),
   clientDisplayName:    z.string().optional(),
+  rejectionReason:      z.string().nullable().optional(),
   title:                z.string().min(10).max(100),
   description:          z.string().max(500),
   specialization:       z.array(z.string()),
@@ -26,7 +28,7 @@ export const ListingSchema = z.object({
   offerCount:           z.number().int().min(0).default(0),
   status:               ListingStatusSchema,
   budgetLabel:          z.string(),
-  expiresAt:            z.string().datetime(),
+  expiresAt:            z.string().datetime().nullable(),
   createdAt:            z.string().datetime(),
   createdAtRelative:    z.string(),
   viewerHasOffered:     z.boolean().optional(),

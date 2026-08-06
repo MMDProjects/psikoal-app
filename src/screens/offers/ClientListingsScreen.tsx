@@ -16,10 +16,12 @@ import { useUnreadNotificationCount } from '@/domains/notification'
 import type { ListingStatus } from '@/domains/listing'
 
 const CLIENT_LISTING_FILTERS: Array<{ label: string; value: ListingStatus }> = [
-  { label: 'Açık',         value: 'OPEN'    },
-  { label: 'Eşleşildi',    value: 'MATCHED' },
-  { label: 'Kapalı',       value: 'CLOSED'  },
-  { label: 'Süresi Doldu', value: 'EXPIRED' },
+  { label: 'Onay Bekliyor', value: 'PENDING_APPROVAL'  },
+  { label: 'Açık',          value: 'OPEN'              },
+  { label: 'Eşleşildi',     value: 'MATCHED'           },
+  { label: 'Kapalı',        value: 'CLOSED'            },
+  { label: 'Süresi Doldu',  value: 'EXPIRED'           },
+  { label: 'Reddedildi',    value: 'REJECTED_BY_ADMIN' },
 ]
 
 export function ClientListingsScreen() {

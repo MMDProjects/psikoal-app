@@ -112,10 +112,7 @@ export default function ListingDetailScreen() {
           >
             <ScreenTitle title="İlan Detayı" />
 
-            <ListingDetail
-              listing={listing}
-              viewerRole={isClient ? 'client' : 'expert'}
-            />
+            <ListingDetail listing={listing} />
 
             <View className="mx-4 h-px bg-neutral-200 dark:bg-neutral-800" />
             <View className="px-4 py-5">
