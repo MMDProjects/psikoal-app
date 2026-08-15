@@ -1,0 +1,48 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: Europe/Istanbul
+    target-branch: dev
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore
+      include: scope
+    ignore:
+      # Expo SDK sürüm-kilitli: expo/react-native/react sürümleri SDK tarafından belirlenir.
+      # Yükseltme `npx expo install --fix` ile, SDK geçişiyle birlikte yapılır.
+      - dependency-name: expo
+        update-types: [version-update:semver-major, version-update:semver-minor]
+      - dependency-name: react-native
+        update-types: [version-update:semver-major, version-update:semver-minor]
+      - dependency-name: react
+        update-types: [version-update:semver-major, version-update:semver-minor]
+      - dependency-name: react-dom
+        update-types: [version-update:semver-major, version-update:semver-minor]
+      - dependency-name: 'expo-*'
+        update-types: [version-update:semver-major, version-update:semver-minor]
+      - dependency-name: '@expo/*'
+        update-types: [version-update:semver-major, version-update:semver-minor]
+      # nativewind ve tailwindcss ÇİFT olarak yükseltilir; tek başına major geçiş kırar.
+      - dependency-name: nativewind
+        update-types: [version-update:semver-major]
+      - dependency-name: tailwindcss
+        update-types: [version-update:semver-major]
+      # 0.x paketlerde minor sürüm kırıcı olabilir (semver garantisi yok).
+      - dependency-name: react-native-worklets
+        update-types: [version-update:semver-major, version-update:semver-minor]
+      - dependency-name: react-native-reanimated
+        update-types: [version-update:semver-major, version-update:semver-minor]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    target-branch: dev
+    commit-message:
+      prefix: infra

@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  push:
+    branches: [master, dev]
+  pull_request:
+
+# Least privilege — hiçbir job yazma iznine ihtiyaç duymuyor.
+permissions:
+  contents: read
+
+# Aynı PR'a arka arkaya push atıldığında eski koşumu iptal et.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Lint / Format / Typecheck / Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # Tasarım kısıtları (CLAUDE.md): shadow-* ve iris-* yasak.
+      # Bilerek npm script DEĞİL — Windows'ta grep yok, lokal `npm run lint` kırılırdı.
+      - name: Lint (tasarım kısıtları)
+        run: |
+          set -euo pipefail
+          fail=0
+          if grep -rnE "shadow-(xs|sm|md|lg|xl|2xl)\b" src --include='*.tsx' --include='*.ts'; then
+            echo "::error::shadow-* sınıfı yasak (flat design). Derinlik için border + arka plan farkı kullanın."
+            fail=1
+          fi
+          if grep -rnE "(bg|text|border)-iris-" src --include='*.tsx' --include='*.ts'; then
+            echo "::error::iris-* token'ı bu projede yok. Sky paletini kullanın."
+            fail=1
+          fi
+          if grep -rn "StyleSheet.create" src --include='*.tsx' --include='*.ts'; then
+            echo "::error::StyleSheet.create yasak. NativeWind className kullanın."
+            fail=1
+          fi
+          exit $fail
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test + coverage
+        run: npm run test:ci
+
+      - name: Coverage artifact
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 7
+
+  bundle:
+    name: Bundling kanıtı (expo export)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      # Temiz klonun gerçekten bundle üretebildiğini kanıtlar. mock-db repo dışındayken
+      # bu adım kırmızı dönerdi; repo-içi taşımanın regresyon siperi budur.
+      - name: Expo export (android)
+        env:
+          EXPO_PUBLIC_API_URL: https://api.example.invalid
+          EXPO_PUBLIC_APP_ENV: production
+        run: npx expo export --platform android --output-dir dist
+
+  enforce-promotion:
+    name: Terfi zinciri kontrolü
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event_name == 'pull_request'
+    steps:
+      # master'a yalnız dev veya hotfix/* üzerinden PR açılabilir.
+      # BASE/HEAD env üzerinden geçirilir — doğrudan ${{ }} interpolasyonu script injection'dır.
+      - name: Kaynak dal kontrolü
+        env:
+          BASE: ${{ github.base_ref }}
+          HEAD: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+          if [ "$BASE" = "master" ] && [ "$HEAD" != "dev" ] && [[ "$HEAD" != hotfix/* ]]; then
+            echo "::error::master'a yalnız 'dev' veya 'hotfix/*' dalından PR açılabilir (gelen: $HEAD)"
+            exit 1
+          fi
