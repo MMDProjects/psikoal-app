@@ -52,14 +52,16 @@ export const UpdateProfileSchema = z.object({
   shareLocation: z.boolean().optional(),
 })
 
-export const ChangePasswordSchema = z.object({
-  currentPassword: z.string().min(1, 'Mevcut şifrenizi giriniz'),
-  newPassword: z.string().min(8, 'Şifre en az 8 karakter olmalı'),
-  confirmPassword: z.string().min(1, 'Şifreyi tekrar giriniz'),
-}).refine((data) => data.newPassword === data.confirmPassword, {
-  message: 'Şifreler eşleşmiyor',
-  path: ['confirmPassword'],
-})
+export const ChangePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, 'Mevcut şifrenizi giriniz'),
+    newPassword: z.string().min(8, 'Şifre en az 8 karakter olmalı'),
+    confirmPassword: z.string().min(1, 'Şifreyi tekrar giriniz'),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'Şifreler eşleşmiyor',
+    path: ['confirmPassword'],
+  })
 
 export const ForgotPasswordSchema = z.object({
   email: z.string().email('Geçerli bir e-posta giriniz'),

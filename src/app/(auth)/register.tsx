@@ -1,9 +1,15 @@
 import { useState } from 'react'
+
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native'
+
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'expo-router'
 import { Controller, useForm } from 'react-hook-form'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useRouter } from 'expo-router'
+
+import type { RegisterRequest } from '@/domains/auth'
+import type { UserRole } from '@/domains/auth'
 
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Text } from '@/core/components/atoms/Text'
@@ -13,9 +19,6 @@ import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { StepProgress } from '@/core/components/molecules/StepProgress'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { RegisterRequestSchema, useRegisterMutation, RoleCard } from '@/domains/auth'
-
-import type { RegisterRequest } from '@/domains/auth'
-import type { UserRole } from '@/domains/auth'
 
 const TOTAL_STEPS = 2
 const STEP_LABELS = ['Rol Seçimi', 'Bilgilerin']
@@ -28,7 +31,11 @@ export default function RegisterScreen() {
 
   const { mutate: register, isPending, error } = useRegisterMutation()
 
-  const { control, handleSubmit, formState: { errors } } = useForm<RegisterRequest>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterRequest>({
     resolver: zodResolver(RegisterRequestSchema),
     defaultValues: { email: '', password: '', firstName: '', lastName: '', role: 'client' },
   })
@@ -62,7 +69,7 @@ export default function RegisterScreen() {
         className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <View className="px-5 pt-2 pb-4">
+        <View className="px-5 pb-4 pt-2">
           <StepProgress current={step} total={TOTAL_STEPS} label={STEP_LABELS[step - 1]} />
         </View>
 
@@ -75,21 +82,33 @@ export default function RegisterScreen() {
           {step === 1 ? (
             <View className="gap-5">
               <View className="gap-1">
-                <Text variant="heading" className="text-white">Aramıza Katıl</Text>
+                <Text variant="heading" className="text-white">
+                  Aramıza Katıl
+                </Text>
                 <Text variant="body" className="text-sky-100">
                   Platforma nasıl katılmak istiyorsunuz?
                 </Text>
               </View>
 
               <View className="flex-row gap-3">
-                <RoleCard role="expert" selected={role === 'expert'} onPress={() => setRole('expert')} />
-                <RoleCard role="client" selected={role === 'client'} onPress={() => setRole('client')} />
+                <RoleCard
+                  role="expert"
+                  selected={role === 'expert'}
+                  onPress={() => setRole('expert')}
+                />
+                <RoleCard
+                  role="client"
+                  selected={role === 'client'}
+                  onPress={() => setRole('client')}
+                />
               </View>
             </View>
           ) : (
             <View className="gap-4">
               <View className="gap-1">
-                <Text variant="heading" className="text-white">Bilgilerini Gir</Text>
+                <Text variant="heading" className="text-white">
+                  Bilgilerini Gir
+                </Text>
                 <Text variant="body" className="text-sky-100">
                   Hesabını oluşturmak için son bir adım kaldı.
                 </Text>
@@ -170,7 +189,7 @@ export default function RegisterScreen() {
               />
 
               {apiErrorMessage && (
-                <View className="bg-red-50 dark:bg-red-950 rounded-xl px-4 py-3">
+                <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-950">
                   <Text variant="caption" className="text-red-600 dark:text-red-300">
                     {apiErrorMessage}
                   </Text>
@@ -179,10 +198,14 @@ export default function RegisterScreen() {
             </View>
           )}
 
-          <View className="flex-row items-center justify-center mt-3 gap-1">
-            <Text variant="body" className="text-sky-100">Zaten hesabın var mı?</Text>
+          <View className="mt-3 flex-row items-center justify-center gap-1">
+            <Text variant="body" className="text-sky-100">
+              Zaten hesabın var mı?
+            </Text>
             <Pressable onPress={() => router.push('/(auth)/login')}>
-              <Text variant="body" className="text-white font-semibold">Giriş Yap</Text>
+              <Text variant="body" className="font-semibold text-white">
+                Giriş Yap
+              </Text>
             </Pressable>
           </View>
         </ScrollView>
@@ -190,8 +213,23 @@ export default function RegisterScreen() {
         <BottomActionBar
           actions={
             step === 1
-              ? [{ label: 'Devam Et', onPress: () => setStep(2), variant: 'inverse', isDisabled: !role }]
-              : [{ label: 'Kayıt Ol', onPress: handleSubmit(onSubmit), variant: 'inverse', isLoading: isPending, loadingLabel: 'Kayıt yapılıyor...' }]
+              ? [
+                  {
+                    label: 'Devam Et',
+                    onPress: () => setStep(2),
+                    variant: 'inverse',
+                    isDisabled: !role,
+                  },
+                ]
+              : [
+                  {
+                    label: 'Kayıt Ol',
+                    onPress: handleSubmit(onSubmit),
+                    variant: 'inverse',
+                    isLoading: isPending,
+                    loadingLabel: 'Kayıt yapılıyor...',
+                  },
+                ]
           }
         />
       </KeyboardAvoidingView>

@@ -1,5 +1,9 @@
 import { View } from 'react-native'
 
+import { LISTING_STATUS_CONFIG, SESSION_TYPE_LABELS } from '../listing.constants'
+
+import type { Listing } from '../types/listing.types'
+
 import { Avatar } from '@/core/components/atoms/Avatar'
 import { Chip } from '@/core/components/atoms/Chip'
 import { Icon } from '@/core/components/atoms/Icon'
@@ -7,10 +11,6 @@ import { Text } from '@/core/components/atoms/Text'
 import { cn } from '@/core/utils/cn'
 import { formatDate } from '@/core/utils/formatDate'
 import { AssessmentResultSummary } from '@/domains/assessment'
-
-import { LISTING_STATUS_CONFIG, SESSION_TYPE_LABELS } from '../listing.constants'
-
-import type { Listing } from '../types/listing.types'
 
 export type ListingDetailProps = {
   listing: Listing
@@ -28,12 +28,12 @@ export function ListingDetail({ listing, className }: ListingDetailProps) {
   // maskeli ad); frontend viewerRole'e göre ayrıca dallanmaz.
   const clientName = listing.clientDisplayName ?? 'Danışan'
 
-  const sessionLabel = SESSION_TYPE_LABELS[listing.preferredSessionType] ?? listing.preferredSessionType
+  const sessionLabel =
+    SESSION_TYPE_LABELS[listing.preferredSessionType] ?? listing.preferredSessionType
 
   return (
     <View className={cn('', className)}>
-
-      <View className="px-4 py-5 gap-4">
+      <View className="gap-4 px-4 py-5">
         <View className="flex-row items-center gap-3">
           <Avatar
             size="lg"
@@ -41,27 +41,35 @@ export function ListingDetail({ listing, className }: ListingDetailProps) {
             src={listing.client?.avatarUrl ?? undefined}
           />
           <View className="flex-1">
-            <Text variant="subheading" className="font-semibold leading-tight">{clientName}</Text>
+            <Text variant="subheading" className="font-semibold leading-tight">
+              {clientName}
+            </Text>
           </View>
         </View>
 
-        <Text variant="subheading" className="leading-snug">{listing.title}</Text>
+        <Text variant="subheading" className="leading-snug">
+          {listing.title}
+        </Text>
 
         <View className="flex-row flex-wrap items-center gap-3">
           <View className="flex-row items-center gap-1.5">
             <Icon name={statusConfig.icon} size={13} color={statusConfig.iconColor} />
-            <Text variant="caption" style={{ color: statusConfig.iconColor }}>{statusConfig.label}</Text>
+            <Text variant="caption" style={{ color: statusConfig.iconColor }}>
+              {statusConfig.label}
+            </Text>
           </View>
           {listing.city ? (
             <View className="flex-row items-center gap-1.5">
               <Icon name="MapPin" size={13} color="#A3A3A3" />
-              <Text variant="caption" color="tertiary">{listing.city}</Text>
+              <Text variant="caption" color="tertiary">
+                {listing.city}
+              </Text>
             </View>
           ) : null}
         </View>
 
         {listing.status === 'REJECTED_BY_ADMIN' && listing.rejectionReason ? (
-          <View className="bg-red-50 dark:bg-red-950 rounded-xl px-4 py-3 gap-1">
+          <View className="gap-1 rounded-xl bg-red-50 px-4 py-3 dark:bg-red-950">
             <Text variant="caption" className="font-semibold text-red-600 dark:text-red-300">
               İlanınız reddedildi
             </Text>
@@ -73,10 +81,14 @@ export function ListingDetail({ listing, className }: ListingDetailProps) {
       </View>
 
       <View className="mx-4 h-px bg-neutral-200 dark:bg-neutral-800" />
-      <View className="px-4 py-5 gap-5">
+      <View className="gap-5 px-4 py-5">
         {listing.description ? (
           <View className="gap-2">
-            <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+            <Text
+              variant="caption"
+              color="secondary"
+              className="font-semibold uppercase tracking-widest"
+            >
               İlan Detayı
             </Text>
             <Text variant="body" color="secondary" className="leading-relaxed">
@@ -86,7 +98,11 @@ export function ListingDetail({ listing, className }: ListingDetailProps) {
         ) : null}
 
         <View className="gap-2.5">
-          <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+          <Text
+            variant="caption"
+            color="secondary"
+            className="font-semibold uppercase tracking-widest"
+          >
             Aranan Uzmanlık
           </Text>
           <View className="flex-row flex-wrap gap-1.5">
@@ -97,7 +113,11 @@ export function ListingDetail({ listing, className }: ListingDetailProps) {
         </View>
 
         <View className="gap-2">
-          <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+          <Text
+            variant="caption"
+            color="secondary"
+            className="font-semibold uppercase tracking-widest"
+          >
             Seans Tipi
           </Text>
           <View className="flex-row">
@@ -106,7 +126,11 @@ export function ListingDetail({ listing, className }: ListingDetailProps) {
         </View>
 
         <View className="gap-2">
-          <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+          <Text
+            variant="caption"
+            color="secondary"
+            className="font-semibold uppercase tracking-widest"
+          >
             Fiyat Aralığı
           </Text>
           <View className="flex-row">
@@ -116,8 +140,12 @@ export function ListingDetail({ listing, className }: ListingDetailProps) {
       </View>
 
       <View className="mx-4 h-px bg-neutral-200 dark:bg-neutral-800" />
-      <View className="px-4 py-5 gap-3">
-        <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+      <View className="gap-3 px-4 py-5">
+        <Text
+          variant="caption"
+          color="secondary"
+          className="font-semibold uppercase tracking-widest"
+        >
           Danışan Hakkında
         </Text>
         <View className="flex-row items-center gap-3">
@@ -126,7 +154,9 @@ export function ListingDetail({ listing, className }: ListingDetailProps) {
             initials={clientInitials}
             src={listing.client?.avatarUrl ?? undefined}
           />
-          <Text variant="label" className="font-medium">{clientName}</Text>
+          <Text variant="label" className="font-medium">
+            {clientName}
+          </Text>
         </View>
         <View className="gap-1">
           {listing.client?.createdAt ? (
@@ -146,7 +176,6 @@ export function ListingDetail({ listing, className }: ListingDetailProps) {
           <AssessmentResultSummary result={listing.assessmentResult} />
         </>
       ) : null}
-
     </View>
   )
 }

@@ -1,10 +1,10 @@
 import { View } from 'react-native'
 
 import { Chip } from '@/core/components/atoms/Chip'
+import { Skeleton } from '@/core/components/atoms/Skeleton'
 import { Text } from '@/core/components/atoms/Text'
 import { InputField } from '@/core/components/molecules/InputField'
-
-import { SPECIALIZATION_OPTIONS } from '../../listing.constants'
+import { useCategoriesQuery } from '@/domains/category'
 
 export type CreateListingStepTopicProps = {
   title: string
@@ -27,10 +27,14 @@ export function CreateListingStepTopic({
   onToggleSpec,
   specsError,
 }: CreateListingStepTopicProps) {
+  const { data: categories, isLoading: categoriesLoading } = useCategoriesQuery()
+
   return (
     <View className="gap-5">
       <View className="gap-1">
-        <Text variant="heading" className="text-white">İlanını Oluştur</Text>
+        <Text variant="heading" className="text-white">
+          İlanını Oluştur
+        </Text>
         <Text variant="body" className="text-sky-100">
           Neye ihtiyaç duyduğunu anlat, uzmanlara ilanını göster.
         </Text>
@@ -62,25 +66,40 @@ export function CreateListingStepTopic({
       <View className="gap-2.5">
         <View className="flex-row items-center justify-between">
           <Text variant="label" className="text-white">
-            Uzmanlık Alanı <Text variant="caption" className="text-red-100">*</Text>
+            Uzmanlık Alanı{' '}
+            <Text variant="caption" className="text-red-100">
+              *
+            </Text>
           </Text>
           {selectedSpecs.length > 0 && (
-            <Text variant="caption" className="text-sky-100">{selectedSpecs.length} seçildi</Text>
+            <Text variant="caption" className="text-sky-100">
+              {selectedSpecs.length} seçildi
+            </Text>
           )}
         </View>
         <View className="flex-row flex-wrap gap-2">
-          {SPECIALIZATION_OPTIONS.map((spec) => (
-            <Chip
-              key={spec}
-              label={spec}
-              variant="onBrand"
-              isSelected={selectedSpecs.includes(spec)}
-              onPress={() => onToggleSpec(spec)}
-            />
-          ))}
+          {categoriesLoading ? (
+            <>
+              <Skeleton variant="rect" width={90} height={32} borderRadius="full" />
+              <Skeleton variant="rect" width={110} height={32} borderRadius="full" />
+              <Skeleton variant="rect" width={80} height={32} borderRadius="full" />
+            </>
+          ) : (
+            categories?.map((category) => (
+              <Chip
+                key={category.id}
+                label={category.name}
+                variant="onBrand"
+                isSelected={selectedSpecs.includes(category.name)}
+                onPress={() => onToggleSpec(category.name)}
+              />
+            ))
+          )}
         </View>
         {specsError && (
-          <Text variant="caption" className="text-red-100">{specsError}</Text>
+          <Text variant="caption" className="text-red-100">
+            {specsError}
+          </Text>
         )}
       </View>
     </View>

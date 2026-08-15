@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { get } from '@/lib/api'
-
 import { paymentKeys } from '../payment.constants'
 import { WalletSchema } from '../schemas/payment.schema'
+
+import { get } from '@/lib/api'
 
 export function useWalletQuery() {
   return useQuery({

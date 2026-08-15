@@ -1,10 +1,12 @@
 import { Pressable } from 'react-native'
-import { useRouter } from 'expo-router'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useColorScheme } from 'nativewind'
 
-import { cn } from '@/core/utils/cn'
+import { useColorScheme } from 'nativewind'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useRouter } from 'expo-router'
+
 import { Icon } from '@/core/components/atoms/Icon'
+import { cn } from '@/core/utils/cn'
 
 export type BackButtonVariant = 'floating' | 'overlay' | 'inline'
 
@@ -31,9 +33,11 @@ export function BackButton({ variant = 'floating', onPress, className }: BackBut
       hitSlop={HIT_SLOP}
       accessibilityRole="button"
       accessibilityLabel="Geri"
-      style={isAbsolute ? { position: 'absolute', top: insets.top + 8, left: 16, zIndex: 10 } : undefined}
+      style={
+        isAbsolute ? { position: 'absolute', top: insets.top + 8, left: 16, zIndex: 10 } : undefined
+      }
       className={cn(
-        'w-10 h-10 rounded-full items-center justify-center',
+        'h-10 w-10 items-center justify-center rounded-full',
         variant === 'overlay'
           ? 'bg-black/35 active:bg-black/50'
           : 'bg-white dark:bg-dark-elevated active:bg-neutral-100 dark:active:bg-dark-control',

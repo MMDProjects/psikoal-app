@@ -1,10 +1,10 @@
 import { View } from 'react-native'
 
+import { RESULT_LEVEL_CONFIG } from '../assessment.constants'
+
 import { Icon } from '@/core/components/atoms/Icon'
 import { Text } from '@/core/components/atoms/Text'
 import { useThemeColors } from '@/core/theme'
-
-import { RESULT_LEVEL_CONFIG } from '../assessment.constants'
 
 export type AssessmentResultSummaryProps = {
   result: {
@@ -20,16 +20,23 @@ export function AssessmentResultSummary({ result }: AssessmentResultSummaryProps
   const cfg = RESULT_LEVEL_CONFIG[result.level]
 
   return (
-    <View className="px-4 py-5 gap-3">
+    <View className="gap-3 px-4 py-5">
       <View className="flex-row items-center gap-1.5">
-        <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+        <Text
+          variant="caption"
+          color="secondary"
+          className="font-semibold uppercase tracking-widest"
+        >
           Test Sonucu
         </Text>
         <Icon name="Paperclip" size={12} color={colors.contentDisabled} />
       </View>
-      <View className="rounded-xl overflow-hidden border border-neutral-200">
+      <View className="overflow-hidden rounded-xl border border-neutral-200">
         {/* REASON: statü rengi ve pastel zemin RESULT_LEVEL_CONFIG'ten dinamik gelir, statik class üretilemez */}
-        <View className="px-4 py-3 flex-row items-center justify-between" style={{ backgroundColor: cfg.headerBg }}>
+        <View
+          className="flex-row items-center justify-between px-4 py-3"
+          style={{ backgroundColor: cfg.headerBg }}
+        >
           <View className="flex-row items-center gap-2">
             <Icon name="ClipboardList" size={14} color={cfg.color} />
             <Text variant="label" className="font-semibold" style={{ color: cfg.color }}>
@@ -37,16 +44,23 @@ export function AssessmentResultSummary({ result }: AssessmentResultSummaryProps
             </Text>
           </View>
           <View className="flex-row items-center gap-2">
-            <View className="px-2 py-0.5 rounded-full" style={{ backgroundColor: cfg.color + '20' }}>
+            <View
+              className="rounded-full px-2 py-0.5"
+              style={{ backgroundColor: cfg.color + '20' }}
+            >
               <Text variant="caption" className="font-semibold" style={{ color: cfg.color }}>
                 {cfg.label}
               </Text>
             </View>
-            <Text variant="caption" color="tertiary">Puan: {result.score}</Text>
+            <Text variant="caption" color="tertiary">
+              Puan: {result.score}
+            </Text>
           </View>
         </View>
-        <View className="px-4 pt-3 pb-3 bg-white">
-          <Text variant="caption" color="secondary" className="leading-relaxed">{result.summary}</Text>
+        <View className="bg-white px-4 pb-3 pt-3">
+          <Text variant="caption" color="secondary" className="leading-relaxed">
+            {result.summary}
+          </Text>
         </View>
       </View>
     </View>

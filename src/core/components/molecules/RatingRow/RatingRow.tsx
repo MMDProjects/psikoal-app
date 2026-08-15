@@ -1,13 +1,15 @@
 import { useState } from 'react'
+import type { ComponentType } from 'react'
+
 import { Pressable, View } from 'react-native'
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+
 import { Star } from 'lucide-react-native'
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+
+import type { SvgProps } from 'react-native-svg'
 
 import { Text } from '@/core/components/atoms/Text'
 import { cn } from '@/core/utils/cn'
-
-import type { ComponentType } from 'react'
-import type { SvgProps } from 'react-native-svg'
 
 type IconProps = Pick<SvgProps, 'stroke' | 'fill'> & { size?: number }
 const StarIcon = Star as ComponentType<IconProps>
@@ -25,9 +27,9 @@ export type RatingRowProps = {
 type StarType = 'full' | 'half' | 'empty'
 
 const STAR_COUNT = 5
-const FILLED_COLOR = '#0EA5E9'  // sky-500 — PsikoAL brand color
+const FILLED_COLOR = '#0EA5E9' // sky-500 — PsikoAL brand color
 const EMPTY_COLOR = '#D4D4D4'
-const STROKE_COLOR = '#0EA5E9'  // sky-500
+const STROKE_COLOR = '#0EA5E9' // sky-500
 
 const sizeConfig = {
   sm: { star: 14, gap: 'gap-0.5', text: 'caption' as const },

@@ -1,12 +1,14 @@
 import { useState } from 'react'
+import type { ComponentType, ReactNode } from 'react'
+
 import { Image, View } from 'react-native'
+
 import { Check, User } from 'lucide-react-native'
 
-import { cn } from '@/core/utils/cn'
-import { Text } from '@/core/components/atoms/Text'
-
-import type { ComponentType, ReactNode } from 'react'
 import type { SvgProps } from 'react-native-svg'
+
+import { Text } from '@/core/components/atoms/Text'
+import { cn } from '@/core/utils/cn'
 
 type IconProps = Pick<SvgProps, 'stroke'> & { size?: number; strokeWidth?: number }
 const UserIcon = User as ComponentType<IconProps>
@@ -87,10 +89,7 @@ export function Avatar({
   const verifiedPx = verifiedSizeMap[size]
 
   return (
-    <View
-      className={cn('relative self-start', className)}
-      style={{ width: px, height: px }}
-    >
+    <View className={cn('relative self-start', className)} style={{ width: px, height: px }}>
       <View
         style={{
           width: px,
@@ -112,12 +111,15 @@ export function Avatar({
         ) : (
           <View
             style={fallbackColor ? { backgroundColor: fallbackColor } : undefined}
-            className={cn('flex-1 items-center justify-center', !fallbackColor && 'bg-neutral-200 dark:bg-neutral-800')}
+            className={cn(
+              'flex-1 items-center justify-center',
+              !fallbackColor && 'bg-neutral-200 dark:bg-neutral-800'
+            )}
           >
             {initials ? (
               <Text
                 style={{ fontSize: fontSizeMap[size], lineHeight: fontSizeMap[size] * 1.2 }}
-                className="text-neutral-700 dark:text-neutral-200 font-semibold"
+                className="font-semibold text-neutral-700 dark:text-neutral-200"
               >
                 {initials.slice(0, 2).toUpperCase()}
               </Text>
@@ -130,7 +132,7 @@ export function Avatar({
 
       {isVerified && (
         <View
-          className="absolute bg-sky-500 items-center justify-center rounded-full border-2 border-white"
+          className="absolute items-center justify-center rounded-full border-2 border-white bg-sky-500"
           style={{
             width: verifiedPx,
             height: verifiedPx,
@@ -142,9 +144,7 @@ export function Avatar({
         </View>
       )}
 
-      {badge && !isVerified && (
-        <View className="absolute bottom-0 right-0">{badge}</View>
-      )}
+      {badge && !isVerified && <View className="absolute bottom-0 right-0">{badge}</View>}
     </View>
   )
 }
@@ -158,10 +158,7 @@ export function AvatarGroup({ avatars, max = 5, size = 'md', className }: Avatar
   return (
     <View className={cn('flex-row items-center', className)}>
       {avatars.slice(0, visibleCount).map((avatar, i) => (
-        <View
-          key={i}
-          style={{ marginLeft: i === 0 ? 0 : -overlap, zIndex: visibleCount - i }}
-        >
+        <View key={i} style={{ marginLeft: i === 0 ? 0 : -overlap, zIndex: visibleCount - i }}>
           <Avatar {...avatar} size={size} borderWidth={2} borderColor="#FFFFFF" />
         </View>
       ))}
@@ -178,7 +175,7 @@ export function AvatarGroup({ avatars, max = 5, size = 'md', className }: Avatar
             borderColor: '#FFFFFF',
           }}
         >
-          <Text style={{ fontSize: fontSizeMap[size] }} className="text-neutral-700 font-semibold">
+          <Text style={{ fontSize: fontSizeMap[size] }} className="font-semibold text-neutral-700">
             +{overflowCount}
           </Text>
         </View>

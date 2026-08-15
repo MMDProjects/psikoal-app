@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { get } from '@/lib/api'
-
 import { expertKeys, EXPERT_STALE_TIME } from '../expert.constants'
 import { ReviewSchema } from '../schemas/review.schema'
+
+import { get } from '@/lib/api'
 
 export function useExpertReviewsQuery(expertId: string) {
   return useQuery({

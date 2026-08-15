@@ -1,6 +1,7 @@
+import type { ComponentType } from 'react'
+
 import * as LucideIcons from 'lucide-react-native'
 
-import type { ComponentType } from 'react'
 import type { SvgProps } from 'react-native-svg'
 
 type LucideIconProps = Pick<SvgProps, 'stroke'> & { size?: number; strokeWidth?: number }

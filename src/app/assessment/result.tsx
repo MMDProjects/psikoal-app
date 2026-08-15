@@ -1,6 +1,8 @@
 import { ScrollView, View } from 'react-native'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useLocalSearchParams, useRouter } from 'expo-router'
 
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Skeleton } from '@/core/components/atoms/Skeleton'
@@ -25,7 +27,7 @@ export default function AssessmentResultScreen() {
         <DecorCircles />
         <BackButton />
         <ScreenTitle title="Değerlendirme Tamamlandı" topInset titleClassName="text-white" />
-        <View className="px-5 gap-4 pt-2">
+        <View className="gap-4 px-5 pt-2">
           <Skeleton variant="rect" width="100%" height={220} borderRadius="xl" />
           <Skeleton variant="line" width="70%" height={14} />
           <Skeleton variant="line" width="85%" height={14} />
@@ -67,7 +69,11 @@ export default function AssessmentResultScreen() {
 
       <BottomActionBar
         actions={[
-          { label: 'Testi Tekrar Yap', onPress: () => router.replace('/assessment'), variant: 'inverseGhost' },
+          {
+            label: 'Testi Tekrar Yap',
+            onPress: () => router.replace('/assessment'),
+            variant: 'inverseGhost',
+          },
           { label: 'Destek Al', onPress: () => router.push('/listing/new'), variant: 'inverse' },
         ]}
       />

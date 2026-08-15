@@ -13,30 +13,37 @@ export type OnboardingStepExperienceProps = {
   onChange: (value: number) => void
 }
 
-export function OnboardingStepExperience({ experienceYears, onChange }: OnboardingStepExperienceProps) {
+export function OnboardingStepExperience({
+  experienceYears,
+  onChange,
+}: OnboardingStepExperienceProps) {
   const colors = useThemeColors()
 
   return (
-    <View className="flex-row items-center justify-between rounded-xl px-5 py-4 bg-sky-600 dark:bg-sky-900">
+    <View className="flex-row items-center justify-between rounded-xl bg-sky-600 px-5 py-4 dark:bg-sky-900">
       <Pressable
         onPress={() => onChange(Math.max(MIN_YEARS, experienceYears - 1))}
         accessibilityRole="button"
         accessibilityLabel="Deneyim yılını azalt"
-        className="w-10 h-10 rounded-full bg-sky-700 dark:bg-sky-950 items-center justify-center active:bg-sky-800"
+        className="h-10 w-10 items-center justify-center rounded-full bg-sky-700 active:bg-sky-800 dark:bg-sky-950"
       >
         <Icon name="Minus" size={20} color={ICON_ON_BRAND} />
       </Pressable>
 
       <View className="items-center">
-        <Text variant="display" className="text-white">{experienceYears}</Text>
-        <Text variant="caption" className="text-sky-100">yıl deneyim</Text>
+        <Text variant="display" className="text-white">
+          {experienceYears}
+        </Text>
+        <Text variant="caption" className="text-sky-100">
+          yıl deneyim
+        </Text>
       </View>
 
       <Pressable
         onPress={() => onChange(Math.min(MAX_YEARS, experienceYears + 1))}
         accessibilityRole="button"
         accessibilityLabel="Deneyim yılını artır"
-        className="w-10 h-10 rounded-full bg-white items-center justify-center active:bg-sky-50"
+        className="h-10 w-10 items-center justify-center rounded-full bg-white active:bg-sky-50"
       >
         <Icon name="Plus" size={20} color={colors.brand} />
       </Pressable>

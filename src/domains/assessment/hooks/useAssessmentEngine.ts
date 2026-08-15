@@ -38,9 +38,7 @@ export function useAssessmentEngine(assessment: Assessment | undefined): UseAsse
       const filtered = prev.filter((a) => a.questionId !== id)
       if (type === 'multiple_choice') {
         const vals = existing?.values ?? []
-        const updated = vals.includes(value)
-          ? vals.filter((v) => v !== value)
-          : [...vals, value]
+        const updated = vals.includes(value) ? vals.filter((v) => v !== value) : [...vals, value]
         return [...filtered, { questionId: id, values: updated }]
       }
       return [...filtered, { questionId: id, values: [value] }]

@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
 
-import { get } from '@/lib/api'
-
 import { paymentKeys } from '../payment.constants'
 import { PackageSchema } from '../schemas/payment.schema'
+
+import { get } from '@/lib/api'
 
 export function usePackagesQuery() {
   return useQuery({

@@ -10,8 +10,12 @@ export type StatPillProps = {
 export function StatPill({ value, label }: StatPillProps) {
   return (
     <View className="flex-1 items-center gap-0.5">
-      <Text variant="subheading" className="text-sky-600">{value}</Text>
-      <Text variant="caption" color="tertiary">{label}</Text>
+      <Text variant="subheading" className="text-sky-600">
+        {value}
+      </Text>
+      <Text variant="caption" color="tertiary">
+        {label}
+      </Text>
     </View>
   )
 }

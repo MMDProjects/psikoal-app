@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { get } from '@/lib/api'
-
 import { expertKeys, EXPERT_STALE_TIME } from '../expert.constants'
 import { ExpertSchema } from '../schemas/expert.schema'
+
+import { get } from '@/lib/api'
 
 export function useExpertProfileQuery(expertId: string) {
   return useQuery({

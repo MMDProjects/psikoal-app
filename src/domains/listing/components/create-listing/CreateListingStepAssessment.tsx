@@ -1,11 +1,11 @@
 import { Pressable, View } from 'react-native'
 
+import type { MyAssessmentResult } from '@/domains/assessment'
+
 import { Icon } from '@/core/components/atoms/Icon'
 import { Text } from '@/core/components/atoms/Text'
 import { cn } from '@/core/utils/cn'
 import { RESULT_LEVEL_CONFIG } from '@/domains/assessment'
-
-import type { MyAssessmentResult } from '@/domains/assessment'
 
 const ICON_ON_BRAND = '#FFFFFF'
 
@@ -31,38 +31,44 @@ export function CreateListingStepAssessment({
   return (
     <View className="gap-5">
       <View className="gap-1">
-        <Text variant="heading" className="text-white">Test Sonucu Ekle</Text>
+        <Text variant="heading" className="text-white">
+          Test Sonucu Ekle
+        </Text>
         <Text variant="body" className="text-sky-100">
           Geçmiş test sonuçlarını ilanına ekleyerek uzmanlara daha fazla bilgi verebilirsin.
         </Text>
       </View>
 
-      <View className="bg-sky-600 dark:bg-sky-900 rounded-xl px-4 py-4 gap-3">
-        <Text variant="caption" className="text-sky-100 font-semibold uppercase tracking-widest">
+      <View className="gap-3 rounded-xl bg-sky-600 px-4 py-4 dark:bg-sky-900">
+        <Text variant="caption" className="font-semibold uppercase tracking-widest text-sky-100">
           İlan Özeti
         </Text>
         <View className="gap-1.5">
           <View className="flex-row gap-2">
             <Icon name="FileText" size={14} color={ICON_ON_BRAND} />
-            <Text variant="caption" className="text-white flex-1" numberOfLines={2}>{title.trim()}</Text>
+            <Text variant="caption" className="flex-1 text-white" numberOfLines={2}>
+              {title.trim()}
+            </Text>
           </View>
           <View className="flex-row gap-2">
             <Icon name="Tag" size={14} color={ICON_ON_BRAND} />
-            <Text variant="caption" className="text-white flex-1">
-              {selectedSpecs.slice(0, 3).join(', ')}{selectedSpecs.length > 3 ? ` +${selectedSpecs.length - 3}` : ''}
+            <Text variant="caption" className="flex-1 text-white">
+              {selectedSpecs.slice(0, 3).join(', ')}
+              {selectedSpecs.length > 3 ? ` +${selectedSpecs.length - 3}` : ''}
             </Text>
           </View>
           <View className="flex-row gap-2">
             <Icon name="Wallet" size={14} color={ICON_ON_BRAND} />
             <Text variant="caption" className="text-white">
-              ₺{parseFloat(budgetMin).toLocaleString('tr-TR')} – ₺{parseFloat(budgetMax).toLocaleString('tr-TR')}
+              ₺{parseFloat(budgetMin).toLocaleString('tr-TR')} – ₺
+              {parseFloat(budgetMax).toLocaleString('tr-TR')}
             </Text>
           </View>
         </View>
       </View>
 
       {results.length === 0 ? (
-        <View className="bg-sky-600 dark:bg-sky-900 rounded-xl p-4 items-center gap-2">
+        <View className="items-center gap-2 rounded-xl bg-sky-600 p-4 dark:bg-sky-900">
           <Icon name="ClipboardList" size={32} color="rgba(255,255,255,0.8)" />
           <Text variant="body" className="text-white" align="center">
             Henüz tamamlanmış test sonucun yok.
@@ -81,7 +87,7 @@ export function CreateListingStepAssessment({
                 key={result.id}
                 onPress={() => onSelectResult(isSelected ? undefined : result.id)}
                 className={cn(
-                  'rounded-xl px-4 py-4 gap-2 active:opacity-90',
+                  'gap-2 rounded-xl px-4 py-4 active:opacity-90',
                   isSelected ? 'bg-sky-50 dark:bg-sky-100' : 'bg-white dark:bg-white'
                 )}
               >
@@ -98,7 +104,7 @@ export function CreateListingStepAssessment({
                   </Text>
                   <View
                     className={cn(
-                      'w-5 h-5 rounded-full border-2 items-center justify-center',
+                      'h-5 w-5 items-center justify-center rounded-full border-2',
                       isSelected ? 'border-sky-500 bg-sky-500' : 'border-neutral-300 bg-white'
                     )}
                   >

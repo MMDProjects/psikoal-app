@@ -1,7 +1,10 @@
 import { useState } from 'react'
+
 import { Pressable, ScrollView, View } from 'react-native'
-import { useRouter } from 'expo-router'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useRouter } from 'expo-router'
 
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Icon } from '@/core/components/atoms/Icon'
@@ -13,7 +16,11 @@ import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { StepProgress } from '@/core/components/molecules/StepProgress'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { cn } from '@/core/utils/cn'
-import { useAssessmentQuery, useSubmitAssessmentMutation, useAssessmentEngine } from '@/domains/assessment'
+import {
+  useAssessmentQuery,
+  useSubmitAssessmentMutation,
+  useAssessmentEngine,
+} from '@/domains/assessment'
 
 export default function AssessmentScreen() {
   const router = useRouter()
@@ -72,7 +79,7 @@ export default function AssessmentScreen() {
       <ScreenTitle title="Değerlendirme Testi" topInset titleClassName="text-white" />
 
       {isLoading ? (
-        <View className="flex-1 px-5 justify-center">
+        <View className="flex-1 justify-center px-5">
           <SkeletonGroup gap="lg" className="items-center">
             <Skeleton variant="circle" width={64} height={64} />
             <Skeleton variant="line" width="60%" height={24} />
@@ -95,12 +102,14 @@ export default function AssessmentScreen() {
             showsVerticalScrollIndicator={false}
           >
             <View className="items-center gap-4">
-              <View className="w-16 h-16 rounded-full bg-white items-center justify-center">
+              <View className="h-16 w-16 items-center justify-center rounded-full bg-white">
                 <Icon name="Brain" size={32} color="#0EA5E9" />
               </View>
               <View className="items-center gap-2">
-                <Text variant="heading" className="text-white text-center">{assessment.title}</Text>
-                <Text variant="body" className="text-sky-100 text-center">
+                <Text variant="heading" className="text-center text-white">
+                  {assessment.title}
+                </Text>
+                <Text variant="body" className="text-center text-sky-100">
                   {assessment.description}
                 </Text>
               </View>
@@ -120,21 +129,23 @@ export default function AssessmentScreen() {
               </View>
             </View>
 
-            <View className="bg-sky-600 dark:bg-sky-900 rounded-xl px-4 py-3 flex-row items-start gap-3">
+            <View className="flex-row items-start gap-3 rounded-xl bg-sky-600 px-4 py-3 dark:bg-sky-900">
               <Icon name="Info" size={16} color="#FFFFFF" />
-              <Text variant="caption" className="text-white flex-1">
+              <Text variant="caption" className="flex-1 text-white">
                 Bu test tanı koymaz. Sonuçlar bilgilendirme amaçlıdır. Ücretsiz, kayıt gerektirmez.
               </Text>
             </View>
           </ScrollView>
 
           <BottomActionBar
-            actions={[{ label: 'Testi Başlat', onPress: () => setStarted(true), variant: 'inverse' }]}
+            actions={[
+              { label: 'Testi Başlat', onPress: () => setStarted(true), variant: 'inverse' },
+            ]}
           />
         </>
       ) : (
         <>
-          <View className="px-5 pt-2 pb-4">
+          <View className="px-5 pb-4 pt-2">
             <StepProgress
               current={currentIndex + 1}
               total={assessment.questions.length}
@@ -149,7 +160,9 @@ export default function AssessmentScreen() {
           >
             {currentQuestion && (
               <>
-                <Text variant="subheading" className="text-white leading-relaxed">{currentQuestion.text}</Text>
+                <Text variant="subheading" className="leading-relaxed text-white">
+                  {currentQuestion.text}
+                </Text>
 
                 <View className="gap-3">
                   {currentQuestion.options.map((option) => {
@@ -168,17 +181,21 @@ export default function AssessmentScreen() {
                         <View className="flex-row items-center gap-3">
                           <View
                             className={cn(
-                              'w-5 h-5 rounded-full border-2 items-center justify-center',
-                              isSelected ? 'border-sky-500 bg-sky-500' : 'border-sky-300 dark:border-sky-700'
+                              'h-5 w-5 items-center justify-center rounded-full border-2',
+                              isSelected
+                                ? 'border-sky-500 bg-sky-500'
+                                : 'border-sky-300 dark:border-sky-700'
                             )}
                           >
-                            {isSelected && <View className="w-2.5 h-2.5 rounded-full bg-white" />}
+                            {isSelected && <View className="h-2.5 w-2.5 rounded-full bg-white" />}
                           </View>
                           <Text
                             variant="body"
                             className={cn(
                               'flex-1',
-                              isSelected ? 'text-sky-700 dark:text-sky-700 font-medium' : 'text-white'
+                              isSelected
+                                ? 'text-sky-700 dark:text-sky-700 font-medium'
+                                : 'text-white'
                             )}
                           >
                             {option.text}
@@ -193,14 +210,16 @@ export default function AssessmentScreen() {
           </ScrollView>
 
           <BottomActionBar
-            actions={[{
-              label: isLast ? 'Sonuçları Gör' : 'Sonraki',
-              onPress: handleNext,
-              variant: 'inverse',
-              isDisabled: !canProceed,
-              isLoading: isPending && isLast,
-              loadingLabel: 'Hesaplanıyor...',
-            }]}
+            actions={[
+              {
+                label: isLast ? 'Sonuçları Gör' : 'Sonraki',
+                onPress: handleNext,
+                variant: 'inverse',
+                isDisabled: !canProceed,
+                isLoading: isPending && isLast,
+                loadingLabel: 'Hesaplanıyor...',
+              },
+            ]}
           />
         </>
       )}

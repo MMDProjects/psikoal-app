@@ -1,6 +1,9 @@
 const TR = 'tr-TR'
 
-const FORMAT_OPTIONS: Record<'short' | 'long' | 'time' | 'dayMonth' | 'dayMonthShort', Intl.DateTimeFormatOptions> = {
+const FORMAT_OPTIONS: Record<
+  'short' | 'long' | 'time' | 'dayMonth' | 'dayMonthShort',
+  Intl.DateTimeFormatOptions
+> = {
   short: { day: '2-digit', month: '2-digit', year: 'numeric' },
   long: { day: 'numeric', month: 'long', year: 'numeric' },
   time: { hour: '2-digit', minute: '2-digit', hour12: false },

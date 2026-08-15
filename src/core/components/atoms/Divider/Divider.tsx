@@ -1,7 +1,7 @@
 import { View } from 'react-native'
 
-import { cn } from '@/core/utils/cn'
 import { Text } from '@/core/components/atoms/Text'
+import { cn } from '@/core/utils/cn'
 
 export type DividerOrientation = 'horizontal' | 'vertical'
 export type DividerColor = 'default' | 'muted' | 'strong' | 'brand'
@@ -46,7 +46,12 @@ export function Divider({
   if (orientation === 'vertical') {
     return (
       <View
-        className={cn('w-px self-stretch', colorStyles[color], spacingVerticalStyles[spacing], className)}
+        className={cn(
+          'w-px self-stretch',
+          colorStyles[color],
+          spacingVerticalStyles[spacing],
+          className
+        )}
         accessibilityRole="none"
       />
     )
@@ -55,18 +60,18 @@ export function Divider({
   if (label) {
     return (
       <View className={cn('flex-row items-center gap-3', spacingStyles[spacing], className)}>
-        <View className={cn('flex-1 h-px', colorStyles[color])} />
+        <View className={cn('h-px flex-1', colorStyles[color])} />
         <Text variant="caption" color="tertiary">
           {label}
         </Text>
-        <View className={cn('flex-1 h-px', colorStyles[color])} />
+        <View className={cn('h-px flex-1', colorStyles[color])} />
       </View>
     )
   }
 
   return (
     <View
-      className={cn('w-full h-px', colorStyles[color], spacingStyles[spacing], className)}
+      className={cn('h-px w-full', colorStyles[color], spacingStyles[spacing], className)}
       accessibilityRole="none"
     />
   )

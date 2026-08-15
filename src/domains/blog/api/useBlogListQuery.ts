@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
 
-import { get } from '@/lib/api'
-
 import { blogKeys, BLOG_STALE_TIME } from '../blog.constants'
 import { BlogListItemSchema } from '../schemas/blog.schema'
+
+import { get } from '@/lib/api'
 
 const BlogListResponseSchema = z.object({
   data: z.array(BlogListItemSchema),

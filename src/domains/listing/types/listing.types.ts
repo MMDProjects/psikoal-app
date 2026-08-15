@@ -1,5 +1,9 @@
-import { z } from 'zod'
-import { ListingSchema, ListingStatusSchema, CreateListingSchema } from '../schemas/listing.schema'
+import type {
+  ListingSchema,
+  ListingStatusSchema,
+  CreateListingSchema,
+} from '../schemas/listing.schema'
+import type { z } from 'zod'
 
 export type Listing = z.infer<typeof ListingSchema>
 export type ListingStatus = z.infer<typeof ListingStatusSchema>

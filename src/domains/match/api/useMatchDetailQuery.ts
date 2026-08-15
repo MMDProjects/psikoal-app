@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { get } from '@/lib/api'
-
 import { matchKeys } from '../match.constants'
 import { MatchDetailSchema } from '../schemas/match.schema'
 
 import type { MatchDetail } from '../types/match.types'
+
+import { get } from '@/lib/api'
 
 export function useMatchDetailQuery(matchId: string) {
   return useQuery({

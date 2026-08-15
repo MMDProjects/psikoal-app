@@ -1,7 +1,10 @@
 import { useState } from 'react'
+
 import { FlatList, View } from 'react-native'
-import { useRouter } from 'expo-router'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useRouter } from 'expo-router'
 
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
 import { Skeleton } from '@/core/components/atoms/Skeleton'
@@ -39,16 +42,32 @@ export default function MatchesScreen() {
       <HeaderActions
         actions={
           isExpert
-            ? [{ icon: 'Bell', accessibilityLabel: 'Bildirimler', badgeCount: unreadCount, onPress: () => router.push('/notifications') }]
+            ? [
+                {
+                  icon: 'Bell',
+                  accessibilityLabel: 'Bildirimler',
+                  badgeCount: unreadCount,
+                  onPress: () => router.push('/notifications'),
+                },
+              ]
             : [
-                { icon: 'Bell', accessibilityLabel: 'Bildirimler', badgeCount: unreadCount, onPress: () => router.push('/notifications') },
-                { icon: 'Plus', accessibilityLabel: 'Yeni İlan Oluştur', onPress: () => router.push('/listing/new') },
+                {
+                  icon: 'Bell',
+                  accessibilityLabel: 'Bildirimler',
+                  badgeCount: unreadCount,
+                  onPress: () => router.push('/notifications'),
+                },
+                {
+                  icon: 'Plus',
+                  accessibilityLabel: 'Yeni İlan Oluştur',
+                  onPress: () => router.push('/listing/new'),
+                },
               ]
         }
       />
 
       <FlatList
-        data={(!isLoading && !isError) ? displayed : []}
+        data={!isLoading && !isError ? displayed : []}
         keyExtractor={(item) => item.id}
         contentContainerClassName="pb-6"
         showsVerticalScrollIndicator={false}
@@ -58,11 +77,13 @@ export default function MatchesScreen() {
         )}
         ListHeaderComponent={
           <View className="px-4 pb-3" style={{ paddingTop: insets.top + 8 }}>
-            <Text variant="heading" className={isExpert ? 'mb-3 pr-13' : 'mb-3 pr-24'}>Eşleşmelerim</Text>
+            <Text variant="heading" className={isExpert ? 'mb-3 pr-13' : 'mb-3 pr-24'}>
+              Eşleşmelerim
+            </Text>
             <SegmentedControl
               options={[
-                { key: 'active', label: 'Aktif'  },
-                { key: 'past',   label: 'Geçmiş' },
+                { key: 'active', label: 'Aktif' },
+                { key: 'past', label: 'Geçmiş' },
               ]}
               value={tab}
               onChange={setTab}
@@ -74,7 +95,7 @@ export default function MatchesScreen() {
             <View>
               {[1, 2].map((i) => (
                 <View key={i}>
-                  <View className="px-4 py-4 gap-3">
+                  <View className="gap-3 px-4 py-4">
                     <Skeleton variant="line" width="70%" height={14} />
                     <Skeleton variant="line" width="45%" height={12} />
                   </View>
@@ -90,12 +111,14 @@ export default function MatchesScreen() {
               title={tab === 'active' ? 'Aktif eşleşme yok' : 'Geçmiş eşleşme yok'}
               description={
                 tab === 'active'
-                  ? (isExpert
-                    ? "Fırsatlar sekmesinden ilanları inceleyin ve teklif gönderin."
-                    : "İlanlarınıza gelen teklifleri kabul ettiğinizde eşleşmeler burada görünür.")
+                  ? isExpert
+                    ? 'Fırsatlar sekmesinden ilanları inceleyin ve teklif gönderin.'
+                    : 'İlanlarınıza gelen teklifleri kabul ettiğinizde eşleşmeler burada görünür.'
                   : ''
               }
-              ctaLabel={tab === 'active' ? (isExpert ? "İlan Feed'ine Git" : "İlanlarıma Git") : undefined}
+              ctaLabel={
+                tab === 'active' ? (isExpert ? "İlan Feed'ine Git" : 'İlanlarıma Git') : undefined
+              }
               onCta={tab === 'active' ? () => router.push(isExpert ? '/' : '/offers') : undefined}
             />
           )

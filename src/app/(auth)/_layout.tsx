@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+
 import { Redirect, Stack, useSegments } from 'expo-router'
 
 import { useAuthStore } from '@/domains/auth'

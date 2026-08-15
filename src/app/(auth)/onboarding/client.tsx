@@ -1,7 +1,10 @@
 import { useState } from 'react'
+
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native'
-import { useRouter } from 'expo-router'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useRouter } from 'expo-router'
 
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Icon } from '@/core/components/atoms/Icon'
@@ -56,7 +59,7 @@ export default function ClientOnboardingScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View className="items-center gap-3">
-            <View className="w-16 h-16 rounded-full bg-white items-center justify-center">
+            <View className="h-16 w-16 items-center justify-center rounded-full bg-white">
               <Icon name="CheckCircle" size={32} color="#0EA5E9" />
             </View>
             <Text variant="heading" align="center" className="text-white">
@@ -68,7 +71,7 @@ export default function ClientOnboardingScreen() {
             </Text>
           </View>
 
-          <View className="gap-4 mt-2">
+          <View className="mt-2 gap-4">
             <InputField
               tone="onBrand"
               label="Telefon"
@@ -90,15 +93,20 @@ export default function ClientOnboardingScreen() {
             />
 
             <Pressable
-              onPress={() => { setKvkkAccepted((v) => !v); setKvkkError(undefined) }}
+              onPress={() => {
+                setKvkkAccepted((v) => !v)
+                setKvkkError(undefined)
+              }}
               className={cn(
-                'flex-row items-start gap-3 p-4 rounded-xl',
-                kvkkAccepted ? 'bg-white dark:bg-white' : 'bg-sky-600 dark:bg-sky-900 active:bg-sky-700 dark:active:bg-sky-800'
+                'flex-row items-start gap-3 rounded-xl p-4',
+                kvkkAccepted
+                  ? 'bg-white dark:bg-white'
+                  : 'bg-sky-600 dark:bg-sky-900 active:bg-sky-700 dark:active:bg-sky-800'
               )}
             >
               <View
                 className={cn(
-                  'w-5 h-5 rounded border-2 items-center justify-center mt-0.5',
+                  'mt-0.5 h-5 w-5 items-center justify-center rounded border-2',
                   kvkkAccepted ? 'bg-sky-500 border-sky-500' : 'border-sky-300 dark:border-sky-700'
                 )}
               >
@@ -106,11 +114,18 @@ export default function ClientOnboardingScreen() {
               </View>
               <Text
                 variant="caption"
-                className={cn('flex-1', kvkkAccepted ? 'text-neutral-600 dark:text-neutral-600' : 'text-sky-100')}
+                className={cn(
+                  'flex-1',
+                  kvkkAccepted ? 'text-neutral-600 dark:text-neutral-600' : 'text-sky-100'
+                )}
               >
                 <Text
                   variant="caption"
-                  className={kvkkAccepted ? 'text-sky-600 dark:text-sky-600 font-semibold' : 'text-white font-semibold'}
+                  className={
+                    kvkkAccepted
+                      ? 'text-sky-600 dark:text-sky-600 font-semibold'
+                      : 'text-white font-semibold'
+                  }
                 >
                   KVKK Aydınlatma Metni
                 </Text>
@@ -119,11 +134,13 @@ export default function ClientOnboardingScreen() {
             </Pressable>
 
             {kvkkError && (
-              <Text variant="caption" className="text-red-100">{kvkkError}</Text>
+              <Text variant="caption" className="text-red-100">
+                {kvkkError}
+              </Text>
             )}
 
             {apiErrorMessage && (
-              <View className="bg-red-50 dark:bg-red-950 rounded-xl px-4 py-3">
+              <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-950">
                 <Text variant="caption" className="text-red-600 dark:text-red-300">
                   {apiErrorMessage}
                 </Text>

@@ -1,7 +1,9 @@
 import { Alert, Pressable, ScrollView, View } from 'react-native'
-import { useRouter } from 'expo-router'
+
 import { Controller, useForm } from 'react-hook-form'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useRouter } from 'expo-router'
 
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
 import { Chip } from '@/core/components/atoms/Chip'
@@ -14,8 +16,8 @@ import { EmptyState } from '@/core/components/molecules/EmptyState'
 import { InputField } from '@/core/components/molecules/InputField'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
-import { useThemeColors } from '@/core/theme'
 import { useRefresh } from '@/core/hooks'
+import { useThemeColors } from '@/core/theme'
 import { useAuthStore } from '@/domains/auth'
 import { useExpertProfileQuery, useExpertProfileMutation } from '@/domains/expert'
 
@@ -54,10 +56,10 @@ export default function DocumentsScreen() {
 
       {isLoading && (
         <View style={{ paddingTop: insets.top + 8 }}>
-          <View className="pt-2 pb-3 items-center">
+          <View className="items-center pb-3 pt-2">
             <Skeleton variant="line" width="45%" height={14} />
           </View>
-          <View className="px-4 py-5 gap-3">
+          <View className="gap-3 px-4 py-5">
             <Skeleton variant="rect" height={56} borderRadius="xl" />
             <Skeleton variant="rect" height={56} borderRadius="xl" />
           </View>
@@ -77,14 +79,21 @@ export default function DocumentsScreen() {
       {!isLoading && !isError && expert && (
         <>
           <ScrollView
-            contentContainerStyle={{ paddingTop: insets.top + 8, paddingBottom: bottomBarHeight + 16 }}
+            contentContainerStyle={{
+              paddingTop: insets.top + 8,
+              paddingBottom: bottomBarHeight + 16,
+            }}
             showsVerticalScrollIndicator={false}
             refreshControl={<AppRefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
           >
             <ScreenTitle title="Belgeler ve Bağlantılar" />
 
-            <View className="px-4 py-5 gap-3">
-              <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+            <View className="gap-3 px-4 py-5">
+              <Text
+                variant="caption"
+                color="secondary"
+                className="font-semibold uppercase tracking-widest"
+              >
                 Özgeçmiş (CV)
               </Text>
               <Pressable
@@ -92,17 +101,21 @@ export default function DocumentsScreen() {
                 className="flex-row items-center gap-3 py-2 active:opacity-90"
               >
                 <Icon name="FileUp" size={18} color={colors.brand} />
-                <Text variant="body" className="flex-1 dark:text-[#F5F5F7]">{expert.cvUrl ? 'CV Güncelle' : 'CV Yükle'}</Text>
-                {expert.cvUrl && (
-                  <Icon name="CheckCircle2" size={16} color={colors.success} />
-                )}
+                <Text variant="body" className="flex-1 dark:text-[#F5F5F7]">
+                  {expert.cvUrl ? 'CV Güncelle' : 'CV Yükle'}
+                </Text>
+                {expert.cvUrl && <Icon name="CheckCircle2" size={16} color={colors.success} />}
                 <Icon name="ChevronRight" size={16} color={colors.contentDisabled} />
               </Pressable>
             </View>
 
             <Divider spacing="none" className="mx-4" />
-            <View className="px-4 py-5 gap-3">
-              <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+            <View className="gap-3 px-4 py-5">
+              <Text
+                variant="caption"
+                color="secondary"
+                className="font-semibold uppercase tracking-widest"
+              >
                 Sertifikalar
               </Text>
               {expert.certificates && expert.certificates.length > 0 && (
@@ -117,14 +130,20 @@ export default function DocumentsScreen() {
                 className="flex-row items-center gap-3 py-2 active:opacity-90"
               >
                 <Icon name="Award" size={18} color={colors.brand} />
-                <Text variant="body" className="flex-1 dark:text-[#F5F5F7]">Sertifika Ekle</Text>
+                <Text variant="body" className="flex-1 dark:text-[#F5F5F7]">
+                  Sertifika Ekle
+                </Text>
                 <Icon name="ChevronRight" size={16} color={colors.contentDisabled} />
               </Pressable>
             </View>
 
             <Divider spacing="none" className="mx-4" />
-            <View className="px-4 py-5 gap-3">
-              <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+            <View className="gap-3 px-4 py-5">
+              <Text
+                variant="caption"
+                color="secondary"
+                className="font-semibold uppercase tracking-widest"
+              >
                 Bağlantılar
               </Text>
               <Controller
@@ -146,12 +165,14 @@ export default function DocumentsScreen() {
           </ScrollView>
 
           <BottomActionBar
-            actions={[{
-              label: 'Kaydet',
-              loadingLabel: 'Kaydediliyor...',
-              onPress: handleSubmit(onSubmit),
-              isLoading: isPending,
-            }]}
+            actions={[
+              {
+                label: 'Kaydet',
+                loadingLabel: 'Kaydediliyor...',
+                onPress: handleSubmit(onSubmit),
+                isLoading: isPending,
+              },
+            ]}
           />
         </>
       )}

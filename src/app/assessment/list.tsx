@@ -1,6 +1,8 @@
 import { Pressable, ScrollView, useColorScheme, View } from 'react-native'
-import { useRouter } from 'expo-router'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useRouter } from 'expo-router'
 
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
 import { Divider } from '@/core/components/atoms/Divider'
@@ -10,14 +12,13 @@ import { BackButton } from '@/core/components/molecules/BackButton'
 import { ListRowSkeleton } from '@/core/components/molecules/ListRowSkeleton'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { SectionHeader } from '@/core/components/molecules/SectionHeader'
+import { useRefresh } from '@/core/hooks'
+import { formatDate } from '@/core/utils/formatDate'
 import {
   useAssessmentListQuery,
   useMyAssessmentResultsQuery,
   RESULT_LEVEL_CONFIG,
 } from '@/domains/assessment'
-
-import { formatDate } from '@/core/utils/formatDate'
-import { useRefresh } from '@/core/hooks'
 
 export default function AssessmentListScreen() {
   const router = useRouter()
@@ -49,10 +50,14 @@ export default function AssessmentListScreen() {
         {resultsLoading ? (
           <ListRowSkeleton />
         ) : !myResults || myResults.length === 0 ? (
-          <View className="px-4 py-6 items-center gap-2">
+          <View className="items-center gap-2 px-4 py-6">
             <Icon name="ClipboardList" size={28} color="#A3A3A3" />
-            <Text variant="body" color="secondary" align="center">Henüz tamamlanmış test yok</Text>
-            <Text variant="caption" color="tertiary" align="center">Aşağıdaki testlerden birini tamamlayın.</Text>
+            <Text variant="body" color="secondary" align="center">
+              Henüz tamamlanmış test yok
+            </Text>
+            <Text variant="caption" color="tertiary" align="center">
+              Aşağıdaki testlerden birini tamamlayın.
+            </Text>
           </View>
         ) : (
           myResults.map((result, index) => {
@@ -60,9 +65,13 @@ export default function AssessmentListScreen() {
             return (
               <View key={result.id}>
                 {index > 0 && <Divider spacing="none" className="mx-4" />}
-                <View className="px-4 py-4 gap-2">
+                <View className="gap-2 px-4 py-4">
                   <View className="flex-row items-center gap-2.5">
-                    <Text variant="label" className="flex-1 font-semibold text-neutral-900 dark:text-[#F5F5F7]" numberOfLines={1}>
+                    <Text
+                      variant="label"
+                      className="flex-1 font-semibold text-neutral-900 dark:text-[#F5F5F7]"
+                      numberOfLines={1}
+                    >
                       {result.assessmentTitle}
                     </Text>
                     <Text variant="caption" className="font-semibold" style={{ color: cfg.color }}>
@@ -70,13 +79,22 @@ export default function AssessmentListScreen() {
                     </Text>
                   </View>
 
-                  <Text variant="caption" color="secondary" numberOfLines={2} className="leading-relaxed">
+                  <Text
+                    variant="caption"
+                    color="secondary"
+                    numberOfLines={2}
+                    className="leading-relaxed"
+                  >
                     {result.summary}
                   </Text>
 
                   <View className="flex-row items-center justify-between pt-1">
-                    <Text variant="caption" color="tertiary">Puan: {result.score}</Text>
-                    <Text variant="caption" color="tertiary">{formatDate(result.createdAt, 'long')}</Text>
+                    <Text variant="caption" color="tertiary">
+                      Puan: {result.score}
+                    </Text>
+                    <Text variant="caption" color="tertiary">
+                      {formatDate(result.createdAt, 'long')}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -95,12 +113,15 @@ export default function AssessmentListScreen() {
               {index > 0 && <Divider spacing="none" className="mx-4" />}
               <Pressable
                 onPress={() => router.push('/assessment' as never)}
-                className="px-4 py-4 flex-row items-center gap-3 active:opacity-90"
+                className="flex-row items-center gap-3 px-4 py-4 active:opacity-90"
               >
                 <View className="flex-1 gap-0.5">
-                  <Text variant="body" className="dark:text-[#F5F5F7]">{test.title}</Text>
+                  <Text variant="body" className="dark:text-[#F5F5F7]">
+                    {test.title}
+                  </Text>
                   <Text variant="caption" color="tertiary">
-                    Ücretsiz · {test.questionCount} soru · ~{test.estimatedMinutes} dk · Kayıt gerekmez
+                    Ücretsiz · {test.questionCount} soru · ~{test.estimatedMinutes} dk · Kayıt
+                    gerekmez
                   </Text>
                 </View>
                 <Icon name="ChevronRight" size={16} color={isDark ? '#525252' : '#A3A3A3'} />

@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
+
 import { Pressable, ScrollView, View } from 'react-native'
-import { useRouter } from 'expo-router'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useRouter } from 'expo-router'
 
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
 import { Chip } from '@/core/components/atoms/Chip'
@@ -14,10 +17,11 @@ import { EmptyState } from '@/core/components/molecules/EmptyState'
 import { InputField } from '@/core/components/molecules/InputField'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
-import { themeColors, useThemeColors } from '@/core/theme'
 import { useRefresh } from '@/core/hooks'
+import { themeColors, useThemeColors } from '@/core/theme'
 import { useAuthStore } from '@/domains/auth'
-import { ExpertSpecializations, useExpertProfileQuery, useExpertProfileMutation } from '@/domains/expert'
+import { useCategoriesQuery } from '@/domains/category'
+import { useExpertProfileQuery, useExpertProfileMutation } from '@/domains/expert'
 
 export default function ProfessionalInfoScreen() {
   const router = useRouter()
@@ -25,6 +29,7 @@ export default function ProfessionalInfoScreen() {
   const insets = useSafeAreaInsets()
   const bottomBarHeight = 56 + insets.bottom
 
+  const { data: categories } = useCategoriesQuery()
   const expertQuery = useExpertProfileQuery(user?.id ?? '')
   const { data: expert, isLoading, isError } = expertQuery
   const { isRefreshing, onRefresh } = useRefresh(expertQuery)
@@ -94,10 +99,10 @@ export default function ProfessionalInfoScreen() {
 
       {isLoading && (
         <View style={{ paddingTop: insets.top + 8 }}>
-          <View className="pt-2 pb-3 items-center">
+          <View className="items-center pb-3 pt-2">
             <Skeleton variant="line" width="40%" height={14} />
           </View>
-          <View className="px-4 py-5 gap-3">
+          <View className="gap-3 px-4 py-5">
             <Skeleton variant="rect" height={44} borderRadius="lg" />
             <View className="flex-row flex-wrap gap-2">
               <Skeleton variant="rect" width={100} height={32} borderRadius="full" />
@@ -120,70 +125,88 @@ export default function ProfessionalInfoScreen() {
       {!isLoading && !isError && expert && (
         <>
           <ScrollView
-            contentContainerStyle={{ paddingTop: insets.top + 8, paddingBottom: bottomBarHeight + 16 }}
+            contentContainerStyle={{
+              paddingTop: insets.top + 8,
+              paddingBottom: bottomBarHeight + 16,
+            }}
             showsVerticalScrollIndicator={false}
             refreshControl={<AppRefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
           >
             <ScreenTitle title="Mesleki Bilgiler" />
 
-            <View className="px-4 py-5 gap-4">
+            <View className="gap-4 px-4 py-5">
               <InputField
                 label="Ünvan"
                 placeholder="Örn: Klinik Psikolog, Psikoterapist"
                 value={title}
-                onChangeText={(t) => { setTitle(t); setTitleError(undefined) }}
+                onChangeText={(t) => {
+                  setTitle(t)
+                  setTitleError(undefined)
+                }}
                 errorMessage={titleError}
                 isRequired
               />
             </View>
 
             <Divider spacing="none" className="mx-4" />
-            <View className="px-4 py-5 gap-3">
-              <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+            <View className="gap-3 px-4 py-5">
+              <Text
+                variant="caption"
+                color="secondary"
+                className="font-semibold uppercase tracking-widest"
+              >
                 Uzmanlık Alanları
               </Text>
               <View className="flex-row flex-wrap gap-2">
-                {ExpertSpecializations.map((spec) => (
+                {categories?.map((category) => (
                   <Chip
-                    key={spec}
-                    label={spec}
+                    key={category.id}
+                    label={category.name}
                     variant="filter"
                     size="md"
-                    isSelected={specs.includes(spec)}
-                    onPress={() => toggleSpec(spec)}
+                    isSelected={specs.includes(category.name)}
+                    onPress={() => toggleSpec(category.name)}
                   />
                 ))}
               </View>
               {specsError && (
-                <Text variant="caption" color="error">{specsError}</Text>
+                <Text variant="caption" color="error">
+                  {specsError}
+                </Text>
               )}
             </View>
 
             <Divider spacing="none" className="mx-4" />
-            <View className="px-4 py-5 gap-3">
-              <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+            <View className="gap-3 px-4 py-5">
+              <Text
+                variant="caption"
+                color="secondary"
+                className="font-semibold uppercase tracking-widest"
+              >
                 Deneyim Süresi
               </Text>
-              <View className="flex-row items-center justify-between rounded-xl px-5 py-4 bg-neutral-100 dark:bg-dark-control">
+              <View className="flex-row items-center justify-between rounded-xl bg-neutral-100 px-5 py-4 dark:bg-dark-control">
                 <Pressable
                   onPress={() => setExperienceYears((y) => Math.max(0, y - 1))}
                   accessibilityRole="button"
                   accessibilityLabel="Deneyim yılını azalt"
-                  className="w-10 h-10 rounded-full bg-white dark:bg-dark-elevated items-center justify-center active:bg-neutral-50"
+                  className="h-10 w-10 items-center justify-center rounded-full bg-white active:bg-neutral-50 dark:bg-dark-elevated"
                 >
                   <Icon name="Minus" size={20} color={colors.contentPrimary} />
                 </Pressable>
 
                 <View className="items-center">
                   <Text variant="display">{experienceYears}</Text>
-                  <Text variant="caption" color="secondary">yıl deneyim</Text>
+                  <Text variant="caption" color="secondary">
+                    yıl deneyim
+                  </Text>
                 </View>
 
                 <Pressable
                   onPress={() => setExperienceYears((y) => Math.min(50, y + 1))}
                   accessibilityRole="button"
                   accessibilityLabel="Deneyim yılını artır"
-                  className="w-10 h-10 rounded-full bg-sky-500 items-center justify-center active:bg-sky-600"
+                  className="h-10 w-10 items-center justify-center rounded-full bg-sky-500 active:bg-sky-600"
                 >
                   <Icon name="Plus" size={20} color={themeColors.light.contentInverse} />
                 </Pressable>
@@ -191,7 +214,7 @@ export default function ProfessionalInfoScreen() {
             </View>
 
             <Divider spacing="none" className="mx-4" />
-            <View className="px-4 py-5 gap-4">
+            <View className="gap-4 px-4 py-5">
               <InputField
                 label="Eğitim Bilgisi"
                 placeholder="örn. İstanbul Üniversitesi, Klinik Psikoloji (Yüksek Lisans)"
@@ -203,7 +226,10 @@ export default function ProfessionalInfoScreen() {
                 label="Biyografi"
                 placeholder="Kendinizi danışanlara tanıtın."
                 value={bio}
-                onChangeText={(t) => { setBio(t); setBioError(undefined) }}
+                onChangeText={(t) => {
+                  setBio(t)
+                  setBioError(undefined)
+                }}
                 errorMessage={bioError}
                 multiline
                 hint={`${bio.length}/1000 karakter (minimum 50)`}
@@ -213,12 +239,14 @@ export default function ProfessionalInfoScreen() {
           </ScrollView>
 
           <BottomActionBar
-            actions={[{
-              label: 'Kaydet',
-              loadingLabel: 'Kaydediliyor...',
-              onPress: handleSave,
-              isLoading: isPending,
-            }]}
+            actions={[
+              {
+                label: 'Kaydet',
+                loadingLabel: 'Kaydediliyor...',
+                onPress: handleSave,
+                isLoading: isPending,
+              },
+            ]}
           />
         </>
       )}

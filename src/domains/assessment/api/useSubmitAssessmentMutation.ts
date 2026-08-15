@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { post } from '@/lib/api'
-
 import { assessmentKeys } from '../assessment.constants'
 import { AssessmentResultSchema } from '../schemas/assessment.schema'
 
 import type { SubmitAssessmentRequest } from '../types/assessment.types'
+
+import { post } from '@/lib/api'
 
 export function useSubmitAssessmentMutation() {
   const queryClient = useQueryClient()

@@ -1,10 +1,10 @@
 import { Pressable, useColorScheme, View } from 'react-native'
 
-import { cn } from '@/core/utils/cn'
+import type { IconName } from '@/core/components/atoms/Icon'
+
 import { Icon } from '@/core/components/atoms/Icon'
 import { Text } from '@/core/components/atoms/Text'
-
-import type { IconName } from '@/core/components/atoms/Icon'
+import { cn } from '@/core/utils/cn'
 
 export type DiscoverMoreVariant = 'row' | 'tile'
 
@@ -39,7 +39,7 @@ export function DiscoverMore({
         accessibilityRole="button"
         accessibilityLabel={label}
         style={{ width: tileWidth }}
-        className={cn('active:opacity-70 gap-2', className)}
+        className={cn('gap-2 active:opacity-70', className)}
       >
         <View
           className="rounded-xl bg-neutral-200/70 dark:bg-white/5"
@@ -47,13 +47,13 @@ export function DiscoverMore({
         />
 
         <View className="gap-1">
-          <Text variant="caption" className="text-sky-500 font-semibold" numberOfLines={1}>
+          <Text variant="caption" className="font-semibold text-sky-500" numberOfLines={1}>
             {tag}
           </Text>
           <Text
             variant="body"
             numberOfLines={2}
-            className="font-semibold text-neutral-900 dark:text-[#F5F5F7] leading-snug"
+            className="font-semibold leading-snug text-neutral-900 dark:text-[#F5F5F7]"
             style={{ fontSize: 13 }}
           >
             {label}
@@ -73,15 +73,17 @@ export function DiscoverMore({
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={label}
-      className={cn('px-4 py-4 flex-row items-center gap-3 active:opacity-80', className)}
+      className={cn('flex-row items-center gap-3 px-4 py-4 active:opacity-80', className)}
     >
-      {icon && (
-        <Icon name={icon} size={18} color={isDark ? '#38BDF8' : '#0EA5E9'} />
-      )}
+      {icon && <Icon name={icon} size={18} color={isDark ? '#38BDF8' : '#0EA5E9'} />}
       <View className="flex-1 gap-0.5">
-        <Text variant="body" className="font-medium dark:text-[#F5F5F7]">{label}</Text>
+        <Text variant="body" className="font-medium dark:text-[#F5F5F7]">
+          {label}
+        </Text>
         {hint && (
-          <Text variant="caption" color="tertiary">{hint}</Text>
+          <Text variant="caption" color="tertiary">
+            {hint}
+          </Text>
         )}
       </View>
     </Pressable>

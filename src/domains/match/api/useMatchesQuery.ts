@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
 
-import { get } from '@/lib/api'
-
 import { matchKeys } from '../match.constants'
 import { MatchSchema } from '../schemas/match.schema'
+
+import { get } from '@/lib/api'
 
 const MatchesResponseSchema = z.object({
   data: z.array(MatchSchema),

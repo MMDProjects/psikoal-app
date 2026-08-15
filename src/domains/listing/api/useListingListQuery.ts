@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
 
-import { get } from '@/lib/api'
-
 import { listingKeys, LISTING_STALE_TIME } from '../listing.constants'
 import { ListingSchema } from '../schemas/listing.schema'
 
 import type { ListingListFilters, ListingListParams } from '../types/listing.types'
+
+import { get } from '@/lib/api'
 
 const ListingListResponseSchema = z.object({
   data: z.array(ListingSchema),

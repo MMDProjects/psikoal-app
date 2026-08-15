@@ -1,6 +1,12 @@
 import { useState } from 'react'
+
 import { FlatList, View } from 'react-native'
+
 import { useRouter } from 'expo-router'
+
+import { HomeHero } from './HomeHero'
+
+import type { ListingListFilters, ListingSortValue } from '@/domains/listing'
 
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
 import { Chip } from '@/core/components/atoms/Chip'
@@ -10,21 +16,17 @@ import { EmptyState } from '@/core/components/molecules/EmptyState'
 import { HeaderActions } from '@/core/components/molecules/HeaderActions'
 import { HeroQuickActions } from '@/core/components/organisms/HeroQuickActions'
 import { useRefresh } from '@/core/hooks'
-import { useSuggestionsQuery, SuggestionSlide } from '@/domains/suggestion'
 import { useAuthStore } from '@/domains/auth'
-import { useMatchesQuery } from '@/domains/match'
-import { useUnreadNotificationCount } from '@/domains/notification'
-import { useExpertOffersQuery } from '@/domains/offer'
 import {
   useListingListQuery,
   ListingCard,
   ListingFilterModal,
   ListingSortModal,
 } from '@/domains/listing'
-
-import { HomeHero } from './HomeHero'
-
-import type { ListingListFilters, ListingSortValue } from '@/domains/listing'
+import { useMatchesQuery } from '@/domains/match'
+import { useUnreadNotificationCount } from '@/domains/notification'
+import { useExpertOffersQuery } from '@/domains/offer'
+import { useSuggestionsQuery, SuggestionSlide } from '@/domains/suggestion'
 
 export function ExpertHomeScreen() {
   const router = useRouter()
@@ -51,7 +53,12 @@ export function ExpertHomeScreen() {
   const listings = listingsQuery.data?.data ?? []
   const listingCount = listingsQuery.data?.meta.total ?? 0
 
-  const { isRefreshing, onRefresh } = useRefresh(listingsQuery, offersQuery, matchesQuery, suggestionsQuery)
+  const { isRefreshing, onRefresh } = useRefresh(
+    listingsQuery,
+    offersQuery,
+    matchesQuery,
+    suggestionsQuery
+  )
 
   const activeFilterCount = [
     (filters.specialization?.length ?? 0) > 0,
@@ -69,12 +76,17 @@ export function ExpertHomeScreen() {
     <View className="flex-1 bg-surface-base dark:bg-dark-bg">
       <HeaderActions
         actions={[
-          { icon: 'Bell', accessibilityLabel: 'Bildirimler', badgeCount: unreadCount, onPress: () => router.push('/notifications') },
+          {
+            icon: 'Bell',
+            accessibilityLabel: 'Bildirimler',
+            badgeCount: unreadCount,
+            onPress: () => router.push('/notifications'),
+          },
         ]}
       />
 
       <FlatList
-        data={(!isLoading && !isError) ? listings : []}
+        data={!isLoading && !isError ? listings : []}
         keyExtractor={(item) => item.id}
         contentContainerClassName="pb-6"
         showsVerticalScrollIndicator={false}
@@ -140,7 +152,7 @@ export function ExpertHomeScreen() {
             <View>
               {[1, 2, 3].map((i) => (
                 <View key={i}>
-                  <View className="px-4 py-4 gap-3">
+                  <View className="gap-3 px-4 py-4">
                     <Skeleton variant="line" width="70%" height={14} />
                     <Skeleton variant="line" width="55%" height={12} />
                     <Skeleton variant="line" width="40%" height={12} />

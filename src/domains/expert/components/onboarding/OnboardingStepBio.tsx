@@ -10,7 +10,13 @@ export type OnboardingStepBioProps = {
   onEducationChange: (value: string) => void
 }
 
-export function OnboardingStepBio({ bio, onBioChange, bioError, education, onEducationChange }: OnboardingStepBioProps) {
+export function OnboardingStepBio({
+  bio,
+  onBioChange,
+  bioError,
+  education,
+  onEducationChange,
+}: OnboardingStepBioProps) {
   return (
     <View className="gap-4">
       <InputField

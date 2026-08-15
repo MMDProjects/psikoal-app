@@ -4,7 +4,9 @@ import { useRefresh } from './useRefresh'
 
 describe('useRefresh', () => {
   it('starts with isRefreshing false', () => {
-    const { result } = renderHook(() => useRefresh({ refetch: jest.fn().mockResolvedValue(undefined) }))
+    const { result } = renderHook(() =>
+      useRefresh({ refetch: jest.fn().mockResolvedValue(undefined) })
+    )
     expect(result.current.isRefreshing).toBe(false)
   })
 

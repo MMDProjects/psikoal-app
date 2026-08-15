@@ -1,11 +1,11 @@
 import { Image, Pressable, View } from 'react-native'
 
-import { Icon } from '@/core/components/atoms/Icon'
-import { Text } from '@/core/components/atoms/Text'
-
 import { useBlogLike } from '../hooks/useBlogLike'
 
 import type { BlogListItem } from '../types/blog.types'
+
+import { Icon } from '@/core/components/atoms/Icon'
+import { Text } from '@/core/components/atoms/Text'
 
 type BlogCardProps = {
   blog: BlogListItem
@@ -13,10 +13,14 @@ type BlogCardProps = {
 }
 
 export function BlogCard({ blog, onPress }: BlogCardProps) {
-  const { liked, likeCount, toggleLike } = useBlogLike({ slug: blog.slug, liked: blog.liked, likeCount: blog.likeCount })
+  const { liked, likeCount, toggleLike } = useBlogLike({
+    slug: blog.slug,
+    liked: blog.liked,
+    likeCount: blog.likeCount,
+  })
 
   return (
-    <View className="px-4 py-4 gap-3">
+    <View className="gap-3 px-4 py-4">
       <Pressable onPress={onPress} className="active:opacity-90">
         <Image
           source={{ uri: blog.coverImage }}
@@ -27,20 +31,27 @@ export function BlogCard({ blog, onPress }: BlogCardProps) {
 
       <View className="flex-row flex-wrap gap-x-2 gap-y-1">
         {blog.categories.map((cat) => (
-          <Text key={cat} variant="caption" className="text-sky-500 font-semibold">
+          <Text key={cat} variant="caption" className="font-semibold text-sky-500">
             #{cat}
           </Text>
         ))}
       </View>
 
       <Pressable onPress={onPress} className="active:opacity-80">
-        <Text variant="label" className="font-semibold text-neutral-900 dark:text-[#F5F5F7] leading-snug">
+        <Text
+          variant="label"
+          className="font-semibold leading-snug text-neutral-900 dark:text-[#F5F5F7]"
+        >
           {blog.title}
         </Text>
       </Pressable>
 
       <Pressable onPress={onPress} className="active:opacity-80">
-        <Text variant="caption" numberOfLines={4} className="leading-relaxed text-neutral-500 dark:text-neutral-400 -mt-1">
+        <Text
+          variant="caption"
+          numberOfLines={4}
+          className="-mt-1 leading-relaxed text-neutral-500 dark:text-neutral-400"
+        >
           {blog.excerpt}
         </Text>
       </Pressable>
@@ -56,7 +67,9 @@ export function BlogCard({ blog, onPress }: BlogCardProps) {
             <Icon name="Heart" size={17} color={liked ? '#EF4444' : '#A3A3A3'} />
             <Text
               variant="caption"
-              className={liked ? 'text-red-500 font-semibold' : 'text-neutral-400 dark:text-neutral-500'}
+              className={
+                liked ? 'text-red-500 font-semibold' : 'text-neutral-400 dark:text-neutral-500'
+              }
             >
               {likeCount}
             </Text>
@@ -70,11 +83,10 @@ export function BlogCard({ blog, onPress }: BlogCardProps) {
           </View>
         </View>
 
-        <Pressable
-          onPress={onPress}
-          className="flex-row items-center gap-1 active:opacity-70"
-        >
-          <Text variant="caption" className="text-sky-500 font-semibold">Devamını Oku</Text>
+        <Pressable onPress={onPress} className="flex-row items-center gap-1 active:opacity-70">
+          <Text variant="caption" className="font-semibold text-sky-500">
+            Devamını Oku
+          </Text>
           <Icon name="ChevronRight" size={14} color="#0EA5E9" />
         </Pressable>
       </View>

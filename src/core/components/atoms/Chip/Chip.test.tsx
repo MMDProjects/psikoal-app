@@ -1,5 +1,6 @@
-import { fireEvent, render } from '@testing-library/react-native'
 import React from 'react'
+
+import { fireEvent, render } from '@testing-library/react-native'
 
 import { Chip } from './Chip'
 
@@ -90,13 +91,17 @@ describe('Chip — input variant', () => {
 
 describe('Chip — onBrand variant', () => {
   it('applies flat dark-sky styles when unselected', () => {
-    const { getByRole, getByText } = render(<Chip label="Anksiyete" variant="onBrand" onPress={jest.fn()} />)
+    const { getByRole, getByText } = render(
+      <Chip label="Anksiyete" variant="onBrand" onPress={jest.fn()} />
+    )
     expect(getByRole('button').props.className).toContain('bg-sky-600')
     expect(getByText('Anksiyete').props.className).toContain('text-white')
   })
 
   it('applies solid white styles when selected', () => {
-    const { getByRole, getByText } = render(<Chip label="Anksiyete" variant="onBrand" isSelected onPress={jest.fn()} />)
+    const { getByRole, getByText } = render(
+      <Chip label="Anksiyete" variant="onBrand" isSelected onPress={jest.fn()} />
+    )
     expect(getByRole('button').props.className).toContain('bg-white')
     expect(getByText('Anksiyete').props.className).toContain('text-sky-700')
   })

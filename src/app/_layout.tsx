@@ -1,6 +1,7 @@
 import '../../global.css'
 
 import { useEffect } from 'react'
+
 import {
   PlusJakartaSans_400Regular,
   PlusJakartaSans_500Medium,
@@ -8,13 +9,15 @@ import {
   PlusJakartaSans_700Bold,
   PlusJakartaSans_800ExtraBold,
 } from '@expo-google-fonts/plus-jakarta-sans'
+import { useColorScheme } from 'nativewind'
+
 import { useFonts } from 'expo-font'
 import { Stack, useRouter } from 'expo-router'
-import { useColorScheme } from 'nativewind'
 import * as SplashScreen from 'expo-splash-screen'
 
 import { AppProviders } from '@/core/components/templates/AppProviders'
 import '@/domains/notification/pushNotificationHandler'
+import { useAuthStore } from '@/domains/auth'
 import { registerUnauthenticatedHandler } from '@/lib/api'
 import { useThemeStore } from '@/store/themeStore'
 
@@ -45,6 +48,9 @@ export default function RootLayout() {
 
   useEffect(() => {
     registerUnauthenticatedHandler(() => {
+      // clearAuth ÖNCE çağrılmalı — yoksa (auth)/_layout.tsx hâlâ isAuthenticated=true
+      // görüp /(tabs)'a geri yönlendirir, orada fetch yine 401 alır: sonsuz döngü.
+      useAuthStore.getState().clearAuth()
       router.replace('/(auth)/login')
     })
   }, [router])

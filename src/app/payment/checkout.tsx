@@ -1,8 +1,11 @@
 import { useEffect, useRef } from 'react'
+
 import { View } from 'react-native'
-import WebView from 'react-native-webview'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+
 import { useColorScheme } from 'nativewind'
+import WebView from 'react-native-webview'
+
+import { useLocalSearchParams, useRouter } from 'expo-router'
 
 import { Icon } from '@/core/components/atoms/Icon'
 import { Skeleton } from '@/core/components/atoms/Skeleton'
@@ -17,7 +20,12 @@ export default function CheckoutScreen() {
   const router = useRouter()
   const { colorScheme } = useColorScheme()
 
-  const { mutate: initiateCheckout, data: session, isPending, isError } = useInitiateCheckoutMutation()
+  const {
+    mutate: initiateCheckout,
+    data: session,
+    isPending,
+    isError,
+  } = useInitiateCheckoutMutation()
   const hasInitiated = useRef(false)
 
   useEffect(() => {
@@ -39,15 +47,21 @@ export default function CheckoutScreen() {
     <View className="flex-1 bg-surface-base dark:bg-dark-bg">
       <BackButton />
 
-      <ScreenTitle title="Güvenli Ödeme" topInset className="border-b border-neutral-100 dark:border-dark-border">
+      <ScreenTitle
+        title="Güvenli Ödeme"
+        topInset
+        className="border-b border-neutral-100 dark:border-dark-border"
+      >
         <View className="flex-row items-center gap-1">
           <Icon name="Lock" size={10} color={colorScheme === 'dark' ? '#A3A3A3' : '#737373'} />
-          <Text variant="caption" color="secondary">Iyzico ile güvenli</Text>
+          <Text variant="caption" color="secondary">
+            Iyzico ile güvenli
+          </Text>
         </View>
       </ScreenTitle>
 
       {isPending && (
-        <View className="flex-1 p-4 gap-4">
+        <View className="flex-1 gap-4 p-4">
           <Skeleton variant="rect" height={50} borderRadius="xl" />
           <Skeleton variant="rect" height={200} borderRadius="xl" />
           <Skeleton variant="rect" height={60} borderRadius="xl" />

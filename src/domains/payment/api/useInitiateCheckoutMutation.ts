@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query'
 
-import { post } from '@/lib/api'
-
 import { CheckoutSessionSchema } from '../schemas/payment.schema'
 
 import type { InitiateCheckoutRequest } from '../types/payment.types'
+
+import { post } from '@/lib/api'
 
 export function useInitiateCheckoutMutation() {
   return useMutation({

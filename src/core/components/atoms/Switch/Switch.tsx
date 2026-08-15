@@ -1,4 +1,5 @@
 import { Switch as RNSwitch } from 'react-native'
+
 import * as Haptics from 'expo-haptics'
 
 export type SwitchProps = {

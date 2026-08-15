@@ -1,8 +1,7 @@
 import { Text as RNText } from 'react-native'
+import type { TextProps as RNTextProps } from 'react-native'
 
 import { cn } from '@/core/utils/cn'
-
-import type { TextProps as RNTextProps } from 'react-native'
 
 export type TextVariant =
   | 'display'
@@ -35,26 +34,26 @@ export type TextProps = RNTextProps & {
 }
 
 const variantStyles: Record<TextVariant, string> = {
-  display:    'font-display text-5xl font-extrabold tracking-tight',
-  heading:    'font-display text-4xl font-extrabold tracking-tight',
+  display: 'font-display text-5xl font-extrabold tracking-tight',
+  heading: 'font-display text-4xl font-extrabold tracking-tight',
   subheading: 'font-body text-xl font-bold',
-  body:       'font-body text-[15px] font-regular leading-relaxed',
-  label:      'font-body text-sm font-medium',
-  caption:    'font-body text-xs font-medium',
-  overline:   'font-body text-xs font-medium uppercase tracking-widest',
+  body: 'font-body text-[15px] font-regular leading-relaxed',
+  label: 'font-body text-sm font-medium',
+  caption: 'font-body text-xs font-medium',
+  overline: 'font-body text-xs font-medium uppercase tracking-widest',
 }
 
 const colorStyles: Record<TextColor, string> = {
-  primary:   'text-content-primary   dark:text-[#F5F5F7]',
+  primary: 'text-content-primary   dark:text-[#F5F5F7]',
   secondary: 'text-content-secondary dark:text-[#8E8E93]',
-  tertiary:  'text-content-tertiary  dark:text-[#636366]',
-  disabled:  'text-content-disabled  dark:text-[#48484A]',
-  inverse:   'text-content-inverse   dark:text-neutral-900',
-  brand:     'text-brand-text        dark:text-sky-400',
-  accent:    'text-accent-text       dark:text-sky-300',
-  success:   'text-semantic-success  dark:text-emerald-400',
-  warning:   'text-semantic-warning  dark:text-amber-400',
-  error:     'text-semantic-error    dark:text-red-400',
+  tertiary: 'text-content-tertiary  dark:text-[#636366]',
+  disabled: 'text-content-disabled  dark:text-[#48484A]',
+  inverse: 'text-content-inverse   dark:text-neutral-900',
+  brand: 'text-brand-text        dark:text-sky-400',
+  accent: 'text-accent-text       dark:text-sky-300',
+  success: 'text-semantic-success  dark:text-emerald-400',
+  warning: 'text-semantic-warning  dark:text-amber-400',
+  error: 'text-semantic-error    dark:text-red-400',
 }
 
 const alignStyles: Record<TextAlign, string> = {

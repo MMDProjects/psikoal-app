@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { get } from '@/lib/api'
-
 import { assessmentKeys } from '../assessment.constants'
 import { AssessmentResultSchema } from '../schemas/assessment.schema'
+
+import { get } from '@/lib/api'
 
 export function useAssessmentResultQuery(resultId: string) {
   return useQuery({

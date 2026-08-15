@@ -6,7 +6,11 @@ export type OnboardingStepTitleProps = {
   errorMessage?: string
 }
 
-export function OnboardingStepTitle({ title, onTitleChange, errorMessage }: OnboardingStepTitleProps) {
+export function OnboardingStepTitle({
+  title,
+  onTitleChange,
+  errorMessage,
+}: OnboardingStepTitleProps) {
   return (
     <InputField
       tone="onBrand"

@@ -14,13 +14,13 @@ export const NotificationTypeSchema = z.enum([
 ])
 
 export const NotificationSchema = z.object({
-  id:        z.string(),
-  type:      NotificationTypeSchema,
-  title:     z.string(),
-  body:      z.string(),
+  id: z.string(),
+  type: NotificationTypeSchema,
+  title: z.string(),
+  body: z.string(),
   createdAt: z.string().datetime(),
   timeLabel: z.string(),
-  read:      z.boolean(),
+  read: z.boolean(),
 })
 
 export const NotificationListResponseSchema = z.object({

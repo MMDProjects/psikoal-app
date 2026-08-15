@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
-import { View } from 'react-native'
+import type { ReactNode } from 'react'
 
+import { View } from 'react-native'
 import type { DimensionValue } from 'react-native'
+
 import Animated, {
   cancelAnimation,
   interpolateColor,
@@ -13,8 +15,6 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import { cn } from '@/core/utils/cn'
-
-import type { ReactNode } from 'react'
 
 export type SkeletonBorderRadius =
   | 'none'

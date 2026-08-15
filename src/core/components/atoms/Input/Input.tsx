@@ -1,14 +1,17 @@
 import { forwardRef, useState } from 'react'
+import type { ComponentType } from 'react'
+
 import { Pressable, TextInput, View } from 'react-native'
-import * as Haptics from 'expo-haptics'
-import { useColorScheme } from 'nativewind'
+import type { TextInputProps } from 'react-native'
+
 import { Eye, EyeOff, X } from 'lucide-react-native'
+import { useColorScheme } from 'nativewind'
+
+import * as Haptics from 'expo-haptics'
+
+import type { SvgProps } from 'react-native-svg'
 
 import { cn } from '@/core/utils/cn'
-
-import type { ComponentType } from 'react'
-import type { TextInputProps } from 'react-native'
-import type { SvgProps } from 'react-native-svg'
 
 type IconProps = Pick<SvgProps, 'stroke'> & { size?: number }
 const EyeIcon = Eye as ComponentType<IconProps>
@@ -44,18 +47,18 @@ export type InputProps = {
 const MULTILINE_MAX_HEIGHT = 120
 
 const containerStateStyles: Record<InputState, string> = {
-  default:  'border border-border bg-surface-raised',
-  focused:  'border-2 border-sky-400 bg-surface-raised',
-  error:    'border-2 border-semantic-error bg-semantic-error-light',
-  success:  'border-2 border-semantic-success bg-surface-raised',
+  default: 'border border-border bg-surface-raised',
+  focused: 'border-2 border-sky-400 bg-surface-raised',
+  error: 'border-2 border-semantic-error bg-semantic-error-light',
+  success: 'border-2 border-semantic-success bg-surface-raised',
   disabled: 'border border-border bg-surface-sunken opacity-40',
 }
 
 const onBrandContainerStateStyles: Record<InputState, string> = {
-  default:  'border border-white bg-white dark:border-sky-900 dark:bg-sky-900',
-  focused:  'border-2 border-sky-300 bg-white dark:border-sky-400 dark:bg-sky-900',
-  error:    'border-2 border-red-400 bg-red-50 dark:border-red-700 dark:bg-red-950',
-  success:  'border-2 border-emerald-400 bg-white dark:border-emerald-600 dark:bg-sky-900',
+  default: 'border border-white bg-white dark:border-sky-900 dark:bg-sky-900',
+  focused: 'border-2 border-sky-300 bg-white dark:border-sky-400 dark:bg-sky-900',
+  error: 'border-2 border-red-400 bg-red-50 dark:border-red-700 dark:bg-red-950',
+  success: 'border-2 border-emerald-400 bg-white dark:border-emerald-600 dark:bg-sky-900',
   disabled: 'border border-white bg-white opacity-40 dark:border-sky-900 dark:bg-sky-900',
 }
 
@@ -73,7 +76,11 @@ const textSizeStyles: Record<InputSize, string> = {
 
 const ICON_SIZE: Record<InputSize, number> = { sm: 16, md: 18, lg: 20 }
 const ICON_COLOR = { default: '#737373', error: '#DC2626', success: '#16A34A' }
-const ON_BRAND_DARK_ICON_COLOR = { default: 'rgba(255,255,255,0.7)', error: '#FCA5A5', success: '#6EE7B7' }
+const ON_BRAND_DARK_ICON_COLOR = {
+  default: 'rgba(255,255,255,0.7)',
+  error: '#FCA5A5',
+  success: '#6EE7B7',
+}
 
 export const Input = forwardRef<TextInput, InputProps>(function Input(
   {
@@ -173,7 +180,9 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
     <View
       className={cn(
         'flex-row items-center',
-        tone === 'onBrand' ? onBrandContainerStateStyles[effectiveState] : containerStateStyles[effectiveState],
+        tone === 'onBrand'
+          ? onBrandContainerStateStyles[effectiveState]
+          : containerStateStyles[effectiveState],
         containerSizeStyles[size],
         multiline && 'items-start py-2.5',
         className

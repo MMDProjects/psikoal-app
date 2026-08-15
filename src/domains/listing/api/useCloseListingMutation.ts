@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { post } from '@/lib/api'
-
 import { listingKeys } from '../listing.constants'
 import { ListingSchema } from '../schemas/listing.schema'
+
+import { post } from '@/lib/api'
 
 export function useCloseListingMutation() {
   const queryClient = useQueryClient()

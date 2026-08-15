@@ -1,6 +1,8 @@
 import { FlatList, View } from 'react-native'
-import { useRouter } from 'expo-router'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useRouter } from 'expo-router'
 
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
 import { Divider } from '@/core/components/atoms/Divider'
@@ -25,7 +27,7 @@ export default function BlogFeedScreen() {
       <BackButton />
 
       <FlatList
-        data={(!isLoading && !isError) ? blogs : []}
+        data={!isLoading && !isError ? blogs : []}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingTop: insets.top + 8, paddingBottom: insets.bottom + 24 }}
@@ -37,7 +39,7 @@ export default function BlogFeedScreen() {
             <View>
               {[1, 2].map((i) => (
                 <View key={i}>
-                  <View className="px-4 py-4 gap-3">
+                  <View className="gap-3 px-4 py-4">
                     <Skeleton variant="rect" width="100%" height={190} borderRadius="xl" />
                     <Skeleton variant="line" width="40%" height={12} />
                     <Skeleton variant="line" width="80%" height={14} />
@@ -65,10 +67,7 @@ export default function BlogFeedScreen() {
           )
         }
         renderItem={({ item }) => (
-          <BlogCard
-            blog={item}
-            onPress={() => router.push(`/blog/${item.slug}` as never)}
-          />
+          <BlogCard blog={item} onPress={() => router.push(`/blog/${item.slug}` as never)} />
         )}
       />
     </View>

@@ -1,7 +1,12 @@
 import { useState } from 'react'
+
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native'
-import { useRouter } from 'expo-router'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useRouter } from 'expo-router'
+
+import type { ExpertOnboarding } from '@/domains/expert'
 
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Text } from '@/core/components/atoms/Text'
@@ -21,10 +26,16 @@ import {
   OnboardingStepPhoto,
 } from '@/domains/expert'
 
-import type { ExpertOnboarding } from '@/domains/expert'
-
 const TOTAL_STEPS = 7
-const STEP_LABELS = ['Ünvan', 'Uzmanlık', 'Deneyim', 'İletişim', 'Biyografi', 'Belgeler', 'Fotoğraf']
+const STEP_LABELS = [
+  'Ünvan',
+  'Uzmanlık',
+  'Deneyim',
+  'İletişim',
+  'Biyografi',
+  'Belgeler',
+  'Fotoğraf',
+]
 
 const STEP_TITLES = [
   'Ünvanınız nedir?',
@@ -50,7 +61,11 @@ export default function ExpertOnboardingScreen() {
   const router = useRouter()
   const insets = useSafeAreaInsets()
   const [step, setStep] = useState(1)
-  const { mutate: createProfile, isPending: isCreatingProfile, error } = useCreateExpertProfileMutation()
+  const {
+    mutate: createProfile,
+    isPending: isCreatingProfile,
+    error,
+  } = useCreateExpertProfileMutation()
   const { mutate: updateAuthProfile, isPending: isUpdatingAuthProfile } = useUpdateProfileMutation()
 
   const [title, setTitle] = useState('')
@@ -137,7 +152,7 @@ export default function ExpertOnboardingScreen() {
   const bottomBarHeight = 56 + insets.bottom
 
   return (
-    <View className="flex-1 bg-sky-500 dark:bg-sky-950 overflow-hidden">
+    <View className="flex-1 overflow-hidden bg-sky-500 dark:bg-sky-950">
       <DecorCircles phase={step} />
       <BackButton onPress={goBack} />
       <ScreenTitle title="Profilini Tamamla" topInset titleClassName="text-white" />
@@ -146,7 +161,7 @@ export default function ExpertOnboardingScreen() {
         className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <View className="px-5 pt-2 pb-4">
+        <View className="px-5 pb-4 pt-2">
           <StepProgress current={step} total={TOTAL_STEPS} label={STEP_LABELS[step - 1]} />
         </View>
 
@@ -157,16 +172,23 @@ export default function ExpertOnboardingScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View className="gap-1">
-            <Text variant="heading" className="text-white">{STEP_TITLES[step - 1]}</Text>
+            <Text variant="heading" className="text-white">
+              {STEP_TITLES[step - 1]}
+            </Text>
             {STEP_SUBTITLES[step - 1] && (
-              <Text variant="body" className="text-sky-100">{STEP_SUBTITLES[step - 1]}</Text>
+              <Text variant="body" className="text-sky-100">
+                {STEP_SUBTITLES[step - 1]}
+              </Text>
             )}
           </View>
 
           {step === 1 && (
             <OnboardingStepTitle
               title={title}
-              onTitleChange={(t) => { setTitle(t); setTitleError(undefined) }}
+              onTitleChange={(t) => {
+                setTitle(t)
+                setTitleError(undefined)
+              }}
               errorMessage={titleError}
             />
           )}
@@ -180,7 +202,10 @@ export default function ExpertOnboardingScreen() {
           )}
 
           {step === 3 && (
-            <OnboardingStepExperience experienceYears={experienceYears} onChange={setExperienceYears} />
+            <OnboardingStepExperience
+              experienceYears={experienceYears}
+              onChange={setExperienceYears}
+            />
           )}
 
           {step === 4 && (
@@ -195,7 +220,10 @@ export default function ExpertOnboardingScreen() {
           {step === 5 && (
             <OnboardingStepBio
               bio={bio}
-              onBioChange={(t) => { setBio(t); setBioError(undefined) }}
+              onBioChange={(t) => {
+                setBio(t)
+                setBioError(undefined)
+              }}
               bioError={bioError}
               education={education}
               onEducationChange={setEducation}
@@ -214,7 +242,7 @@ export default function ExpertOnboardingScreen() {
           {step === 7 && <OnboardingStepPhoto />}
 
           {apiErrorMessage && (
-            <View className="bg-red-50 dark:bg-red-950 rounded-xl px-4 py-3">
+            <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-950">
               <Text variant="caption" className="text-red-600 dark:text-red-300">
                 {apiErrorMessage}
               </Text>
@@ -226,8 +254,18 @@ export default function ExpertOnboardingScreen() {
           actions={
             step === TOTAL_STEPS
               ? [
-                  { label: 'Şimdilik Atla', onPress: () => router.replace('/(tabs)'), variant: 'inverseGhost' },
-                  { label: 'Profili Tamamla', onPress: validateAndNext, variant: 'inverse', isLoading: isPending, loadingLabel: 'Kaydediliyor...' },
+                  {
+                    label: 'Şimdilik Atla',
+                    onPress: () => router.replace('/(tabs)'),
+                    variant: 'inverseGhost',
+                  },
+                  {
+                    label: 'Profili Tamamla',
+                    onPress: validateAndNext,
+                    variant: 'inverse',
+                    isLoading: isPending,
+                    loadingLabel: 'Kaydediliyor...',
+                  },
                 ]
               : [{ label: 'Devam Et', onPress: validateAndNext, variant: 'inverse' }]
           }

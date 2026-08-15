@@ -1,12 +1,12 @@
 import { useMutation } from '@tanstack/react-query'
 
-import { post } from '@/lib/api'
-import { tokenStorage } from '@/lib/storage'
-
 import { LoginResponseSchema } from '../schemas/auth.schema'
 import { useAuthStore } from '../store/authStore'
 
 import type { LoginRequest } from '../types/auth.types'
+
+import { post } from '@/lib/api'
+import { tokenStorage } from '@/lib/storage'
 
 export function useLoginMutation() {
   const { setAuth } = useAuthStore()

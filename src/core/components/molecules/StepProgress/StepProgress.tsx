@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
+
 import { View } from 'react-native'
+
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -35,14 +37,18 @@ export function StepProgress({ current, total, label }: StepProgressProps) {
     <View className="gap-2">
       <View className="flex-row items-center justify-between">
         {label ? (
-          <Text variant="caption" className="text-sky-100 font-medium">{label}</Text>
-        ) : <View />}
+          <Text variant="caption" className="font-medium text-sky-100">
+            {label}
+          </Text>
+        ) : (
+          <View />
+        )}
         <Text variant="caption" className="text-sky-100">
           {current}/{total}
         </Text>
       </View>
       <View
-        className="h-1.5 rounded-full bg-sky-600 dark:bg-sky-900 overflow-hidden"
+        className="h-1.5 overflow-hidden rounded-full bg-sky-600 dark:bg-sky-900"
         onLayout={(e) => setTrackWidth(e.nativeEvent.layout.width)}
         accessibilityRole="progressbar"
         accessibilityValue={{ min: 0, max: total, now: current }}

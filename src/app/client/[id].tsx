@@ -1,6 +1,8 @@
 import { ScrollView, View } from 'react-native'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useLocalSearchParams, useRouter } from 'expo-router'
 
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
 import { Avatar } from '@/core/components/atoms/Avatar'
@@ -10,10 +12,10 @@ import { Icon } from '@/core/components/atoms/Icon'
 import { Skeleton } from '@/core/components/atoms/Skeleton'
 import { Text } from '@/core/components/atoms/Text'
 import { BackButton } from '@/core/components/molecules/BackButton'
-import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { EmptyState } from '@/core/components/molecules/EmptyState'
-import { formatDate } from '@/core/utils/formatDate'
+import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { useRefresh } from '@/core/hooks'
+import { formatDate } from '@/core/utils/formatDate'
 import { useClientProfileQuery, MATCH_STATUS_CONFIG } from '@/domains/client'
 
 export default function ClientDetailScreen() {
@@ -35,10 +37,10 @@ export default function ClientDetailScreen() {
 
       {isLoading && (
         <View style={{ paddingTop: insets.top + 8 }}>
-          <View className="pt-2 pb-3 items-center">
+          <View className="items-center pb-3 pt-2">
             <Skeleton variant="line" width="30%" height={14} />
           </View>
-          <View className="px-4 py-5 gap-4">
+          <View className="gap-4 px-4 py-5">
             <View className="flex-row items-center gap-4">
               <Skeleton variant="circle" width={56} height={56} />
               <View className="flex-1 gap-2">
@@ -48,7 +50,7 @@ export default function ClientDetailScreen() {
             </View>
           </View>
           <Divider spacing="none" className="mx-4" />
-          <View className="px-4 py-5 gap-3">
+          <View className="gap-3 px-4 py-5">
             <Skeleton variant="line" width="25%" height={11} />
             <Skeleton variant="rect" width={100} height={28} borderRadius="full" />
           </View>
@@ -73,33 +75,43 @@ export default function ClientDetailScreen() {
         >
           <ScreenTitle title="Danışan Profili" />
 
-          <View className="px-4 py-5 gap-4">
+          <View className="gap-4 px-4 py-5">
             <View className="flex-row items-center gap-3">
               <Avatar size="lg" initials={initials} />
               <View className="flex-1">
-                <Text variant="subheading" className="leading-tight">{client.fullName}</Text>
+                <Text variant="subheading" className="leading-tight">
+                  {client.fullName}
+                </Text>
               </View>
             </View>
 
             <View className="flex-row flex-wrap items-center gap-3">
               {client.email ? (
-                <View className="flex-row items-center gap-1.5 shrink">
+                <View className="shrink flex-row items-center gap-1.5">
                   <Icon name="Mail" size={13} color="#A3A3A3" />
-                  <Text variant="caption" color="tertiary" numberOfLines={1} className="shrink">{client.email}</Text>
+                  <Text variant="caption" color="tertiary" numberOfLines={1} className="shrink">
+                    {client.email}
+                  </Text>
                 </View>
               ) : null}
               {client.phone ? (
-                <View className="flex-row items-center gap-1.5 shrink-0">
+                <View className="shrink-0 flex-row items-center gap-1.5">
                   <Icon name="Phone" size={13} color="#A3A3A3" />
-                  <Text variant="caption" color="tertiary">{client.phone}</Text>
+                  <Text variant="caption" color="tertiary">
+                    {client.phone}
+                  </Text>
                 </View>
               ) : null}
             </View>
           </View>
 
           <Divider spacing="none" className="mx-4" />
-          <View className="px-4 py-5 gap-3">
-            <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+          <View className="gap-3 px-4 py-5">
+            <Text
+              variant="caption"
+              color="secondary"
+              className="font-semibold uppercase tracking-widest"
+            >
               Eşleşme Durumu
             </Text>
             <View className="flex-row items-center gap-2">
@@ -110,21 +122,31 @@ export default function ClientDetailScreen() {
           {client.notes ? (
             <>
               <Divider spacing="none" className="mx-4" />
-              <View className="px-4 py-5 gap-2">
+              <View className="gap-2 px-4 py-5">
                 <View className="flex-row items-center gap-1.5">
-                  <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+                  <Text
+                    variant="caption"
+                    color="secondary"
+                    className="font-semibold uppercase tracking-widest"
+                  >
                     Notlar
                   </Text>
                   <Icon name="FileText" size={12} color="#A3A3A3" />
                 </View>
-                <Text variant="body" color="secondary" className="leading-relaxed">{client.notes}</Text>
+                <Text variant="body" color="secondary" className="leading-relaxed">
+                  {client.notes}
+                </Text>
               </View>
             </>
           ) : null}
 
           <Divider spacing="none" className="mx-4" />
-          <View className="px-4 py-5 gap-1">
-            <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+          <View className="gap-1 px-4 py-5">
+            <Text
+              variant="caption"
+              color="secondary"
+              className="font-semibold uppercase tracking-widest"
+            >
               Kayıt Bilgisi
             </Text>
             <Text variant="caption" color="secondary">
