@@ -1,0 +1,260 @@
+[
+  {
+    "id": "99999999-9999-9999-9999-999999999999",
+    "title": "Kaygı Değerlendirme",
+    "category": "anxiety",
+    "description": "Son iki hafta içinde kendinizi ne sıklıkla aşağıdaki durumlarda buldunuz? Bu test tanı koymaz, genel bir değerlendirme sunar.",
+    "estimatedMinutes": 3,
+    "questions": [
+      {
+        "id": "q1",
+        "text": "Gergin, endişeli veya sinirli hissettim.",
+        "type": "single_choice",
+        "options": [
+          { "id": "q1a", "text": "Hiç", "value": 0 },
+          { "id": "q1b", "text": "Birkaç gün", "value": 1 },
+          { "id": "q1c", "text": "Günlerin yarısından fazla", "value": 2 },
+          { "id": "q1d", "text": "Neredeyse her gün", "value": 3 }
+        ]
+      },
+      {
+        "id": "q2",
+        "text": "Endişelerimi durduramadım veya kontrol edemedim.",
+        "type": "single_choice",
+        "options": [
+          { "id": "q2a", "text": "Hiç", "value": 0 },
+          { "id": "q2b", "text": "Birkaç gün", "value": 1 },
+          { "id": "q2c", "text": "Günlerin yarısından fazla", "value": 2 },
+          { "id": "q2d", "text": "Neredeyse her gün", "value": 3 }
+        ]
+      },
+      {
+        "id": "q3",
+        "text": "Farklı konularda aşırı endişelendim.",
+        "type": "single_choice",
+        "options": [
+          { "id": "q3a", "text": "Hiç", "value": 0 },
+          { "id": "q3b", "text": "Birkaç gün", "value": 1 },
+          { "id": "q3c", "text": "Günlerin yarısından fazla", "value": 2 },
+          { "id": "q3d", "text": "Neredeyse her gün", "value": 3 }
+        ]
+      },
+      {
+        "id": "q4",
+        "text": "Rahatlayamadım, içim sıkıştı.",
+        "type": "single_choice",
+        "options": [
+          { "id": "q4a", "text": "Hiç", "value": 0 },
+          { "id": "q4b", "text": "Birkaç gün", "value": 1 },
+          { "id": "q4c", "text": "Günlerin yarısından fazla", "value": 2 },
+          { "id": "q4d", "text": "Neredeyse her gün", "value": 3 }
+        ]
+      },
+      {
+        "id": "q5",
+        "text": "Yerimde duramayacak kadar huzursuz veya tedirgin hissettim.",
+        "type": "single_choice",
+        "options": [
+          { "id": "q5a", "text": "Hiç", "value": 0 },
+          { "id": "q5b", "text": "Birkaç gün", "value": 1 },
+          { "id": "q5c", "text": "Günlerin yarısından fazla", "value": 2 },
+          { "id": "q5d", "text": "Neredeyse her gün", "value": 3 }
+        ]
+      },
+      {
+        "id": "q6",
+        "text": "Kolayca sinirlenip tahammülsüz hale geldim.",
+        "type": "single_choice",
+        "options": [
+          { "id": "q6a", "text": "Hiç", "value": 0 },
+          { "id": "q6b", "text": "Birkaç gün", "value": 1 },
+          { "id": "q6c", "text": "Günlerin yarısından fazla", "value": 2 },
+          { "id": "q6d", "text": "Neredeyse her gün", "value": 3 }
+        ]
+      },
+      {
+        "id": "q7",
+        "text": "Korku duygusuyla bir şeylerin çok kötü gidebileceğini hissettim.",
+        "type": "single_choice",
+        "options": [
+          { "id": "q7a", "text": "Hiç", "value": 0 },
+          { "id": "q7b", "text": "Birkaç gün", "value": 1 },
+          { "id": "q7c", "text": "Günlerin yarısından fazla", "value": 2 },
+          { "id": "q7d", "text": "Neredeyse her gün", "value": 3 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "88888888-8888-4888-8888-888888888888",
+    "title": "Depresyon Tarama",
+    "category": "depression",
+    "description": "Son iki hafta içinde kendinizi ne sıklıkla aşağıdaki durumlarda buldunuz? PHQ-9 tabanlı bu test tanı koymaz.",
+    "estimatedMinutes": 4,
+    "questions": [
+      {
+        "id": "d1",
+        "text": "İşlere karşı ilgi veya zevk duymama.",
+        "type": "single_choice",
+        "options": [
+          { "id": "d1a", "text": "Hiç", "value": 0 },
+          { "id": "d1b", "text": "Birkaç gün", "value": 1 },
+          { "id": "d1c", "text": "Günlerin yarısından fazla", "value": 2 },
+          { "id": "d1d", "text": "Neredeyse her gün", "value": 3 }
+        ]
+      },
+      {
+        "id": "d2",
+        "text": "Kendimi kötü, çökmüş ya da umutsuz hissettim.",
+        "type": "single_choice",
+        "options": [
+          { "id": "d2a", "text": "Hiç", "value": 0 },
+          { "id": "d2b", "text": "Birkaç gün", "value": 1 },
+          { "id": "d2c", "text": "Günlerin yarısından fazla", "value": 2 },
+          { "id": "d2d", "text": "Neredeyse her gün", "value": 3 }
+        ]
+      },
+      {
+        "id": "d3",
+        "text": "Uykuya dalmakta zorlandım ya da çok fazla uyudum.",
+        "type": "single_choice",
+        "options": [
+          { "id": "d3a", "text": "Hiç", "value": 0 },
+          { "id": "d3b", "text": "Birkaç gün", "value": 1 },
+          { "id": "d3c", "text": "Günlerin yarısından fazla", "value": 2 },
+          { "id": "d3d", "text": "Neredeyse her gün", "value": 3 }
+        ]
+      },
+      {
+        "id": "d4",
+        "text": "Yorgun hissettim ya da enerjim yoktu.",
+        "type": "single_choice",
+        "options": [
+          { "id": "d4a", "text": "Hiç", "value": 0 },
+          { "id": "d4b", "text": "Birkaç gün", "value": 1 },
+          { "id": "d4c", "text": "Günlerin yarısından fazla", "value": 2 },
+          { "id": "d4d", "text": "Neredeyse her gün", "value": 3 }
+        ]
+      },
+      {
+        "id": "d5",
+        "text": "İştahsızlık ya da aşırı yeme.",
+        "type": "single_choice",
+        "options": [
+          { "id": "d5a", "text": "Hiç", "value": 0 },
+          { "id": "d5b", "text": "Birkaç gün", "value": 1 },
+          { "id": "d5c", "text": "Günlerin yarısından fazla", "value": 2 },
+          { "id": "d5d", "text": "Neredeyse her gün", "value": 3 }
+        ]
+      },
+      {
+        "id": "d6",
+        "text": "Kendimi başarısız hissettim ya da kendimi ve ailemi hayal kırıklığına uğrattığımı düşündüm.",
+        "type": "single_choice",
+        "options": [
+          { "id": "d6a", "text": "Hiç", "value": 0 },
+          { "id": "d6b", "text": "Birkaç gün", "value": 1 },
+          { "id": "d6c", "text": "Günlerin yarısından fazla", "value": 2 },
+          { "id": "d6d", "text": "Neredeyse her gün", "value": 3 }
+        ]
+      },
+      {
+        "id": "d7",
+        "text": "Konsantre olmakta zorlandım; örneğin gazete okurken veya televizyon izlerken.",
+        "type": "single_choice",
+        "options": [
+          { "id": "d7a", "text": "Hiç", "value": 0 },
+          { "id": "d7b", "text": "Birkaç gün", "value": 1 },
+          { "id": "d7c", "text": "Günlerin yarısından fazla", "value": 2 },
+          { "id": "d7d", "text": "Neredeyse her gün", "value": 3 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "77777777-7777-4777-7777-777777777777",
+    "title": "Stres Değerlendirme",
+    "category": "stress",
+    "description": "Son bir ay içindeki deneyimlerinizi değerlendirin. Bu test algılanan stres düzeyinizi ölçer, tanı koymaz.",
+    "estimatedMinutes": 3,
+    "questions": [
+      {
+        "id": "s1",
+        "text": "Beklenmedik bir şeyin olmasıyla ne sıklıkla bunaldınız?",
+        "type": "single_choice",
+        "options": [
+          { "id": "s1a", "text": "Hiç", "value": 0 },
+          { "id": "s1b", "text": "Nadiren", "value": 1 },
+          { "id": "s1c", "text": "Bazen", "value": 2 },
+          { "id": "s1d", "text": "Sıklıkla", "value": 3 }
+        ]
+      },
+      {
+        "id": "s2",
+        "text": "Hayatınızdaki önemli şeyleri kontrol edemediğinizi ne sıklıkla hissettiniz?",
+        "type": "single_choice",
+        "options": [
+          { "id": "s2a", "text": "Hiç", "value": 0 },
+          { "id": "s2b", "text": "Nadiren", "value": 1 },
+          { "id": "s2c", "text": "Bazen", "value": 2 },
+          { "id": "s2d", "text": "Sıklıkla", "value": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "text": "Gergin ve stresli hissettiniz mi?",
+        "type": "single_choice",
+        "options": [
+          { "id": "s3a", "text": "Hiç", "value": 0 },
+          { "id": "s3b", "text": "Nadiren", "value": 1 },
+          { "id": "s3c", "text": "Bazen", "value": 2 },
+          { "id": "s3d", "text": "Sıklıkla", "value": 3 }
+        ]
+      },
+      {
+        "id": "s4",
+        "text": "Kişisel sorunlarınızla başa çıkamama konusunda ne sıklıkla kendinizi yetersiz hissettiniz?",
+        "type": "single_choice",
+        "options": [
+          { "id": "s4a", "text": "Hiç", "value": 0 },
+          { "id": "s4b", "text": "Nadiren", "value": 1 },
+          { "id": "s4c", "text": "Bazen", "value": 2 },
+          { "id": "s4d", "text": "Sıklıkla", "value": 3 }
+        ]
+      },
+      {
+        "id": "s5",
+        "text": "İşlerin istediğiniz gibi gitmediğini ne sıklıkla hissettiniz?",
+        "type": "single_choice",
+        "options": [
+          { "id": "s5a", "text": "Hiç", "value": 0 },
+          { "id": "s5b", "text": "Nadiren", "value": 1 },
+          { "id": "s5c", "text": "Bazen", "value": 2 },
+          { "id": "s5d", "text": "Sıklıkla", "value": 3 }
+        ]
+      },
+      {
+        "id": "s6",
+        "text": "Üstesinden gelemeyeceğiniz şeyler biriktiğini ne sıklıkla hissettiniz?",
+        "type": "single_choice",
+        "options": [
+          { "id": "s6a", "text": "Hiç", "value": 0 },
+          { "id": "s6b", "text": "Nadiren", "value": 1 },
+          { "id": "s6c", "text": "Bazen", "value": 2 },
+          { "id": "s6d", "text": "Sıklıkla", "value": 3 }
+        ]
+      },
+      {
+        "id": "s7",
+        "text": "Sinirlilik ve öfkenizi kontrol edebildiniz mi?",
+        "type": "single_choice",
+        "options": [
+          { "id": "s7a", "text": "Her zaman", "value": 0 },
+          { "id": "s7b", "text": "Çoğunlukla", "value": 1 },
+          { "id": "s7c", "text": "Bazen", "value": 2 },
+          { "id": "s7d", "text": "Nadiren", "value": 3 }
+        ]
+      }
+    ]
+  }
+]

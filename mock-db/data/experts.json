@@ -1,0 +1,50 @@
+[
+  {
+    "id": "11111111-1111-4111-8111-111111111111",
+    "firstName": "Ayşe",
+    "lastName": "Kaya",
+    "title": "Klinik Psikolog",
+    "specializations": ["Anksiyete", "Kaygı Bozukluğu", "Depresyon", "Uyku Bozukluğu"],
+    "experienceYears": 8,
+    "bio": "İstanbul Üniversitesi Klinik Psikoloji mezunuyum. 8 yıllık deneyimimle anksiyete bozuklukları, depresyon ve travma alanlarında bireysel ve grup terapileri yürütüyorum. Bilişsel Davranışçı Terapi (BDT) ve EMDR konusunda sertifikalıyım.",
+    "avatarUrl": null,
+    "isVerified": true,
+    "status": "approved",
+    "education": "İstanbul Üniversitesi, Klinik Psikoloji (Yüksek Lisans) — Boğaziçi Üniversitesi, Psikoloji (Lisans)",
+    "cvUrl": "mock://cv/ayse-kaya.pdf",
+    "certificates": ["EMDR Terapisi Sertifikası", "Bilişsel Davranışçı Terapi (BDT) Sertifikası"],
+    "personalWebsite": "https://aysekaya-psikolog.example.com"
+  },
+  {
+    "id": "66666666-6666-4666-8666-666666666666",
+    "firstName": "Mehmet",
+    "lastName": "Demir",
+    "title": "Psikoterapist",
+    "specializations": ["Depresyon", "İlişki Sorunları", "Öfke Yönetimi"],
+    "experienceYears": 12,
+    "bio": "Ankara Üniversitesi Psikoloji bölümü ve Hacettepe Üniversitesi Psikoterapi yüksek lisans mezunuyum. Yetişkin bireylerin ilişki sorunları, öfke yönetimi ve depresyon tedavisinde uzmanlaştım. Psikodinamik ve bütüncül yaklaşımlarla çalışıyorum.",
+    "avatarUrl": null,
+    "isVerified": true,
+    "status": "approved",
+    "education": "Hacettepe Üniversitesi, Psikoterapi (Yüksek Lisans) — Ankara Üniversitesi, Psikoloji (Lisans)",
+    "cvUrl": "mock://cv/mehmet-demir.pdf",
+    "certificates": ["Psikodinamik Psikoterapi Sertifikası"],
+    "personalWebsite": null
+  },
+  {
+    "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+    "firstName": "Elif",
+    "lastName": "Şahin",
+    "title": "Uzman Psikolog",
+    "specializations": ["Çocuk & Ergen", "Aile Terapisi", "Travma & PTSD"],
+    "experienceYears": 5,
+    "bio": "Boğaziçi Üniversitesi Psikoloji bölümü mezunuyum. Çocuk ve ergen terapisi ile aile danışmanlığı alanında uzmanlaştım. Oyun terapisi ve sanat terapisi sertifikalarına sahibim.",
+    "avatarUrl": null,
+    "isVerified": false,
+    "status": "pending",
+    "education": "Boğaziçi Üniversitesi, Psikoloji (Lisans)",
+    "cvUrl": null,
+    "certificates": ["Oyun Terapisi Sertifikası", "Sanat Terapisi Sertifikası"],
+    "personalWebsite": null
+  }
+]

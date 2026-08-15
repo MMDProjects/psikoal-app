@@ -1,0 +1,80 @@
+[
+  {
+    "id": "blog-001",
+    "slug": "anksiyete-ile-basa-cikmak",
+    "title": "Anksiyete ile Başa Çıkmanın 5 Etkili Yolu",
+    "excerpt": "Günlük yaşamda anksiyete ile mücadele etmek zor gelebilir. Sürekli kaygı, beyin yorgunluğu ve odaklanma güçlüğü birçok kişinin tanıdık sorunları arasında yer alıyor. Ancak doğru tekniklerle bu duyguları yönetmek mümkündür. Bu yazıda kanıta dayalı 5 etkili yöntemi sizinle paylaşıyoruz.",
+    "content": "Anksiyete, modern yaşamın en yaygın psikolojik deneyimlerinden biridir. Dünya Sağlık Örgütü verilerine göre her 13 kişiden biri anksiyete bozukluğu yaşamaktadır. Hafif endişeden yoğun panik ataklara uzanan geniş bir spektrumda seyredebilen bu durum, tedavi edilebilir ve yönetilebilirdir.\n\nBilinçli nefes alma (diyafragmatik nefes) anksiyete anında bedeninize en hızlı sinyal gönderen yöntemdir. 4 saniye nefes alın, 4 saniye tutun, 4 saniye verin. Bu döngüyü 5 kez tekrarlayın. Sempatik sinir sisteminizin freni olan parasempatik sistem devreye girer ve vücut gevşemeye başlar.\n\nBilişsel yeniden çerçeveleme ise kaygı veren düşüncelere farklı bir perspektiften bakmayı sağlar. \"En kötü ne olabilir?\" sorusu yerine \"Bu düşünce ne kadar gerçekçi?\" ve \"Bu durumla başa çıkabilmem için ne gerekiyor?\" sorularını sormak, beynin alarm sistemini yeniden kalibre eder.\n\nDüzenli fiziksel hareket anksiyeteye karşı en güçlü doğal ilaçlardan biridir. Haftada 3 gün 30 dakika yürüyüş yapmak bile kortizol seviyesini belirgin biçimde düşürür ve serotonin-endorfin dengesini iyileştirir. Son olarak, bir uzmandan destek almaktan çekinmeyin; Bilişsel Davranışçı Terapi (BDT) anksiyete bozukluklarında en güçlü kanıt tabanına sahip psikoterapi yöntemidir.",
+    "coverImage": "https://picsum.photos/seed/anxiety-calm/800/450",
+    "categories": ["anksiyete", "kendinebakım", "teknikler"],
+    "likeCount": 148,
+    "readingTime": 4,
+    "publishedAt": "2026-06-10T09:00:00.000Z",
+    "author": { "name": "Dr. Ayşe Kaya", "title": "Klinik Psikolog" }
+  },
+  {
+    "id": "blog-002",
+    "slug": "uyku-ve-ruh-sagligi",
+    "title": "Uyku ve Ruh Sağlığı: Neden Bu Kadar Önemli?",
+    "excerpt": "Uyku bozukluklarıyla ruh sağlığı sorunları arasındaki ilişki tek yönlü değil, karşılıklı bir döngüdür. Yetersiz uyku depresyon ve kaygıyı derinleştirirken, bu koşullar da uykuyu daha da güçleştirir. Uyku hijyenini iyileştirmek mental iyilik halinizde fark yaratan en temel adımlardan biridir.",
+    "content": "Beynimiz uyurken temizlenir. Lenfatik sistem gece boyunca nörotoksik atıkları, özellikle de Alzheimer ile ilişkili amiloid beta plaklarını filtreler. Bu süreç ne kadar kısa kesilirse, bilişsel işlev o kadar etkilenir ve duygusal düzenleme kapasitesi o kadar zayıflar.\n\nAraştırmalar, haftada 5 gün 6 saatten az uyumanın depresyon riskini %17 artırdığını göstermektedir. Uyku yoksunluğu amigdalanın (duygusal tepki merkezi) aşırı tepkiselliğini artırır; küçük stresörler devasa tehditler gibi algılanmaya başlar. Bu durum hem kaygıyı hem de öfke patlamalarını körükler.\n\nUyku hijyeni için kanıtlanmış öneriler şunlardır: Her gün aynı saatte yatıp kalkmak, yatmadan 1 saat önce ekranlardan uzak durmak, yatak odası sıcaklığını 18-20°C'de tutmak ve yatmadan önce hafif bir germe rutini uygulamak. Kafein yarı ömrü yaklaşık 5-6 saattir, bu nedenle öğleden sonra 2'den itibaren tüketimini kesmek önerilir.\n\nUyku sorunları 3 haftayı aşarsa ya da gün içi işlevselliğinizi ciddi biçimde bozuyorsa bir uzmanla görüşmek önemlidir. Uyku bozuklukları için Bilişsel Davranışçı Terapi (BDT-I) ilaç tedavisinden daha uzun süreli sonuçlar vermektedir.",
+    "coverImage": "https://picsum.photos/seed/sleep-wellness/800/450",
+    "categories": ["uyku", "ruhsağlığı", "yaşambilimi"],
+    "likeCount": 203,
+    "readingTime": 5,
+    "publishedAt": "2026-06-18T10:00:00.000Z",
+    "author": { "name": "Uzm. Psk. Mehmet Arslan", "title": "Psikoloji Uzmanı" }
+  },
+  {
+    "id": "blog-003",
+    "slug": "mindfulness-nedir-nasil-uygulanir",
+    "title": "Mindfulness Nedir ve Günlük Hayata Nasıl Eklenir?",
+    "excerpt": "Mindfulness (bilinçli farkındalık) günümüzde yalnızca meditasyon guruları için değil, stresini yönetmek isteyen herkes için erişilebilir bir araçtır. Bilimsel araştırmalar, 8 haftalık bir mindfulness programının beyin yapısında ölçülebilir değişiklikler yarattığını ortaya koyuyor. Günde yalnızca 10 dakika ile başlamak bile fark yaratabilir.",
+    "content": "Mindfulness en yalın haliyle şu anda ne yaşandığını yargılamadan fark etmektir. Geçmişe ya da geleceğe dalmak yerine şimdiki anı olduğu gibi gözlemlemek, stres tepkisini azaltır ve duygusal esnekliği artırır. Jon Kabat-Zinn'in 1970'lerde Massachusetts Üniversitesi'nde geliştirdiği MBSR (Mindfulness Temelli Stres Azaltma) programı bugün dünyada en çok araştırılan psikolojik müdahalelerden biridir.\n\nBeyin görüntüleme çalışmaları, düzenli mindfulness pratiğinin prefrontal korteksi (planlama ve karar verme) güçlendirdiğini ve amigdalanın (korku-tehdit işleme) yoğunluğunu azalttığını göstermektedir. Yalnızca 8 haftalık bir programdan sonra katılımcıların gri madde yoğunluğunda artış gözlemlenmiştir.\n\nGünlük hayata mindfulness eklemek için büyük bloklar ayırmak gerekmez. Sabah kahvenizi içerken yalnızca o deneyime odaklanmak, yemek yerken telefonu bir kenara bırakmak, kısa bir yürüyüşte adımlarınızı ve nefes almanızı fark etmek — bunların hepsi anı kök salan pratiklerdir.\n\nYeni başlayanlar için önerilen: Günde 10 dakika gözleri kapalı oturmak, nefesinizi gözlemlemek ve dikkat dağıldığında nazikçe nefese geri dönmek. \"Mükemmel yapmak\" diye bir hedef yoktur. Her dikkat dağılması ve geri dönüş, beyin kasınızın bir tekrarıdır.",
+    "coverImage": "https://picsum.photos/seed/mindfulness-peace/800/450",
+    "categories": ["mindfulness", "meditasyon", "stres"],
+    "likeCount": 317,
+    "readingTime": 5,
+    "publishedAt": "2026-06-25T08:30:00.000Z",
+    "author": { "name": "Dr. Selin Çelik", "title": "MBSR Eğitmeni & Psikolog" }
+  },
+  {
+    "id": "blog-004",
+    "slug": "ilk-terapi-seansinda-neler-olur",
+    "title": "İlk Terapi Seansında Neler Olur? Başlamadan Bilmeniz Gerekenler",
+    "excerpt": "Psikolojik destek almak istiyor ama ilk adımı atmakta zorlanıyor musunuz? \"Ne konuşacağım?\", \"Beni yargılar mı?\", \"Yardımcı olur mu?\" gibi sorular aklınızı meşgul edebilir. Bu yazıda terapi sürecini sıfırdan anlatıyor, ilk seansı daha az ürkütücü hale getirmeyi amaçlıyoruz.",
+    "content": "İlk terapi seansı genellikle bir \"tanışma\" seansıdır. Terapist sizi tanımak, sizi buraya getiren nedeni anlamak ve birlikte çalışıp çalışamayacağınızı değerlendirmek için zaman ayırır. Bir sınav değil, bir sohbettir. Hiçbir şeyi \"doğru\" ya da \"yanlış\" söylemeniz beklenemez.\n\nBu seansta terapist genellikle şu soruları sorar: \"Bugün buraya ne getirdi sizi?\", \"Bu durum ne zamandır sürüyor?\", \"Yaşamınızın diğer alanları nasıl etkileniyor?\" Bunlara cevap verirken ne kadar paylaşmak istediğinizi siz belirlersiniz. Hazır olmadığınız bir konuya girmenize kimse zorlayamaz.\n\nGizlilik terapinin temel taşıdır. Paylaştığınız her şey kural olarak terapistle kalır. Yasal istisnaları (kendinize ya da başkasına zarar verme riski) terapist ilk seansta sizinle paylaşır. Terapi ilişkisi karşılıklı güvene dayandığından bu şeffaflık önemlidir.\n\nİlk seans sonrası birlikte çalışmak isteyip istemediğinize karar vermekte özgürsünüz. Terapist ile \"kimya\" tutmayabilir — bu normaldir. Psikoloğu değiştirmek bir başarısızlık değil, kendi ihtiyaçlarınıza saygı göstermektir. Doğru eşleşme bulunduğunda terapi süreci gerçekten dönüştürücü olabilir.",
+    "coverImage": "https://picsum.photos/seed/therapy-session/800/450",
+    "categories": ["terapi", "psikoloji", "başlangıç"],
+    "likeCount": 89,
+    "readingTime": 4,
+    "publishedAt": "2026-07-01T11:00:00.000Z",
+    "author": { "name": "Dr. Ayşe Kaya", "title": "Klinik Psikolog" }
+  },
+  {
+    "id": "blog-005",
+    "slug": "sosyal-medyanin-ruh-sagligina-etkileri",
+    "title": "Sosyal Medyanın Ruh Sağlığına Etkileri ve Dijital Denge",
+    "excerpt": "Günde ortalama 3 saat sosyal medyada geçirmek ne anlama geliyor? Beyin, sürekli karşılaştırma ve anlık onay mekanizmaları içinde çalışırken uzun vadeli stres ve benlik saygısı sorunları artıyor. Dijital dengeyi kurabilmek için önce neyin bizi çektiğini anlamak gerekiyor.",
+    "content": "Sosyal medya platformları, insan beyninin dopaminerjik ödül sistemini hedef alacak biçimde tasarlanmıştır. Beğeni, yorum ve bildirim her biri küçük bir dopamin patlaması tetikler — kumarhane mekanizmalarıyla benzer bir döngü. Bu döngünün sonunda zihin sürekli uyarı arayan, duraklamayı zorlu bulan bir hale gelebilir.\n\nAraştırmalar, özellikle gençler arasında günlük 2 saatten fazla sosyal medya kullanımının depresyon ve yalnızlık puanlarını anlamlı biçimde yükselttiğini göstermektedir. \"Kıyaslama sarmalı\" — başkalarının kurgu gibi sunulan hayatlarına bakarak kendi gerçekliğinizi değerlendirmek — benlik saygısını aşındıran en yaygın mekanizmalardan biridir.\n\nDijital denge için bilinçli kullanım stratejileri işe yaramaktadır. Platformlarda geçirdiğiniz zamanı ölçün (telefonunuzun ekran süresi özelliği), yatmadan 1 saat önce akışı kapatın, \"pasif kaydırma\" yerine amaçlı kullanım hedefleyin. Düzenli \"dijital detoks\" günleri — sosyal medyadan 24 saatlik aralar — kortizon düzeyini düşürdüğü ve dikkat süresini uzattığı gözlemlenmektedir.\n\nSosyal medya kullanımınız kendinize ya da ilişkilerinize zarar veriyorsa bir uzmanla bu konuyu değerlendirmek faydalı olabilir. Dijital bağımlılık ve kompulsif akış kontrolü psikoterapi ile ele alınabilir sorunlardır.",
+    "coverImage": "https://picsum.photos/seed/digital-wellbeing/800/450",
+    "categories": ["dijitaldenge", "sosyalmedya", "ruhsağlığı"],
+    "likeCount": 261,
+    "readingTime": 5,
+    "publishedAt": "2026-07-04T09:00:00.000Z",
+    "author": { "name": "Uzm. Psk. Mehmet Arslan", "title": "Psikoloji Uzmanı" }
+  },
+  {
+    "id": "blog-006",
+    "slug": "depresyonu-anlamak",
+    "title": "Depresyonu Anlamak: Sadece Hüzün Değil",
+    "excerpt": "\"Kendini topla\", \"herkesin bir sorunu var\", \"bir şeyin yok ki\" — depresyonu yaşayan kişiler bu tür yorumları çok iyi bilir. Oysa depresyon biyolojik, psikolojik ve sosyal faktörlerin bir arada rol oynadığı karmaşık bir tablodur. Onu anlamak, hem yaşayanlar için hem de yakınları için kritik öneme sahiptir.",
+    "content": "Depresyon yalnızca üzgün hissetmekten ibaret değildir. Enerji kaybı, daha önce zevk alınan aktivitelerden keyif alamama (anhedoni), düşünce hızının yavaşlaması, uyku ve iştah bozuklukları, konsantrasyon güçlüğü ve ağır vakalarda intihar düşünceleri de depresyonun yaygın belirtileri arasındadır.\n\nNörobiyolojik araştırmalar depresyonda serotonin, norepinefrin ve dopamin sistemlerinin işlevinin değiştiğini ortaya koymaktadır. Aynı zamanda hipokampüs hacminin azaldığı ve prefrontal korteks aktivitesinin düştüğü gözlemlenmektedir. Bu beyin değişiklikleri \"irade eksikliği\" olarak yorumlanamaz; ciddi bir sağlık durumunun biyolojik işaretçileridir.\n\nDepresyon tedavisinde en güçlü kanıtlar psikoterapi (özellikle BDT) ve gerektiğinde ilaç tedavisinin kombinasyonu üzerinedir. Yaşam tarzı müdahalelerinin — düzenli egzersiz, uyku düzeni, sosyal bağlantı — da belirtileri hafiflettiği gösterilmiştir. Ancak orta ve ağır depresyonda profesyonel destek almadan bu müdahaleleri uygulamak genellikle yeterli değildir.\n\nDepresyon belirtileri 2 haftayı aşıyor ve işlevselliğinizi etkiliyorsa bir klinik psikolog ya da psikiyatrist ile görüşmenizi şiddetle öneririz. Yardım istemek güçlüğün değil, gücün işaretidir.",
+    "coverImage": "https://picsum.photos/seed/depression-hope/800/450",
+    "categories": ["depresyon", "ruhsağlığı", "psikoloji"],
+    "likeCount": 394,
+    "readingTime": 6,
+    "publishedAt": "2026-07-07T10:00:00.000Z",
+    "author": { "name": "Dr. Selin Çelik", "title": "Psikolog & Yazar" }
+  }
+]

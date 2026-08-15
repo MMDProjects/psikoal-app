@@ -1,0 +1,20 @@
+{
+  "balance": 1250,
+  "currency": "TRY",
+  "transactions": [
+    {
+      "id": "tx-0001",
+      "type": "credit",
+      "amount": 1500,
+      "description": "Paket satın alımı (3 seans)",
+      "createdAt": "2026-05-01T10:00:00.000Z"
+    },
+    {
+      "id": "tx-0002",
+      "type": "debit",
+      "amount": 250,
+      "description": "Seans ücreti",
+      "createdAt": "2026-05-15T14:00:00.000Z"
+    }
+  ]
+}

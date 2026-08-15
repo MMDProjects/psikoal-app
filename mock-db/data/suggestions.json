@@ -1,0 +1,51 @@
+[
+  {
+    "id": "sug-001",
+    "audience": "client",
+    "category": "Günün Önerisi",
+    "title": "Güne 3 dakikalık nefes egzersiziyle başlayın",
+    "body": "4 saniye nefes alın, 7 saniye tutun, 8 saniye verin. Bu döngü sinir sisteminizi sakinleştirir."
+  },
+  {
+    "id": "sug-002",
+    "audience": "client",
+    "category": "Uyku",
+    "title": "Yatmadan 1 saat önce ekranı bırakın",
+    "body": "Mavi ışık melatonin üretimini baskılar. Ekransız geçen son 1 saat uyku kalitenizi belirgin artırır."
+  },
+  {
+    "id": "sug-003",
+    "audience": "client",
+    "category": "Farkındalık",
+    "title": "Bugün 10 dakikanızı kendinize ayırın",
+    "body": "Kısa bir yürüyüş ya da sessiz bir mola, günün stres yükünü azaltmanın en basit yoludur."
+  },
+  {
+    "id": "sug-004",
+    "audience": "client",
+    "category": "İpucu",
+    "title": "Duygularınızı yazıya dökün",
+    "body": "Günde 5 dakikalık duygu günlüğü, kaygı düzeyini düşürmede kanıtlanmış bir tekniktir."
+  },
+  {
+    "id": "sug-005",
+    "audience": "expert",
+    "category": "Profil İpucu",
+    "title": "Profilinizi güncel tutun",
+    "body": "Uzmanlık alanları ve tanıtım metni güncel olan profiller danışanlardan daha fazla kabul alıyor."
+  },
+  {
+    "id": "sug-006",
+    "audience": "expert",
+    "category": "Teklif İpucu",
+    "title": "Teklif mesajınızı kişiselleştirin",
+    "body": "İlan içeriğine özel yazılmış teklifler, genel mesajlara göre çok daha yüksek kabul oranına sahip."
+  },
+  {
+    "id": "sug-007",
+    "audience": "expert",
+    "category": "Hız",
+    "title": "İlanlara erken teklif verin",
+    "body": "İlk 24 saat içinde gönderilen teklifler danışanlar tarafından daha sık değerlendiriliyor."
+  }
+]

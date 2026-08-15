@@ -1,0 +1,78 @@
+[
+  {
+    "id": "b1111111-1111-4111-8111-111111111111",
+    "expertId": "11111111-1111-4111-8111-111111111111",
+    "rating": 5,
+    "comment": "Kaygı bozukluğumla ilgili çok yol aldım. Seansları online yapıyoruz, çok esnek ve anlayışlı bir yaklaşımı var.",
+    "sessionType": "online",
+    "createdAt": "2026-06-02T10:00:00.000Z"
+  },
+  {
+    "id": "b1111111-2222-4111-8111-111111111111",
+    "expertId": "11111111-1111-4111-8111-111111111111",
+    "rating": 5,
+    "comment": "Uyku sorunlarım için başvurmuştum, birkaç seans içinde belirgin bir rahatlama hissettim. Kesinlikle tavsiye ederim.",
+    "createdAt": "2026-05-14T10:00:00.000Z"
+  },
+  {
+    "id": "b1111111-3333-4111-8111-111111111111",
+    "expertId": "11111111-1111-4111-8111-111111111111",
+    "rating": 4,
+    "comment": "Randevu saatlerinde bazen küçük gecikmeler oluyor ama görüşme kalitesi gerçekten yüksek.",
+    "sessionType": "yüz_yüze",
+    "createdAt": "2026-04-20T10:00:00.000Z"
+  },
+  {
+    "id": "b1111111-4444-4111-8111-111111111111",
+    "expertId": "11111111-1111-4111-8111-111111111111",
+    "rating": 5,
+    "comment": "EMDR seanslarından çok verim aldım, travma sonrası kendimi çok daha iyi hissediyorum.",
+    "createdAt": "2026-03-08T10:00:00.000Z"
+  },
+  {
+    "id": "b6666666-1111-4666-8666-666666666666",
+    "expertId": "66666666-6666-4666-8666-666666666666",
+    "rating": 5,
+    "comment": "İlişkimdeki iletişim sorunlarını çözmemde büyük katkısı oldu. Sakin ve çözüm odaklı bir üslubu var.",
+    "sessionType": "yüz_yüze",
+    "createdAt": "2026-06-10T10:00:00.000Z"
+  },
+  {
+    "id": "b6666666-2222-4666-8666-666666666666",
+    "expertId": "66666666-6666-4666-8666-666666666666",
+    "rating": 4,
+    "comment": "Öfke kontrolü konusunda pratik teknikler öğretti, günlük hayatımda gerçekten işe yarıyor.",
+    "createdAt": "2026-05-22T10:00:00.000Z"
+  },
+  {
+    "id": "b6666666-3333-4666-8666-666666666666",
+    "expertId": "66666666-6666-4666-8666-666666666666",
+    "rating": 5,
+    "comment": "Depresif dönemimde bana çok destek oldu, kendimi asla yargılanmış hissetmedim.",
+    "sessionType": "online",
+    "createdAt": "2026-04-02T10:00:00.000Z"
+  },
+  {
+    "id": "caaaaaaa-1111-4aaa-8aaa-aaaaaaaaaaaa",
+    "expertId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+    "rating": 5,
+    "comment": "Çocuğumla kurduğu iletişim harikaydı, oyun terapisi seansları sonrası okulda çok daha rahat.",
+    "sessionType": "yüz_yüze",
+    "createdAt": "2026-06-18T10:00:00.000Z"
+  },
+  {
+    "id": "caaaaaaa-2222-4aaa-8aaa-aaaaaaaaaaaa",
+    "expertId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+    "rating": 5,
+    "comment": "Aile terapisi seanslarında hepimizi dinledi, evdeki gerginlik gözle görülür şekilde azaldı.",
+    "createdAt": "2026-05-01T10:00:00.000Z"
+  },
+  {
+    "id": "caaaaaaa-3333-4aaa-8aaa-aaaaaaaaaaaa",
+    "expertId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+    "rating": 4,
+    "comment": "Genç kızımızla kurduğu güven ilişkisi sayesinde artık evde çok daha açık konuşabiliyor.",
+    "sessionType": "online",
+    "createdAt": "2026-03-25T10:00:00.000Z"
+  }
+]
