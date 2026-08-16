@@ -1,3 +1,6 @@
+// KAPI TESTİ — var olmayan modül. Bu dal MERGE EDİLMEYECEK.
+import './boyle-bir-dosya-yok'
+
 import { QueryClient } from '@tanstack/react-query'
 
 import { ApiError } from './api'
