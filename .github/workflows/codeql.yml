@@ -5,6 +5,7 @@ on:
     branches: [master, dev]
   pull_request:
     branches: [master, dev]
+  workflow_dispatch:
   schedule:
     # Haftalık tarama — yeni yayımlanan sorgular mevcut kodda da bulgu üretebilir.
     - cron: '17 4 * * 1'
