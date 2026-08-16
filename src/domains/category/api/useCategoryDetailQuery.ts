@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { get } from '@/lib/api'
-
 import { categoryKeys, CATEGORY_STALE_TIME } from '../category.constants'
 import { CategoryDetailSchema } from '../schemas/category.schema'
+
+import { get } from '@/lib/api'
 
 export function useCategoryDetailQuery(slug: string) {
   return useQuery({

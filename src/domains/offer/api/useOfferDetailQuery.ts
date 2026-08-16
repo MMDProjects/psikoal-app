@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { get } from '@/lib/api'
-
 import { offerKeys, OFFER_STALE_TIME } from '../offer.constants'
 import { OfferSchema } from '../schemas/offer.schema'
+
+import { get } from '@/lib/api'
 
 export function useOfferDetailQuery(offerId: string) {
   return useQuery({

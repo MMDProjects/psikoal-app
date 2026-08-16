@@ -1,0 +1,172 @@
+[
+  {
+    "id": "cat-001",
+    "slug": "anksiyete",
+    "name": "Anksiyete",
+    "icon": "HeartPulse",
+    "summary": "Kaygı ve huzursuzlukla baş etmenin yolu",
+    "description": "Anksiyete, sürekli kaygı, gerginlik ve tedirginlik hissiyle kendini gösteren yaygın bir ruhsal deneyimdir. Doğru teknik ve profesyonel destekle yönetilebilir, günlük yaşamınız üzerindeki etkisi azaltılabilir.",
+    "blogTag": "anksiyete",
+    "assessmentCategory": "anxiety"
+  },
+  {
+    "id": "cat-002",
+    "slug": "depresyon",
+    "name": "Depresyon",
+    "icon": "CloudRain",
+    "summary": "Düşük ruh hali için profesyonel destek",
+    "description": "Depresyon yalnızca üzgünlük değil; enerji kaybı, isteksizlik ve odaklanma güçlüğü gibi belirtilerle seyreden karmaşık bir tablodur. Erken destek, iyileşme sürecini önemli ölçüde hızlandırır.",
+    "blogTag": "depresyon",
+    "assessmentCategory": "depression"
+  },
+  {
+    "id": "cat-003",
+    "slug": "kaygi-bozuklugu",
+    "name": "Kaygı Bozukluğu",
+    "icon": "HeartPulse",
+    "summary": "Kontrol edilemeyen kaygıyla sağlıklı baş etme",
+    "description": "Günlük yaşamı zorlaştıran, kontrol edilmesi güç yoğun kaygı hisleri kaygı bozukluğunun belirtisi olabilir. Uzman desteğiyle bu döngüyü kırmak mümkündür.",
+    "blogTag": "kaygi",
+    "assessmentCategory": "anxiety"
+  },
+  {
+    "id": "cat-004",
+    "slug": "panik-atak",
+    "name": "Panik Atak",
+    "icon": "Zap",
+    "summary": "Ani gelen yoğun korku atakları için destek",
+    "description": "Çarpıntı, nefes darlığı ve yoğun korku ile gelen panik ataklar tedavi edilebilir bir durumdur. Uzman desteğiyle atakların sıklığı ve şiddeti azaltılabilir.",
+    "blogTag": "panikatak",
+    "assessmentCategory": null
+  },
+  {
+    "id": "cat-005",
+    "slug": "okb",
+    "name": "OKB",
+    "icon": "RefreshCw",
+    "summary": "Takıntılı düşüncelerle mücadelede uzman desteği",
+    "description": "Obsesif Kompulsif Bozukluk, tekrarlayan takıntılı düşünceler ve bunları hafifletmeye yönelik zorlayıcı davranışlarla seyreder. Bilişsel Davranışçı Terapi bu alanda en etkili yöntemlerden biridir.",
+    "blogTag": "okb",
+    "assessmentCategory": null
+  },
+  {
+    "id": "cat-006",
+    "slug": "travma-ptsd",
+    "name": "Travma & PTSD",
+    "icon": "Shield",
+    "summary": "Geçmiş travmaların etkisini azaltmak için destek",
+    "description": "Travmatik deneyimlerin bıraktığı izler zamanla iyileşmeyebilir. Travma odaklı terapi yaklaşımlarıyla bu etkileri azaltmak ve günlük yaşama sağlıklı biçimde dönmek mümkündür.",
+    "blogTag": "travma",
+    "assessmentCategory": null
+  },
+  {
+    "id": "cat-007",
+    "slug": "iliski-sorunlari",
+    "name": "İlişki Sorunları",
+    "icon": "Heart",
+    "summary": "İlişkilerinizde sağlıklı iletişim için destek",
+    "description": "Partnerinizle, ailenizle ya da yakın çevrenizle yaşanan iletişim ve güven sorunları ilişki terapisiyle ele alınabilir. Sağlıklı sınırlar ve iletişim becerileri kazandırılır.",
+    "blogTag": "iliski",
+    "assessmentCategory": null
+  },
+  {
+    "id": "cat-008",
+    "slug": "aile-terapisi",
+    "name": "Aile Terapisi",
+    "icon": "Users",
+    "summary": "Aile içi iletişimi güçlendirmek için terapi",
+    "description": "Aile içi çatışmaları sağlıklı biçimde çözmek ve iletişimi güçlendirmek için aile terapisi, tüm üyelerin sürece dahil olduğu bütüncül bir yaklaşım sunar.",
+    "blogTag": "terapi",
+    "assessmentCategory": null
+  },
+  {
+    "id": "cat-009",
+    "slug": "cocuk-ergen",
+    "name": "Çocuk & Ergen",
+    "icon": "User",
+    "summary": "Çocuk ve ergenler için özel destek",
+    "description": "Çocukların ve ergenlik dönemindeki gençlerin duygusal, davranışsal ve gelişimsel ihtiyaçları yaş grubuna özel yaklaşımlarla ele alınmalıdır. Bu alanda deneyimli uzmanlar destek verir.",
+    "blogTag": "cocukergen",
+    "assessmentCategory": null
+  },
+  {
+    "id": "cat-010",
+    "slug": "uyku-bozuklugu",
+    "name": "Uyku Bozukluğu",
+    "icon": "Moon",
+    "summary": "Dinlendirmeyen uykuyla baş etmenin yolları",
+    "description": "Uykuya dalmakta güçlük, sık uyanma ya da dinlendirmeyen uyku ruh sağlığını doğrudan etkiler. Uyku hijyeni ve gerektiğinde profesyonel destekle bu döngü kırılabilir.",
+    "blogTag": "uyku",
+    "assessmentCategory": null
+  },
+  {
+    "id": "cat-011",
+    "slug": "stres-yonetimi",
+    "name": "Stres Yönetimi",
+    "icon": "Wind",
+    "summary": "Yoğun tempoyla sağlıklı baş etme yolları",
+    "description": "Yoğun iş temposu ve günlük yaşamın getirdiği stres, doğru yöntemlerle sağlıklı biçimde yönetilebilir. Uzman desteği, uzun vadeli tükenmişliği önlemede önemli rol oynar.",
+    "blogTag": "stres",
+    "assessmentCategory": "stress"
+  },
+  {
+    "id": "cat-012",
+    "slug": "yeme-bozuklugu",
+    "name": "Yeme Bozukluğu",
+    "icon": "Utensils",
+    "summary": "Yeme alışkanlıklarında sağlıklı dengeyi bulmak",
+    "description": "Yeme alışkanlıklarıyla ilgili zorlanmalar hem bedensel hem ruhsal sağlığı etkiler. Bu alanda deneyimli uzmanlar bütüncül bir iyileşme süreci sunar.",
+    "blogTag": "yeme",
+    "assessmentCategory": null
+  },
+  {
+    "id": "cat-013",
+    "slug": "bagimlilik",
+    "name": "Bağımlılık",
+    "icon": "Wine",
+    "summary": "Bağımlılıkla mücadelede profesyonel destek",
+    "description": "Madde, davranış ya da dijital bağımlılıklarla mücadele etmek yalnız başına zor olabilir. Uzman desteğiyle sağlıklı ve sürdürülebilir bir iyileşme süreci mümkündür.",
+    "blogTag": "bagimlilik",
+    "assessmentCategory": null
+  },
+  {
+    "id": "cat-014",
+    "slug": "kisilik-bozukluklari",
+    "name": "Kişilik Bozuklukları",
+    "icon": "Fingerprint",
+    "summary": "Kişilik özellikleriyle sağlıklı bir yaşam",
+    "description": "Kişilik özelliklerinizin günlük yaşamınızı ve ilişkilerinizi zorlaştırdığını düşünüyorsanız uzman bir psikologla bu süreci uzun vadeli bir terapi çalışmasıyla ele alabilirsiniz.",
+    "blogTag": "kisilik",
+    "assessmentCategory": null
+  },
+  {
+    "id": "cat-015",
+    "slug": "motivasyon",
+    "name": "Motivasyon",
+    "icon": "TrendingUp",
+    "summary": "Hedeflerinize odaklanmak için destek alın",
+    "description": "Hedeflerinize odaklanmakta zorlanmak, isteksizlik ve erteleme davranışları motivasyon kaybının işareti olabilir. Uzman desteğiyle bu döngüyü kırmak ve yeniden harekete geçmek mümkündür.",
+    "blogTag": "motivasyon",
+    "assessmentCategory": null
+  },
+  {
+    "id": "cat-016",
+    "slug": "is-stresi",
+    "name": "İş Stresi",
+    "icon": "Briefcase",
+    "summary": "Tükenmişlikle baş etmek için destek",
+    "description": "Tükenmişlik, iş-yaşam dengesizliği ve yoğun çalışma temposu uzun vadede ruh sağlığını ciddi biçimde etkiler. Uzman desteğiyle sağlıklı sınırlar kurmak mümkündür.",
+    "blogTag": "isstresi",
+    "assessmentCategory": null
+  },
+  {
+    "id": "cat-017",
+    "slug": "yas-kayip",
+    "name": "Yas & Kayıp",
+    "icon": "Umbrella",
+    "summary": "Kayıp sonrası yas sürecinde yanınızdayız",
+    "description": "Bir kaybın ardından yaşanan yas süreci her kişide farklı seyreder. Uzman desteği, bu süreci sağlıklı biçimde deneyimlemek için önemli bir kaynaktır.",
+    "blogTag": "yaskayip",
+    "assessmentCategory": null
+  }
+]

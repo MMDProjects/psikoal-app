@@ -1,19 +1,21 @@
 import { useState } from 'react'
+
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { CreateListingStepAssessment } from './create-listing/CreateListingStepAssessment'
+import { CreateListingStepPreferences } from './create-listing/CreateListingStepPreferences'
+import { CreateListingStepTopic } from './create-listing/CreateListingStepTopic'
+
+import type { SessionType } from './create-listing/CreateListingStepPreferences'
+import type { CreateListingRequest } from '../types/listing.types'
 
 import { Icon } from '@/core/components/atoms/Icon'
 import { Text } from '@/core/components/atoms/Text'
 import { StepProgress } from '@/core/components/molecules/StepProgress'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { useMyAssessmentResultsQuery } from '@/domains/assessment'
-
-import { CreateListingStepTopic } from './create-listing/CreateListingStepTopic'
-import { CreateListingStepPreferences } from './create-listing/CreateListingStepPreferences'
-import { CreateListingStepAssessment } from './create-listing/CreateListingStepAssessment'
-
-import type { SessionType } from './create-listing/CreateListingStepPreferences'
-import type { CreateListingRequest } from '../types/listing.types'
 
 const TOTAL_STEPS = 3
 const STEP_LABELS = ['Konu & Açıklama', 'Tercihler', 'Test Sonucu']
@@ -37,8 +39,8 @@ export function CreateListingForm({
   const [title, setTitle] = useState('')
   const [titleError, setTitleError] = useState<string | undefined>()
   const [description, setDescription] = useState('')
-  const [selectedSpecs, setSelectedSpecs] = useState<string[]>(
-    () => (initialSpecialization ? [initialSpecialization] : [])
+  const [selectedSpecs, setSelectedSpecs] = useState<string[]>(() =>
+    initialSpecialization ? [initialSpecialization] : []
   )
   const [specsError, setSpecsError] = useState<string | undefined>()
 
@@ -128,7 +130,7 @@ export function CreateListingForm({
       className="flex-1"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <View className="px-5 pt-2 pb-4">
+      <View className="px-5 pb-4 pt-2">
         <StepProgress current={step} total={TOTAL_STEPS} label={STEP_LABELS[step - 1]} />
       </View>
 
@@ -177,9 +179,11 @@ export function CreateListingForm({
         )}
 
         {step === TOTAL_STEPS && selectedResultId !== undefined && (
-          <View className="flex-row items-center gap-1.5 justify-center">
+          <View className="flex-row items-center justify-center gap-1.5">
             <Icon name="Paperclip" size={13} color={ICON_ON_BRAND} />
-            <Text variant="caption" className="text-white">Test sonucu ilanına eklenecek</Text>
+            <Text variant="caption" className="text-white">
+              Test sonucu ilanına eklenecek
+            </Text>
           </View>
         )}
       </ScrollView>
@@ -190,10 +194,30 @@ export function CreateListingForm({
             ? [{ label: 'Devam Et', onPress: handleNext, variant: 'inverse' }]
             : selectedResultId === undefined && myResults.length > 0
               ? [
-                  { label: 'Testsiz Yayınla', onPress: submitListing, variant: 'inverseGhost', isLoading, loadingLabel: 'Yayınlanıyor...' },
-                  { label: 'İlanı Yayınla', onPress: submitListing, variant: 'inverse', isLoading, loadingLabel: 'Yayınlanıyor...' },
+                  {
+                    label: 'Testsiz Yayınla',
+                    onPress: submitListing,
+                    variant: 'inverseGhost',
+                    isLoading,
+                    loadingLabel: 'Yayınlanıyor...',
+                  },
+                  {
+                    label: 'İlanı Yayınla',
+                    onPress: submitListing,
+                    variant: 'inverse',
+                    isLoading,
+                    loadingLabel: 'Yayınlanıyor...',
+                  },
                 ]
-              : [{ label: 'İlanı Yayınla', onPress: submitListing, variant: 'inverse', isLoading, loadingLabel: 'Yayınlanıyor...' }]
+              : [
+                  {
+                    label: 'İlanı Yayınla',
+                    onPress: submitListing,
+                    variant: 'inverse',
+                    isLoading,
+                    loadingLabel: 'Yayınlanıyor...',
+                  },
+                ]
         }
       />
     </KeyboardAvoidingView>

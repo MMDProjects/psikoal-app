@@ -8,7 +8,7 @@ export type ListRowSkeletonProps = {
 
 export function ListRowSkeleton({ lineWidths = ['60%', '90%', '40%'] }: ListRowSkeletonProps) {
   return (
-    <View className="px-4 py-4 gap-3">
+    <View className="gap-3 px-4 py-4">
       {lineWidths.map((width, i) => (
         <Skeleton key={i} variant="line" width={width} height={i === 0 ? 14 : 11} />
       ))}

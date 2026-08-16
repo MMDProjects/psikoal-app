@@ -1,15 +1,15 @@
 import { Pressable, View } from 'react-native'
 
+import { LISTING_STATUS_CONFIG, SESSION_TYPE_LABELS } from '../listing.constants'
+
+import type { Listing } from '../types/listing.types'
+
 import { Avatar } from '@/core/components/atoms/Avatar'
 import { Chip } from '@/core/components/atoms/Chip'
 import { Icon } from '@/core/components/atoms/Icon'
 import { Text } from '@/core/components/atoms/Text'
 import { cn } from '@/core/utils/cn'
 import { formatDate } from '@/core/utils/formatDate'
-
-import { LISTING_STATUS_CONFIG, SESSION_TYPE_LABELS } from '../listing.constants'
-
-import type { Listing } from '../types/listing.types'
 
 export type ListingCardProps = {
   listing: Listing
@@ -18,29 +18,29 @@ export type ListingCardProps = {
   className?: string
 }
 
-export function ListingCard({
-  listing,
-  onPress,
-  hideStatus = false,
-  className,
-}: ListingCardProps) {
+export function ListingCard({ listing, onPress, hideStatus = false, className }: ListingCardProps) {
   const statusConfig = LISTING_STATUS_CONFIG[listing.status]
-  const sessionLabel = SESSION_TYPE_LABELS[listing.preferredSessionType] ?? listing.preferredSessionType
+  const sessionLabel =
+    SESSION_TYPE_LABELS[listing.preferredSessionType] ?? listing.preferredSessionType
   const dateLabel = formatDate(listing.createdAt, 'dayMonth')
 
   return (
-    <Pressable
-      onPress={onPress}
-      className={cn('px-4 py-4 gap-3 active:opacity-90', className)}
-    >
+    <Pressable onPress={onPress} className={cn('gap-3 px-4 py-4 active:opacity-90', className)}>
       <View className="flex-row items-start justify-between gap-2">
-        <Text variant="label" className="flex-1 font-semibold text-neutral-900 dark:text-[#F5F5F7] leading-snug">
+        <Text
+          variant="label"
+          className="flex-1 font-semibold leading-snug text-neutral-900 dark:text-[#F5F5F7]"
+        >
           {listing.title}
         </Text>
         {!hideStatus && (
-          <View className="flex-row items-center gap-1 shrink-0">
+          <View className="shrink-0 flex-row items-center gap-1">
             <Icon name={statusConfig.icon} size={13} color={statusConfig.iconColor} />
-            <Text variant="caption" className="font-medium" style={{ color: statusConfig.iconColor }}>
+            <Text
+              variant="caption"
+              className="font-medium"
+              style={{ color: statusConfig.iconColor }}
+            >
               {statusConfig.label}
             </Text>
           </View>
@@ -66,8 +66,12 @@ export function ListingCard({
 
       <View className="flex-row items-center justify-between pt-1">
         {listing.client ? (
-          <View className="flex-row items-center gap-2 flex-1 mr-3">
-            <Avatar size="xs" initials={listing.client.initials ?? ''} src={listing.client.avatarUrl ?? undefined} />
+          <View className="mr-3 flex-1 flex-row items-center gap-2">
+            <Avatar
+              size="xs"
+              initials={listing.client.initials ?? ''}
+              src={listing.client.avatarUrl ?? undefined}
+            />
             <Text variant="caption" color="secondary" numberOfLines={1}>
               {listing.clientDisplayName ?? ''}
             </Text>
@@ -75,7 +79,9 @@ export function ListingCard({
         ) : (
           <View className="flex-1" />
         )}
-        <Text variant="caption" color="tertiary">{dateLabel}</Text>
+        <Text variant="caption" color="tertiary">
+          {dateLabel}
+        </Text>
       </View>
     </Pressable>
   )

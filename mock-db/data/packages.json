@@ -1,0 +1,32 @@
+[
+  {
+    "id": "pkg-starter",
+    "name": "Başlangıç Paketi",
+    "sessionCount": 3,
+    "price": 2100,
+    "unitPrice": 800,
+    "discountPct": 13,
+    "validDays": 180,
+    "isPopular": false
+  },
+  {
+    "id": "pkg-standard",
+    "name": "Standart Paket",
+    "sessionCount": 8,
+    "price": 4800,
+    "unitPrice": 800,
+    "discountPct": 25,
+    "validDays": 180,
+    "isPopular": true
+  },
+  {
+    "id": "pkg-intensive",
+    "name": "Yoğun Terapi Paketi",
+    "sessionCount": 16,
+    "price": 8000,
+    "unitPrice": 800,
+    "discountPct": 38,
+    "validDays": 180,
+    "isPopular": false
+  }
+]

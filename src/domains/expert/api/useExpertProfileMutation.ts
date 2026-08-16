@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { patch } from '@/lib/api'
-import { useAuthStore } from '@/domains/auth'
-
 import { expertKeys } from '../expert.constants'
 import { ExpertSchema } from '../schemas/expert.schema'
 
 import type { ExpertOnboarding } from '../types/expert.types'
+
+import { useAuthStore } from '@/domains/auth'
+import { patch } from '@/lib/api'
 
 export function useExpertProfileMutation() {
   const queryClient = useQueryClient()

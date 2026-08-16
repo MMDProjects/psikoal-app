@@ -1,7 +1,7 @@
 import { Pressable, View } from 'react-native'
 
-import { cn } from '@/core/utils/cn'
 import { Text } from '@/core/components/atoms/Text'
+import { cn } from '@/core/utils/cn'
 
 export type SegmentedControlOption<T extends string> = {
   key: T
@@ -22,7 +22,9 @@ export function SegmentedControl<T extends string>({
   className,
 }: SegmentedControlProps<T>) {
   return (
-    <View className={cn('flex-row gap-1 bg-neutral-200 dark:bg-neutral-800 rounded-xl p-1', className)}>
+    <View
+      className={cn('flex-row gap-1 rounded-xl bg-neutral-200 p-1 dark:bg-neutral-800', className)}
+    >
       {options.map(({ key, label }) => {
         const isActive = value === key
         return (
@@ -32,7 +34,7 @@ export function SegmentedControl<T extends string>({
             accessibilityRole="button"
             accessibilityState={{ selected: isActive }}
             className={cn(
-              'flex-1 items-center justify-center py-1 rounded-lg',
+              'flex-1 items-center justify-center rounded-lg py-1',
               isActive && 'bg-white dark:bg-dark-control'
             )}
           >
@@ -40,7 +42,9 @@ export function SegmentedControl<T extends string>({
               variant="label"
               className={cn(
                 'font-medium',
-                isActive ? 'text-neutral-900 dark:text-[#F5F5F7]' : 'text-neutral-500 dark:text-neutral-400'
+                isActive
+                  ? 'text-neutral-900 dark:text-[#F5F5F7]'
+                  : 'text-neutral-500 dark:text-neutral-400'
               )}
             >
               {label}

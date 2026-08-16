@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
 
-import { get } from '@/lib/api'
-
 import { offerKeys, OFFER_STALE_TIME } from '../offer.constants'
 import { OfferSchema } from '../schemas/offer.schema'
 
 import type { OfferStatus } from '../types/offer.types'
+
+import { get } from '@/lib/api'
 
 const ExpertOffersResponseSchema = z.object({
   data: z.array(OfferSchema),

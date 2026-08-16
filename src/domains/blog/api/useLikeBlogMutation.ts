@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { z } from 'zod'
 
-import { post } from '@/lib/api'
-
 import { blogKeys } from '../blog.constants'
+
+import { post } from '@/lib/api'
 
 const LikeResponseSchema = z.object({ likeCount: z.number(), liked: z.boolean() })
 

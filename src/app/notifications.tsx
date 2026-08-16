@@ -1,4 +1,5 @@
 import { Pressable, ScrollView, useColorScheme, View } from 'react-native'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
@@ -54,7 +55,7 @@ export default function NotificationsScreen() {
             accessibilityLabel="Tümünü okundu işaretle"
           >
             <Icon name="CheckCheck" size={14} color="#0EA5E9" />
-            <Text variant="caption" className="text-sky-600 dark:text-sky-400 font-semibold">
+            <Text variant="caption" className="font-semibold text-sky-600 dark:text-sky-400">
               Tümünü okundu işaretle
             </Text>
           </Pressable>
@@ -83,16 +84,24 @@ export default function NotificationsScreen() {
               <View key={notif.id}>
                 {index > 0 && <View className="mx-4 h-px bg-neutral-200 dark:bg-neutral-800" />}
                 <Pressable
-                  onPress={() => { if (!notif.read) markRead(notif.id) }}
+                  onPress={() => {
+                    if (!notif.read) markRead(notif.id)
+                  }}
                   className="flex-row items-start gap-3 px-4 py-4 active:opacity-70"
                   accessibilityRole="button"
                   accessibilityLabel={notif.read ? notif.title : `${notif.title}, okunmadı`}
                 >
                   {!notif.read && (
-                    <View className="absolute left-1.5 top-6 w-1.5 h-1.5 rounded-full bg-sky-500" />
+                    <View className="absolute left-1.5 top-6 h-1.5 w-1.5 rounded-full bg-sky-500" />
                   )}
-                  <View className={`w-10 h-10 rounded-full items-center justify-center flex-shrink-0 ${cfg.bgClass}`}>
-                    <Icon name={cfg.icon} size={18} color={isDark ? cfg.iconColorDark : cfg.iconColorLight} />
+                  <View
+                    className={`h-10 w-10 flex-shrink-0 items-center justify-center rounded-full ${cfg.bgClass}`}
+                  >
+                    <Icon
+                      name={cfg.icon}
+                      size={18}
+                      color={isDark ? cfg.iconColorDark : cfg.iconColorLight}
+                    />
                   </View>
                   <View className="flex-1 gap-0.5">
                     <Text variant="label" className={!notif.read ? 'font-semibold' : ''}>

@@ -1,8 +1,12 @@
 import { useState } from 'react'
+
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import type { ForgotPasswordRequest } from '@/domains/auth'
 
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Icon } from '@/core/components/atoms/Icon'
@@ -12,8 +16,6 @@ import { InputField } from '@/core/components/molecules/InputField'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { ForgotPasswordSchema, useForgotPasswordMutation } from '@/domains/auth'
-
-import type { ForgotPasswordRequest } from '@/domains/auth'
 
 export default function ForgotPasswordScreen() {
   const insets = useSafeAreaInsets()
@@ -45,7 +47,10 @@ export default function ForgotPasswordScreen() {
 
       <ScreenTitle title="Şifremi Unuttum" topInset titleClassName="text-white" />
 
-      <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
         <ScrollView
           contentContainerClassName="flex-grow justify-center px-5 gap-6"
           contentContainerStyle={{ paddingBottom: bottomBarHeight + 16 }}
@@ -54,12 +59,14 @@ export default function ForgotPasswordScreen() {
         >
           {sent ? (
             <View className="items-center gap-4">
-              <View className="w-16 h-16 rounded-full bg-white items-center justify-center">
+              <View className="h-16 w-16 items-center justify-center rounded-full bg-white">
                 <Icon name="MailCheck" size={32} color="#0EA5E9" />
               </View>
               <View className="items-center gap-2">
-                <Text variant="heading" className="text-white text-center">E-postanı Kontrol Et</Text>
-                <Text variant="body" className="text-sky-100 text-center">
+                <Text variant="heading" className="text-center text-white">
+                  E-postanı Kontrol Et
+                </Text>
+                <Text variant="body" className="text-center text-sky-100">
                   Şifre sıfırlama bağlantısını e-posta adresine gönderdik.
                 </Text>
               </View>
@@ -67,7 +74,9 @@ export default function ForgotPasswordScreen() {
           ) : (
             <View className="gap-5">
               <View className="gap-1">
-                <Text variant="heading" className="text-white">Şifreni mi Unuttun?</Text>
+                <Text variant="heading" className="text-white">
+                  Şifreni mi Unuttun?
+                </Text>
                 <Text variant="body" className="text-sky-100">
                   E-posta adresini gir, sana bir sıfırlama bağlantısı gönderelim.
                 </Text>
@@ -93,8 +102,10 @@ export default function ForgotPasswordScreen() {
               />
 
               {apiErrorMessage && (
-                <View className="bg-red-50 dark:bg-red-950 rounded-xl px-4 py-3">
-                  <Text variant="caption" className="text-red-600 dark:text-red-300">{apiErrorMessage}</Text>
+                <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-950">
+                  <Text variant="caption" className="text-red-600 dark:text-red-300">
+                    {apiErrorMessage}
+                  </Text>
                 </View>
               )}
             </View>
@@ -103,13 +114,15 @@ export default function ForgotPasswordScreen() {
 
         {!sent && (
           <BottomActionBar
-            actions={[{
-              label: 'Sıfırlama Bağlantısı Gönder',
-              loadingLabel: 'Gönderiliyor...',
-              onPress: handleSubmit(onSubmit),
-              variant: 'inverse',
-              isLoading: isPending,
-            }]}
+            actions={[
+              {
+                label: 'Sıfırlama Bağlantısı Gönder',
+                loadingLabel: 'Gönderiliyor...',
+                onPress: handleSubmit(onSubmit),
+                variant: 'inverse',
+                isLoading: isPending,
+              },
+            ]}
           />
         )}
       </KeyboardAvoidingView>

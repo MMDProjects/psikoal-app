@@ -1,6 +1,8 @@
 import { Alert, ScrollView, View } from 'react-native'
-import { useRouter } from 'expo-router'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useRouter } from 'expo-router'
 
 import { Divider } from '@/core/components/atoms/Divider'
 import { Text } from '@/core/components/atoms/Text'
@@ -27,10 +29,12 @@ export default function PrivacyScreen() {
         {
           text: 'Dondur',
           style: 'destructive',
-          onPress: () => freezeAccount(undefined, {
-            onSuccess: goToLogin,
-            onError: () => Alert.alert('İşlem Başarısız', 'Hesap dondurulamadı. Lütfen tekrar deneyin.'),
-          }),
+          onPress: () =>
+            freezeAccount(undefined, {
+              onSuccess: goToLogin,
+              onError: () =>
+                Alert.alert('İşlem Başarısız', 'Hesap dondurulamadı. Lütfen tekrar deneyin.'),
+            }),
         },
       ]
     )
@@ -54,10 +58,12 @@ export default function PrivacyScreen() {
                 {
                   text: 'Hesabımı Sil',
                   style: 'destructive',
-                  onPress: () => deleteAccount(undefined, {
-                    onSuccess: goToLogin,
-                    onError: () => Alert.alert('İşlem Başarısız', 'Hesap silinemedi. Lütfen tekrar deneyin.'),
-                  }),
+                  onPress: () =>
+                    deleteAccount(undefined, {
+                      onSuccess: goToLogin,
+                      onError: () =>
+                        Alert.alert('İşlem Başarısız', 'Hesap silinemedi. Lütfen tekrar deneyin.'),
+                    }),
                 },
               ]
             )
@@ -83,8 +89,12 @@ export default function PrivacyScreen() {
       >
         <ScreenTitle title="Veri ve Gizlilik" />
 
-        <View className="px-4 pt-4 pb-2">
-          <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+        <View className="px-4 pb-2 pt-4">
+          <Text
+            variant="caption"
+            color="secondary"
+            className="font-semibold uppercase tracking-widest"
+          >
             Hesap Yönetimi
           </Text>
         </View>
@@ -102,8 +112,12 @@ export default function PrivacyScreen() {
 
         <Divider spacing="none" className="mx-4 mt-4" />
 
-        <View className="px-4 pt-4 pb-2">
-          <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+        <View className="px-4 pb-2 pt-4">
+          <Text
+            variant="caption"
+            color="secondary"
+            className="font-semibold uppercase tracking-widest"
+          >
             Gizlilik
           </Text>
         </View>

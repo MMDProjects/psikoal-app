@@ -1,8 +1,8 @@
-import type { IconName } from '@/core/components/atoms/Icon'
 import type { NotificationType } from './types/notification.types'
+import type { IconName } from '@/core/components/atoms/Icon'
 
 export const notificationKeys = {
-  all:  ['notifications'] as const,
+  all: ['notifications'] as const,
   list: () => [...notificationKeys.all, 'list'] as const,
 } as const
 

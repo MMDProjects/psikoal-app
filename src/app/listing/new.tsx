@@ -1,14 +1,16 @@
 import { useState } from 'react'
+
 import { View } from 'react-native'
+
 import { useLocalSearchParams, useRouter } from 'expo-router'
+
+import type { CreateListingRequest } from '@/domains/listing'
 
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Text } from '@/core/components/atoms/Text'
 import { BackButton } from '@/core/components/molecules/BackButton'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { CreateListingForm, useCreateListingMutation } from '@/domains/listing'
-
-import type { CreateListingRequest } from '@/domains/listing'
 
 export default function NewListingScreen() {
   const router = useRouter()
@@ -37,8 +39,10 @@ export default function NewListingScreen() {
       <ScreenTitle title="İlan Oluştur" topInset titleClassName="text-white" />
 
       {apiError && (
-        <View className="mx-4 mb-2 bg-red-50 dark:bg-red-950 rounded-xl px-4 py-3">
-          <Text variant="caption" className="text-red-600 dark:text-red-300">{apiError}</Text>
+        <View className="mx-4 mb-2 rounded-xl bg-red-50 px-4 py-3 dark:bg-red-950">
+          <Text variant="caption" className="text-red-600 dark:text-red-300">
+            {apiError}
+          </Text>
         </View>
       )}
 

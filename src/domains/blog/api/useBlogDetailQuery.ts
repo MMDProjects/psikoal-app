@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { get } from '@/lib/api'
-
 import { blogKeys, BLOG_STALE_TIME } from '../blog.constants'
 import { BlogSchema } from '../schemas/blog.schema'
+
+import { get } from '@/lib/api'
 
 export function useBlogDetailQuery(slug: string) {
   return useQuery({

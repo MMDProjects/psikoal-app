@@ -9,7 +9,12 @@ export type OnboardingStepContactProps = {
   onCityChange: (value: string) => void
 }
 
-export function OnboardingStepContact({ phone, onPhoneChange, city, onCityChange }: OnboardingStepContactProps) {
+export function OnboardingStepContact({
+  phone,
+  onPhoneChange,
+  city,
+  onCityChange,
+}: OnboardingStepContactProps) {
   return (
     <View className="gap-4">
       <InputField

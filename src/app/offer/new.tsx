@@ -1,21 +1,23 @@
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native'
+
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Controller, useForm } from 'react-hook-form'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useLocalSearchParams, useRouter } from 'expo-router'
+
+import type { SendOfferRequest } from '@/domains/offer'
 
 import { Chip } from '@/core/components/atoms/Chip'
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Icon } from '@/core/components/atoms/Icon'
 import { Text } from '@/core/components/atoms/Text'
 import { BackButton } from '@/core/components/molecules/BackButton'
-import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { InputField } from '@/core/components/molecules/InputField'
+import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { useExpertApprovalGate } from '@/domains/expert'
 import { useSendOfferMutation, SendOfferSchema } from '@/domains/offer'
-
-import type { SendOfferRequest } from '@/domains/offer'
 
 export default function NewOfferScreen() {
   const router = useRouter()
@@ -59,8 +61,8 @@ export default function NewOfferScreen() {
       <View className="flex-1 bg-sky-500 dark:bg-sky-950" style={{ overflow: 'hidden' }}>
         <DecorCircles />
         <BackButton />
-        <View className="flex-1 items-center justify-center px-6 gap-4">
-          <View className="w-20 h-20 rounded-full bg-white items-center justify-center">
+        <View className="flex-1 items-center justify-center gap-4 px-6">
+          <View className="h-20 w-20 items-center justify-center rounded-full bg-white">
             <Icon name="Clock" size={36} color="#D97706" />
           </View>
           <Text variant="heading" align="center" className="text-white">
@@ -83,7 +85,7 @@ export default function NewOfferScreen() {
     return (
       <View className="flex-1 bg-sky-500 dark:bg-sky-950" style={{ overflow: 'hidden' }}>
         <DecorCircles />
-        <View className="flex-1 items-center justify-center px-6 gap-4">
+        <View className="flex-1 items-center justify-center gap-4 px-6">
           <Icon name="AlertCircle" size={36} color="#FFFFFF" />
           <Text variant="label" align="center" className="text-white">
             İlan belirtilmedi. Lütfen bir ilanın sayfasından teklif gönderin.
@@ -150,18 +152,23 @@ export default function NewOfferScreen() {
 
           <View className="gap-2">
             <Text variant="label" className="font-semibold text-white">
-              Seans Tipi <Text variant="caption" className="text-red-100">*</Text>
+              Seans Tipi{' '}
+              <Text variant="caption" className="text-red-100">
+                *
+              </Text>
             </Text>
             <Controller
               control={control}
               name="sessionType"
               render={({ field: { onChange } }) => (
                 <View className="flex-row flex-wrap gap-2">
-                  {([
-                    { value: 'online',      label: 'Online'           },
-                    { value: 'yüz_yüze',   label: 'Yüz Yüze'        },
-                    { value: 'yüz_yüze_online', label: 'Yüz Yüze / Online' },
-                  ] as const).map(({ value, label }) => (
+                  {(
+                    [
+                      { value: 'online', label: 'Online' },
+                      { value: 'yüz_yüze', label: 'Yüz Yüze' },
+                      { value: 'yüz_yüze_online', label: 'Yüz Yüze / Online' },
+                    ] as const
+                  ).map(({ value, label }) => (
                     <Chip
                       key={value}
                       label={label}
@@ -175,7 +182,9 @@ export default function NewOfferScreen() {
               )}
             />
             {errors.sessionType && (
-              <Text variant="caption" className="text-red-100">{errors.sessionType.message}</Text>
+              <Text variant="caption" className="text-red-100">
+                {errors.sessionType.message}
+              </Text>
             )}
           </View>
 
@@ -197,20 +206,24 @@ export default function NewOfferScreen() {
           />
 
           {apiError && (
-            <View className="bg-red-50 dark:bg-red-950 rounded-xl px-4 py-3">
-              <Text variant="caption" className="text-red-600 dark:text-red-300">{apiError}</Text>
+            <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-950">
+              <Text variant="caption" className="text-red-600 dark:text-red-300">
+                {apiError}
+              </Text>
             </View>
           )}
         </ScrollView>
 
         <BottomActionBar
-          actions={[{
-            label: 'Teklif Gönder',
-            loadingLabel: 'Gönderiliyor...',
-            onPress: handleSubmit(onSubmit),
-            isLoading: isPending,
-            variant: 'inverse',
-          }]}
+          actions={[
+            {
+              label: 'Teklif Gönder',
+              loadingLabel: 'Gönderiliyor...',
+              onPress: handleSubmit(onSubmit),
+              isLoading: isPending,
+              variant: 'inverse',
+            },
+          ]}
         />
       </KeyboardAvoidingView>
     </View>

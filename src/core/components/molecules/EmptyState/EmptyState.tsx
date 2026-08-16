@@ -1,11 +1,11 @@
 import { View } from 'react-native'
 
+import type { IconName } from '@/core/components/atoms/Icon'
+
 import { Button } from '@/core/components/atoms/Button'
 import { Icon } from '@/core/components/atoms/Icon'
 import { Text } from '@/core/components/atoms/Text'
 import { cn } from '@/core/utils/cn'
-
-import type { IconName } from '@/core/components/atoms/Icon'
 
 export type EmptyStateProps = {
   icon?: IconName
@@ -26,11 +26,11 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <View className={cn('flex-1 items-center justify-center px-8 py-12', className)}>
-      <View className="w-20 h-20 rounded-full bg-neutral-100 dark:bg-dark-control items-center justify-center mb-4">
+      <View className="mb-4 h-20 w-20 items-center justify-center rounded-full bg-neutral-100 dark:bg-dark-control">
         <Icon name={icon} size={36} color="#A3A3A3" strokeWidth={1.5} />
       </View>
 
-      <View className="items-center gap-2 mb-6">
+      <View className="mb-6 items-center gap-2">
         <Text variant="subheading" align="center">
           {title}
         </Text>
@@ -41,9 +41,7 @@ export function EmptyState({
         )}
       </View>
 
-      {ctaLabel && onCta && (
-        <Button label={ctaLabel} onPress={onCta} variant="secondary" />
-      )}
+      {ctaLabel && onCta && <Button label={ctaLabel} onPress={onCta} variant="secondary" />}
     </View>
   )
 }

@@ -1,5 +1,6 @@
-import { render } from '@testing-library/react-native'
 import { RefreshControl } from 'react-native'
+
+import { render } from '@testing-library/react-native'
 
 import { AppRefreshControl } from './AppRefreshControl'
 
@@ -15,9 +16,7 @@ describe('AppRefreshControl', () => {
   })
 
   it('reflects refreshing=true', () => {
-    const { UNSAFE_getByType } = render(
-      <AppRefreshControl refreshing onRefresh={jest.fn()} />
-    )
+    const { UNSAFE_getByType } = render(<AppRefreshControl refreshing onRefresh={jest.fn()} />)
     expect(UNSAFE_getByType(RefreshControl).props.refreshing).toBe(true)
   })
 })

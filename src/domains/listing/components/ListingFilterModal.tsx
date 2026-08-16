@@ -1,25 +1,29 @@
 import { useEffect, useState } from 'react'
+
 import { Modal, Pressable, ScrollView, useColorScheme, View } from 'react-native'
+
+import type { ListingListFilters } from '../types/listing.types'
 
 import { Chip } from '@/core/components/atoms/Chip'
 import { Icon } from '@/core/components/atoms/Icon'
 import { Text } from '@/core/components/atoms/Text'
-
-import { SPECIALIZATION_OPTIONS } from '../listing.constants'
-
-import type { ListingListFilters } from '../types/listing.types'
+import { useCategoriesQuery } from '@/domains/category'
 
 const SESSION_FILTER_OPTIONS = [
-  { label: 'Online',            value: 'online'          as const },
-  { label: 'Yüz Yüze',         value: 'yüz_yüze'        as const },
+  { label: 'Online', value: 'online' as const },
+  { label: 'Yüz Yüze', value: 'yüz_yüze' as const },
   { label: 'Yüz Yüze / Online', value: 'yüz_yüze_online' as const },
 ]
 
-export const PRICE_FILTER_OPTIONS: Array<{ label: string; budgetMin: number; budgetMax: number | undefined }> = [
-  { label: '₺0 – ₺500',      budgetMin: 0,    budgetMax: 500  },
-  { label: '₺500 – ₺1500',   budgetMin: 500,  budgetMax: 1500 },
-  { label: '₺1500 – ₺3000',  budgetMin: 1500, budgetMax: 3000 },
-  { label: '₺3000+',          budgetMin: 3000, budgetMax: undefined },
+export const PRICE_FILTER_OPTIONS: Array<{
+  label: string
+  budgetMin: number
+  budgetMax: number | undefined
+}> = [
+  { label: '₺0 – ₺500', budgetMin: 0, budgetMax: 500 },
+  { label: '₺500 – ₺1500', budgetMin: 500, budgetMax: 1500 },
+  { label: '₺1500 – ₺3000', budgetMin: 1500, budgetMax: 3000 },
+  { label: '₺3000+', budgetMin: 3000, budgetMax: undefined },
 ]
 
 export type ListingFilterResult = {
@@ -40,7 +44,9 @@ function toggleArr<T extends string>(arr: T[], val: T): T[] {
   return arr.includes(val) ? arr.filter((x) => x !== val) : [...arr, val]
 }
 
-function priceLabelsToBudget(labels: string[]): Pick<ListingListFilters, 'budgetMin' | 'budgetMax'> {
+function priceLabelsToBudget(
+  labels: string[]
+): Pick<ListingListFilters, 'budgetMin' | 'budgetMax'> {
   const ranges = PRICE_FILTER_OPTIONS.filter((o) => labels.includes(o.label))
   if (ranges.length === 0) return { budgetMin: undefined, budgetMax: undefined }
   const hasUnbounded = ranges.some((r) => r.budgetMax === undefined)
@@ -59,6 +65,7 @@ export function ListingFilterModal({
   onClose,
 }: ListingFilterModalProps) {
   const isDark = useColorScheme() === 'dark'
+  const { data: categories } = useCategoriesQuery()
   const [spec, setSpec] = useState<string[]>([])
   const [session, setSession] = useState<string[]>([])
   const [price, setPrice] = useState<string[]>([])
@@ -85,8 +92,11 @@ export function ListingFilterModal({
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <Pressable className="flex-1 bg-black/40" onPress={onClose} />
-      <View className="bg-white dark:bg-dark-card rounded-t-3xl px-5 pt-5 pb-10" style={{ maxHeight: '85%' }}>
-        <View className="flex-row items-center justify-between mb-5">
+      <View
+        className="rounded-t-3xl bg-white px-5 pb-10 pt-5 dark:bg-dark-card"
+        style={{ maxHeight: '85%' }}
+      >
+        <View className="mb-5 flex-row items-center justify-between">
           <Text variant="subheading">Filtrele</Text>
           <Pressable onPress={onClose}>
             <Icon name="X" size={20} color={isDark ? '#F5F5F7' : '#171717'} />
@@ -94,21 +104,25 @@ export function ListingFilterModal({
         </View>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerClassName="gap-5 pb-5">
           <View className="gap-2">
-            <Text variant="label" className="font-semibold">Uzmanlık Alanı</Text>
+            <Text variant="label" className="font-semibold">
+              Uzmanlık Alanı
+            </Text>
             <View className="flex-row flex-wrap gap-2">
-              {(SPECIALIZATION_OPTIONS as unknown as string[]).map((item) => (
+              {categories?.map((category) => (
                 <Chip
-                  key={item}
-                  label={item}
+                  key={category.id}
+                  label={category.name}
                   variant="filter"
-                  isSelected={spec.includes(item)}
-                  onPress={() => setSpec((prev) => toggleArr(prev, item))}
+                  isSelected={spec.includes(category.name)}
+                  onPress={() => setSpec((prev) => toggleArr(prev, category.name))}
                 />
               ))}
             </View>
           </View>
           <View className="gap-2">
-            <Text variant="label" className="font-semibold">Seans Tipi</Text>
+            <Text variant="label" className="font-semibold">
+              Seans Tipi
+            </Text>
             <View className="flex-row flex-wrap gap-2">
               {SESSION_FILTER_OPTIONS.map((opt) => (
                 <Chip
@@ -122,7 +136,9 @@ export function ListingFilterModal({
             </View>
           </View>
           <View className="gap-2">
-            <Text variant="label" className="font-semibold">Fiyat Aralığı</Text>
+            <Text variant="label" className="font-semibold">
+              Fiyat Aralığı
+            </Text>
             <View className="flex-row flex-wrap gap-2">
               {PRICE_FILTER_OPTIONS.map((opt) => (
                 <Chip
@@ -136,12 +152,22 @@ export function ListingFilterModal({
             </View>
           </View>
         </ScrollView>
-        <View className="flex-row gap-3 mt-4">
-          <Pressable onPress={onClear} className="flex-1 items-center border border-neutral-200 dark:border-dark-border2 rounded-xl py-3 active:bg-neutral-50 dark:active:bg-dark-elevated">
-            <Text variant="label" color="secondary">Temizle</Text>
+        <View className="mt-4 flex-row gap-3">
+          <Pressable
+            onPress={onClear}
+            className="flex-1 items-center rounded-xl border border-neutral-200 py-3 active:bg-neutral-50 dark:border-dark-border2 dark:active:bg-dark-elevated"
+          >
+            <Text variant="label" color="secondary">
+              Temizle
+            </Text>
           </Pressable>
-          <Pressable onPress={handleApply} className="flex-1 items-center bg-sky-500 rounded-xl py-3 active:bg-sky-600">
-            <Text variant="label" className="text-white font-semibold">Uygula</Text>
+          <Pressable
+            onPress={handleApply}
+            className="flex-1 items-center rounded-xl bg-sky-500 py-3 active:bg-sky-600"
+          >
+            <Text variant="label" className="font-semibold text-white">
+              Uygula
+            </Text>
           </Pressable>
         </View>
       </View>

@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+
 import { Redirect, Stack, useSegments } from 'expo-router'
 
 import { useAuthStore } from '@/domains/auth'
@@ -12,7 +13,10 @@ export default function AuthLayout() {
   const clearOnboardIntent = useOnboardingStore((s) => s.clearOnboardIntent)
   const segments = useSegments()
 
-  const current = segments[1]
+  // .at(1) kullanılıyor çünkü expo-router'ın typedRoutes tipleri `.expo/types/` altında
+  // ÜRETİLİR ve gitignore'dadır. Temiz bir CI klonunda segments `[string]` tuple'ına düşer
+  // ve `segments[1]` derleme hatası verir. `.at()` her iki durumda da `string | undefined`.
+  const current = segments.at(1)
 
   useEffect(() => {
     if (current === 'onboarding' && onboardIntent) clearOnboardIntent()

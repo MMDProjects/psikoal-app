@@ -1,7 +1,12 @@
 import { useState } from 'react'
+
 import { Image, Pressable, View } from 'react-native'
-import { useRouter } from 'expo-router'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useRouter } from 'expo-router'
+
+import type { IconName } from '@/core/components/atoms/Icon'
 
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Icon } from '@/core/components/atoms/Icon'
@@ -9,8 +14,6 @@ import { Text } from '@/core/components/atoms/Text'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { cn } from '@/core/utils/cn'
 import { useOnboardingStore } from '@/store/onboardingStore'
-
-import type { IconName } from '@/core/components/atoms/Icon'
 
 const LOGO_PLACEHOLDER = require('../../../assets/images/brand/logo-placeholder.png')
 
@@ -66,13 +69,15 @@ export default function WelcomeScreen() {
         accessibilityRole="button"
         accessibilityLabel="Karşılamayı atla"
         style={{ position: 'absolute', top: insets.top + 8, right: 16, zIndex: 10 }}
-        className="px-4 h-10 rounded-full items-center justify-center bg-sky-600 dark:bg-sky-900 active:bg-sky-700 dark:active:bg-sky-800"
+        className="h-10 items-center justify-center rounded-full bg-sky-600 px-4 active:bg-sky-700 dark:bg-sky-900 dark:active:bg-sky-800"
       >
-        <Text variant="caption" className="text-white font-semibold">Atla</Text>
+        <Text variant="caption" className="font-semibold text-white">
+          Atla
+        </Text>
       </Pressable>
 
       <View className="items-center" style={{ paddingTop: insets.top + 12 }}>
-        <View className="bg-white rounded-xl px-3 py-1.5">
+        <View className="rounded-xl bg-white px-3 py-1.5">
           <Image
             source={LOGO_PLACEHOLDER}
             style={{ width: 146, height: 34 }}
@@ -82,15 +87,15 @@ export default function WelcomeScreen() {
         </View>
       </View>
 
-      <View className="flex-1 justify-center px-8 gap-6" style={{ paddingBottom: bottomBarHeight }}>
+      <View className="flex-1 justify-center gap-6 px-8" style={{ paddingBottom: bottomBarHeight }}>
         <View className="items-center gap-6">
-          <View className="w-24 h-24 rounded-full bg-white items-center justify-center">
+          <View className="h-24 w-24 items-center justify-center rounded-full bg-white">
             <Icon name={current.icon} size={44} color="#0EA5E9" />
           </View>
           <View className="items-center gap-3">
             <Text
               variant="heading"
-              className="text-white text-center leading-tight"
+              className="text-center leading-tight text-white"
               numberOfLines={2}
               style={{ minHeight: 76 }}
             >
@@ -98,7 +103,7 @@ export default function WelcomeScreen() {
             </Text>
             <Text
               variant="body"
-              className="text-sky-100 text-center leading-relaxed"
+              className="text-center leading-relaxed text-sky-100"
               numberOfLines={4}
               style={{ minHeight: 96 }}
             >
@@ -107,7 +112,7 @@ export default function WelcomeScreen() {
           </View>
         </View>
 
-        <View className="flex-row justify-center gap-2 mt-2">
+        <View className="mt-2 flex-row justify-center gap-2">
           {SLIDES.map((_, i) => (
             <View
               key={i}
@@ -124,8 +129,16 @@ export default function WelcomeScreen() {
         actions={
           isLast
             ? [
-                { label: 'Giriş Yap', onPress: () => finish('/(auth)/login'), variant: 'inverseGhost' },
-                { label: 'Hemen Başla', onPress: () => finish('/(auth)/register'), variant: 'inverse' },
+                {
+                  label: 'Giriş Yap',
+                  onPress: () => finish('/(auth)/login'),
+                  variant: 'inverseGhost',
+                },
+                {
+                  label: 'Hemen Başla',
+                  onPress: () => finish('/(auth)/register'),
+                  variant: 'inverse',
+                },
               ]
             : [{ label: 'Devam', onPress: () => setSlide((s) => s + 1), variant: 'inverse' }]
         }

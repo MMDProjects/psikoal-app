@@ -1,8 +1,12 @@
 import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native'
+
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'expo-router'
 import { Controller, useForm } from 'react-hook-form'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useRouter } from 'expo-router'
+
+import type { UpdateProfileRequest } from '@/domains/auth'
 
 import { Avatar } from '@/core/components/atoms/Avatar'
 import { Divider } from '@/core/components/atoms/Divider'
@@ -17,8 +21,6 @@ import { themeColors } from '@/core/theme'
 import { getFullName, getInitials } from '@/core/utils/personName'
 import { useAuthStore, useUpdateProfileMutation, UpdateProfileSchema } from '@/domains/auth'
 
-import type { UpdateProfileRequest } from '@/domains/auth'
-
 export default function PersonalInfoScreen() {
   const router = useRouter()
   const user = useAuthStore((s) => s.user)
@@ -28,7 +30,11 @@ export default function PersonalInfoScreen() {
 
   const { mutate: updateProfile, isPending } = useUpdateProfileMutation()
 
-  const { control, handleSubmit, formState: { errors } } = useForm<UpdateProfileRequest>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UpdateProfileRequest>({
     resolver: zodResolver(UpdateProfileSchema),
     defaultValues: {
       firstName: user?.firstName ?? '',
@@ -55,25 +61,40 @@ export default function PersonalInfoScreen() {
     <View className="flex-1 bg-surface-base dark:bg-dark-bg">
       <BackButton />
 
-      <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
         <ScrollView
-          contentContainerStyle={{ paddingTop: insets.top + 8, paddingBottom: bottomBarHeight + 16 }}
+          contentContainerStyle={{
+            paddingTop: insets.top + 8,
+            paddingBottom: bottomBarHeight + 16,
+          }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
           <ScreenTitle title="Kişisel Bilgiler" />
 
-          <View className="px-4 py-5 gap-4">
+          <View className="gap-4 px-4 py-5">
             <View className="flex-row items-center gap-4">
               <Pressable onPress={handleChangePhoto} className="relative active:opacity-80">
-                <Avatar size="xl" src={user?.avatarUrl ?? undefined} initials={initials} isVerified={user?.isVerified} />
-                <View className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-sky-500 items-center justify-center border-2 border-surface-base dark:border-dark-bg">
+                <Avatar
+                  size="xl"
+                  src={user?.avatarUrl ?? undefined}
+                  initials={initials}
+                  isVerified={user?.isVerified}
+                />
+                <View className="absolute -bottom-1 -right-1 h-7 w-7 items-center justify-center rounded-full border-2 border-surface-base bg-sky-500 dark:border-dark-bg">
                   <Icon name="Pencil" size={13} color={themeColors.light.contentInverse} />
                 </View>
               </Pressable>
               <View className="flex-1 gap-0.5">
-                <Text variant="subheading" className="leading-tight">{getFullName(user) || 'Kullanıcı'}</Text>
-                <Text variant="caption" color="secondary">{user?.role === 'expert' ? 'Uzman' : 'Danışan'}</Text>
+                <Text variant="subheading" className="leading-tight">
+                  {getFullName(user) || 'Kullanıcı'}
+                </Text>
+                <Text variant="caption" color="secondary">
+                  {user?.role === 'expert' ? 'Uzman' : 'Danışan'}
+                </Text>
               </View>
             </View>
 
@@ -110,15 +131,23 @@ export default function PersonalInfoScreen() {
             />
 
             <View className="gap-1">
-              <Text variant="label" color="secondary">E-posta</Text>
+              <Text variant="label" color="secondary">
+                E-posta
+              </Text>
               <Text variant="body">{user?.email}</Text>
-              <Text variant="caption" color="tertiary">E-posta adresiniz giriş kimliğiniz olduğu için değiştirilemez.</Text>
+              <Text variant="caption" color="tertiary">
+                E-posta adresiniz giriş kimliğiniz olduğu için değiştirilemez.
+              </Text>
             </View>
           </View>
 
           <Divider spacing="none" className="mx-4" />
-          <View className="px-4 py-5 gap-4">
-            <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+          <View className="gap-4 px-4 py-5">
+            <Text
+              variant="caption"
+              color="secondary"
+              className="font-semibold uppercase tracking-widest"
+            >
               İletişim
             </Text>
 
@@ -155,9 +184,13 @@ export default function PersonalInfoScreen() {
           {isClient && (
             <>
               <Divider spacing="none" className="mx-4" />
-              <View className="px-4 py-5 gap-4">
+              <View className="gap-4 px-4 py-5">
                 <View className="gap-1">
-                  <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+                  <Text
+                    variant="caption"
+                    color="secondary"
+                    className="font-semibold uppercase tracking-widest"
+                  >
                     İletişim Paylaşımı
                   </Text>
                   <Text variant="caption" color="tertiary">
@@ -169,21 +202,36 @@ export default function PersonalInfoScreen() {
                   control={control}
                   name="shareEmail"
                   render={({ field: { onChange, value } }) => (
-                    <ToggleRow label="E-posta" description="Uzman e-posta adresinizi görebilir" value={value ?? true} onValueChange={onChange} />
+                    <ToggleRow
+                      label="E-posta"
+                      description="Uzman e-posta adresinizi görebilir"
+                      value={value ?? true}
+                      onValueChange={onChange}
+                    />
                   )}
                 />
                 <Controller
                   control={control}
                   name="sharePhone"
                   render={({ field: { onChange, value } }) => (
-                    <ToggleRow label="Telefon" description="Uzman telefon numaranızı görebilir" value={value ?? true} onValueChange={onChange} />
+                    <ToggleRow
+                      label="Telefon"
+                      description="Uzman telefon numaranızı görebilir"
+                      value={value ?? true}
+                      onValueChange={onChange}
+                    />
                   )}
                 />
                 <Controller
                   control={control}
                   name="shareLocation"
                   render={({ field: { onChange, value } }) => (
-                    <ToggleRow label="Konum" description="Uzman konum tercihinizi görebilir" value={value ?? true} onValueChange={onChange} />
+                    <ToggleRow
+                      label="Konum"
+                      description="Uzman konum tercihinizi görebilir"
+                      value={value ?? true}
+                      onValueChange={onChange}
+                    />
                   )}
                 />
               </View>
@@ -192,12 +240,14 @@ export default function PersonalInfoScreen() {
         </ScrollView>
 
         <BottomActionBar
-          actions={[{
-            label: 'Kaydet',
-            loadingLabel: 'Kaydediliyor...',
-            onPress: handleSubmit(onSubmit),
-            isLoading: isPending,
-          }]}
+          actions={[
+            {
+              label: 'Kaydet',
+              loadingLabel: 'Kaydediliyor...',
+              onPress: handleSubmit(onSubmit),
+              isLoading: isPending,
+            },
+          ]}
         />
       </KeyboardAvoidingView>
     </View>

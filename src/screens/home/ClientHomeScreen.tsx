@@ -1,5 +1,10 @@
 import { Pressable, ScrollView, View } from 'react-native'
+
 import { useRouter } from 'expo-router'
+
+import { HomeHero } from './HomeHero'
+
+import type { IconName } from '@/core/components/atoms/Icon'
 
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
 import { Divider } from '@/core/components/atoms/Divider'
@@ -10,17 +15,13 @@ import { HeaderActions } from '@/core/components/molecules/HeaderActions'
 import { HeroQuickActions } from '@/core/components/organisms/HeroQuickActions'
 import { useRefresh } from '@/core/hooks'
 import { useThemeColors } from '@/core/theme'
-import { useSuggestionsQuery, SuggestionSlide } from '@/domains/suggestion'
 import { useAssessmentListQuery, useMyAssessmentResultsQuery } from '@/domains/assessment'
 import { useAuthStore } from '@/domains/auth'
+import { useBlogListQuery, BlogCarousel } from '@/domains/blog'
 import { useCategoriesQuery } from '@/domains/category'
 import { useMyListingsQuery } from '@/domains/listing'
 import { useUnreadNotificationCount } from '@/domains/notification'
-import { useBlogListQuery, BlogCarousel } from '@/domains/blog'
-
-import { HomeHero } from './HomeHero'
-
-import type { IconName } from '@/core/components/atoms/Icon'
+import { useSuggestionsQuery, SuggestionSlide } from '@/domains/suggestion'
 
 export function ClientHomeScreen() {
   const router = useRouter()
@@ -57,15 +58,24 @@ export function ClientHomeScreen() {
     assessmentsQuery,
     myResultsQuery,
     myListingsQuery,
-    blogsQuery,
+    blogsQuery
   )
 
   return (
     <View className="flex-1 bg-surface-base dark:bg-dark-bg">
       <HeaderActions
         actions={[
-          { icon: 'Bell', accessibilityLabel: 'Bildirimler', badgeCount: unreadCount, onPress: () => router.push('/notifications') },
-          { icon: 'Plus', accessibilityLabel: 'Yeni İlan Oluştur', onPress: () => goToNewListing() },
+          {
+            icon: 'Bell',
+            accessibilityLabel: 'Bildirimler',
+            badgeCount: unreadCount,
+            onPress: () => router.push('/notifications'),
+          },
+          {
+            icon: 'Plus',
+            accessibilityLabel: 'Yeni İlan Oluştur',
+            onPress: () => goToNewListing(),
+          },
         ]}
       />
 
@@ -116,10 +126,12 @@ export function ClientHomeScreen() {
               {i > 0 && <Divider spacing="none" className="mx-4" />}
               <Pressable
                 onPress={() => router.push('/assessment')}
-                className="px-4 py-4 flex-row items-center justify-between gap-3 active:opacity-80"
+                className="flex-row items-center justify-between gap-3 px-4 py-4 active:opacity-80"
               >
                 <View className="flex-1 gap-0.5">
-                  <Text variant="body" className="font-medium dark:text-[#F5F5F7]">{t.title}</Text>
+                  <Text variant="body" className="font-medium dark:text-[#F5F5F7]">
+                    {t.title}
+                  </Text>
                   <Text variant="caption" color="tertiary">
                     Ücretsiz · {t.questionCount} soru · ~{t.estimatedMinutes} dk · Kayıt gerekmez
                   </Text>
@@ -155,11 +167,17 @@ export function ClientHomeScreen() {
             <Pressable
               key={category.id}
               onPress={() => router.push(`/category/${category.slug}`)}
-              className="px-4 py-4 flex-row items-center gap-3 active:opacity-90"
+              className="flex-row items-center gap-3 px-4 py-4 active:opacity-90"
             >
               {/* REASON: icon adı backend'den düz string olarak gelir, IconName union'ına eşlenir */}
-              <Icon name={(category.icon as IconName) ?? 'Circle'} size={18} color={colors.contentSecondary} />
-              <Text variant="body" className="flex-1 dark:text-[#F5F5F7]">{category.name}</Text>
+              <Icon
+                name={(category.icon as IconName) ?? 'Circle'}
+                size={18}
+                color={colors.contentSecondary}
+              />
+              <Text variant="body" className="flex-1 dark:text-[#F5F5F7]">
+                {category.name}
+              </Text>
               <Icon name="ChevronRight" size={16} color={colors.contentDisabled} />
             </Pressable>
           ))}

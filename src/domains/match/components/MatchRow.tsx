@@ -1,5 +1,9 @@
 import { Pressable, View } from 'react-native'
 
+import { MATCH_STATUS_CONFIG } from '../match.constants'
+
+import type { Match } from '../types/match.types'
+
 import { Avatar } from '@/core/components/atoms/Avatar'
 import { Chip } from '@/core/components/atoms/Chip'
 import { Icon } from '@/core/components/atoms/Icon'
@@ -7,12 +11,8 @@ import { Text } from '@/core/components/atoms/Text'
 import { useThemeColors } from '@/core/theme'
 import { formatDate } from '@/core/utils/formatDate'
 
-import { MATCH_STATUS_CONFIG } from '../match.constants'
-
-import type { Match } from '../types/match.types'
-
 const SESSION_LABELS: Record<string, string> = {
-  online:    'Online',
+  online: 'Online',
   yüz_yüze: 'Yüz yüze',
 }
 
@@ -34,18 +34,21 @@ export function MatchRow({ match, onPress, hideStatus, viewerRole }: MatchRowPro
   const initials = (isExpert ? match.client?.initials : match.expert?.initials) ?? ''
 
   const listing = match.listing
-  const offer   = match.offer
-  const specs   = listing?.specialization ?? []
+  const offer = match.offer
+  const specs = listing?.specialization ?? []
   const dateLabel = formatDate(match.createdAt, 'dayMonth')
 
   return (
-    <Pressable onPress={onPress} className="px-4 py-4 gap-3 active:opacity-90">
+    <Pressable onPress={onPress} className="gap-3 px-4 py-4 active:opacity-90">
       <View className="flex-row items-start justify-between gap-2">
-        <Text variant="label" className="flex-1 font-semibold text-neutral-900 dark:text-[#F5F5F7] leading-snug">
+        <Text
+          variant="label"
+          className="flex-1 font-semibold leading-snug text-neutral-900 dark:text-[#F5F5F7]"
+        >
           {listing?.title ?? 'İlan'}
         </Text>
         {!hideStatus && (
-          <View className="flex-row items-center gap-1 shrink-0">
+          <View className="shrink-0 flex-row items-center gap-1">
             <Icon name={cfg.icon} size={13} color={cfg.iconColor} />
             <Text variant="caption" className="font-medium" style={{ color: cfg.iconColor }}>
               {cfg.label}
@@ -65,13 +68,15 @@ export function MatchRow({ match, onPress, hideStatus, viewerRole }: MatchRowPro
           {specs.slice(0, 3).map((s) => (
             <Chip key={s} label={s} variant="filter" isSelected />
           ))}
-          {specs.length > 3 && (
-            <Chip label={`+${specs.length - 3}`} variant="filter" />
-          )}
+          {specs.length > 3 && <Chip label={`+${specs.length - 3}`} variant="filter" />}
           {offer && (
             <>
               <Chip label={`₺${offer.price.toLocaleString('tr-TR')}`} variant="price" isSelected />
-              <Chip label={SESSION_LABELS[offer.sessionType] ?? offer.sessionType} variant="session" isSelected />
+              <Chip
+                label={SESSION_LABELS[offer.sessionType] ?? offer.sessionType}
+                variant="session"
+                isSelected
+              />
             </>
           )}
         </View>
@@ -80,18 +85,26 @@ export function MatchRow({ match, onPress, hideStatus, viewerRole }: MatchRowPro
       <View className="flex-row items-center justify-between pt-1">
         <View className="flex-row items-center gap-2">
           <Avatar size="xs" initials={initials} />
-          <Text variant="caption" color="secondary">{partyName}</Text>
+          <Text variant="caption" color="secondary">
+            {partyName}
+          </Text>
           {listing?.city ? (
             <>
-              <Text variant="caption" color="tertiary">·</Text>
+              <Text variant="caption" color="tertiary">
+                ·
+              </Text>
               <View className="flex-row items-center gap-1">
                 <Icon name="MapPin" size={11} color={colors.contentDisabled} />
-                <Text variant="caption" color="tertiary">{listing.city}</Text>
+                <Text variant="caption" color="tertiary">
+                  {listing.city}
+                </Text>
               </View>
             </>
           ) : null}
         </View>
-        <Text variant="caption" color="tertiary">{dateLabel}</Text>
+        <Text variant="caption" color="tertiary">
+          {dateLabel}
+        </Text>
       </View>
     </Pressable>
   )

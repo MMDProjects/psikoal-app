@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
 
-import { get } from '@/lib/api'
-
 import { assessmentKeys } from '../assessment.constants'
 import { MyAssessmentResultSchema } from '../schemas/assessment.schema'
+
+import { get } from '@/lib/api'
 
 const MyResultsResponseSchema = z.object({
   data: z.array(MyAssessmentResultSchema),

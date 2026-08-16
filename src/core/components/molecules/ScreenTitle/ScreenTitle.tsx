@@ -1,10 +1,11 @@
+import type { ReactNode } from 'react'
+
 import { View } from 'react-native'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { cn } from '@/core/utils/cn'
 import { Text } from '@/core/components/atoms/Text'
-
-import type { ReactNode } from 'react'
+import { cn } from '@/core/utils/cn'
 
 export type ScreenTitleProps = {
   title: string
@@ -14,15 +15,23 @@ export type ScreenTitleProps = {
   titleClassName?: string
 }
 
-export function ScreenTitle({ title, topInset = false, children, className, titleClassName }: ScreenTitleProps) {
+export function ScreenTitle({
+  title,
+  topInset = false,
+  children,
+  className,
+  titleClassName,
+}: ScreenTitleProps) {
   const insets = useSafeAreaInsets()
 
   return (
     <View
       style={topInset ? { paddingTop: insets.top + 8 } : undefined}
-      className={cn('pt-2 pb-3 items-center', className)}
+      className={cn('items-center pb-3 pt-2', className)}
     >
-      <Text variant="label" className={cn('font-semibold', titleClassName)}>{title}</Text>
+      <Text variant="label" className={cn('font-semibold', titleClassName)}>
+        {title}
+      </Text>
       {children}
     </View>
   )

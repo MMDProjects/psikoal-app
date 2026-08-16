@@ -1,0 +1,16 @@
+[
+  {
+    "id": "result-r1-mock",
+    "assessmentId": "99999999-9999-9999-9999-999999999999",
+    "assessmentTitle": "Kaygı Değerlendirme",
+    "score": 7,
+    "level": "moderate",
+    "summary": "Değerlendirmenize göre orta düzeyde kaygı belirtileri gözlemlenmektedir. Bir uzmanla görüşmeniz faydalı olabilir.",
+    "suggestions": [
+      "Kaygı tetikleyicilerinizi bir günlük tutarak takip edin",
+      "Derin nefes ve gevşeme tekniklerini öğrenin",
+      "Kafein ve alkol tüketimini azaltın"
+    ],
+    "createdAt": "2026-06-01T10:30:00.000Z"
+  }
+]

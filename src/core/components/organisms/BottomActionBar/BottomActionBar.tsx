@@ -1,10 +1,11 @@
+import type { ReactNode } from 'react'
+
 import { Pressable, View } from 'react-native'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { cn } from '@/core/utils/cn'
 import { Text } from '@/core/components/atoms/Text'
-
-import type { ReactNode } from 'react'
+import { cn } from '@/core/utils/cn'
 
 export type BottomBarActionVariant = 'primary' | 'ghost' | 'danger' | 'inverse' | 'inverseGhost'
 
@@ -25,23 +26,25 @@ export type BottomActionBarProps = {
 const variantStyles: Record<BottomBarActionVariant, { button: string; text: string }> = {
   primary: {
     button: 'bg-brand active:bg-brand-hover',
-    text:   'text-white font-semibold',
+    text: 'text-white font-semibold',
   },
   ghost: {
-    button: 'bg-neutral-100 border border-neutral-300 dark:bg-neutral-800 dark:border-dark-border2 active:bg-neutral-200 dark:active:bg-neutral-700',
-    text:   'text-neutral-600 dark:text-neutral-400 font-medium',
+    button:
+      'bg-neutral-100 border border-neutral-300 dark:bg-neutral-800 dark:border-dark-border2 active:bg-neutral-200 dark:active:bg-neutral-700',
+    text: 'text-neutral-600 dark:text-neutral-400 font-medium',
   },
   danger: {
-    button: 'bg-red-50 border border-red-200 dark:bg-red-950 dark:border-red-900 active:bg-red-100 dark:active:bg-red-900',
-    text:   'text-red-600 dark:text-red-400 font-medium',
+    button:
+      'bg-red-50 border border-red-200 dark:bg-red-950 dark:border-red-900 active:bg-red-100 dark:active:bg-red-900',
+    text: 'text-red-600 dark:text-red-400 font-medium',
   },
   inverse: {
     button: 'bg-white active:bg-sky-50',
-    text:   'text-sky-700 dark:text-sky-700 font-semibold',
+    text: 'text-sky-700 dark:text-sky-700 font-semibold',
   },
   inverseGhost: {
     button: 'bg-sky-600 dark:bg-sky-900 active:bg-sky-700 dark:active:bg-sky-800',
-    text:   'text-white font-medium',
+    text: 'text-white font-medium',
   },
 }
 
@@ -61,7 +64,7 @@ export function BottomActionBar({ actions = [], children }: BottomActionBarProps
                 onPress={busy || action.isDisabled ? undefined : action.onPress}
                 disabled={busy || action.isDisabled}
                 className={cn(
-                  'rounded-full h-14 items-center justify-center',
+                  'h-14 items-center justify-center rounded-full',
                   actions.length > 1 && 'flex-1',
                   button,
                   action.isDisabled && 'opacity-40'

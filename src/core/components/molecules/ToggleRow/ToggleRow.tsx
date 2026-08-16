@@ -14,8 +14,14 @@ export function ToggleRow({ label, description, value, onValueChange }: ToggleRo
   return (
     <View className="flex-row items-center justify-between gap-4">
       <View className="flex-1 gap-0.5">
-        <Text variant="label" className="font-medium">{label}</Text>
-        {description ? <Text variant="caption" color="tertiary">{description}</Text> : null}
+        <Text variant="label" className="font-medium">
+          {label}
+        </Text>
+        {description ? (
+          <Text variant="caption" color="tertiary">
+            {description}
+          </Text>
+        ) : null}
       </View>
       <Switch value={value} onValueChange={onValueChange} />
     </View>

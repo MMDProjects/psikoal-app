@@ -1,10 +1,12 @@
 import { forwardRef } from 'react'
-import { TextInput, View } from 'react-native'
+
+import type { TextInput } from 'react-native'
+import { View } from 'react-native'
+
+import type { InputProps, InputState } from '@/core/components/atoms'
 
 import { Input, Text } from '@/core/components/atoms'
 import { cn } from '@/core/utils/cn'
-
-import type { InputProps, InputState } from '@/core/components/atoms'
 
 export type InputFieldProps = Omit<InputProps, 'state' | 'className'> & {
   label?: string
@@ -59,11 +61,19 @@ export const InputField = forwardRef<TextInput, InputFieldProps>(function InputF
     <View className={cn('gap-1.5', className)}>
       {label && (
         <View className="flex-row items-center gap-0.5">
-          <Text variant="label" color={isOnBrand ? undefined : 'secondary'} className={isOnBrand ? 'text-white' : undefined}>
+          <Text
+            variant="label"
+            color={isOnBrand ? undefined : 'secondary'}
+            className={isOnBrand ? 'text-white' : undefined}
+          >
             {label}
           </Text>
           {isRequired && (
-            <Text variant="label" color={isOnBrand ? undefined : 'error'} className={cn('leading-none', isOnBrand && 'text-red-100')}>
+            <Text
+              variant="label"
+              color={isOnBrand ? undefined : 'error'}
+              className={cn('leading-none', isOnBrand && 'text-red-100')}
+            >
               *
             </Text>
           )}
@@ -73,7 +83,11 @@ export const InputField = forwardRef<TextInput, InputFieldProps>(function InputF
       <Input ref={ref} state={derivedState} className={inputClassName} {...inputProps} />
 
       {subText && (
-        <Text variant="caption" color={subTextColor} className={isOnBrand ? onBrandSubTextClass : undefined}>
+        <Text
+          variant="caption"
+          color={subTextColor}
+          className={isOnBrand ? onBrandSubTextClass : undefined}
+        >
           {subText}
         </Text>
       )}

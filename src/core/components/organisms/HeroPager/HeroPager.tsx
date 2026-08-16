@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
+
 import { useWindowDimensions, View } from 'react-native'
+
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
   Easing,
@@ -8,8 +11,6 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated'
-
-import type { ReactNode } from 'react'
 
 export type HeroPagerProps = {
   pages: ReactNode[]
@@ -76,7 +77,7 @@ export function HeroPager({ pages, autoAdvanceMs = 5000 }: HeroPagerProps) {
         </View>
       </GestureDetector>
 
-      <View className="flex-row justify-center gap-1.5 mt-3">
+      <View className="mt-3 flex-row justify-center gap-1.5">
         {pages.map((_, i) => (
           <View
             key={i}

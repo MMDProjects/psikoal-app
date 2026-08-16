@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
 
-import { get } from '@/lib/api'
-
-import { suggestionKeys, SUGGESTION_STALE_TIME } from '../suggestion.constants'
 import { SuggestionSchema } from '../schemas/suggestion.schema'
+import { suggestionKeys, SUGGESTION_STALE_TIME } from '../suggestion.constants'
 
 import type { SuggestionAudience } from '../types/suggestion.types'
+
+import { get } from '@/lib/api'
 
 const SuggestionListResponseSchema = z.object({
   data: z.array(SuggestionSchema),

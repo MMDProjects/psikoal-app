@@ -1,5 +1,3 @@
-import type { z } from 'zod'
-
 import type {
   AuthTokensSchema,
   AuthUserSchema,
@@ -11,6 +9,7 @@ import type {
   UpdateProfileSchema,
   UserRoleSchema,
 } from '../schemas/auth.schema'
+import type { z } from 'zod'
 
 export type UserRole = z.infer<typeof UserRoleSchema>
 export type AuthUser = z.infer<typeof AuthUserSchema>

@@ -1,11 +1,14 @@
 import { useEffect } from 'react'
-import { Platform } from 'react-native'
-import { Tabs, useRouter } from 'expo-router'
-import { useColorScheme } from 'nativewind'
-import { NativeTabs, Label, Icon as NativeIcon } from 'expo-router/unstable-native-tabs'
 
-import { useAuthStore } from '@/domains/auth'
+import { Platform } from 'react-native'
+
+import { NativeTabs, Label, Icon as NativeIcon } from 'expo-router/unstable-native-tabs'
+import { useColorScheme } from 'nativewind'
+
+import { Tabs, useRouter } from 'expo-router'
+
 import { Icon } from '@/core/components/atoms/Icon'
+import { useAuthStore } from '@/domains/auth'
 
 export default function TabsLayout() {
   const router = useRouter()
@@ -47,10 +50,10 @@ export default function TabsLayout() {
     )
   }
 
-  const tabBg        = isDark ? '#1C1C1E' : '#FFFFFF'
-  const tabBorder    = isDark ? '#38383A' : '#F0F0F0'
-  const tabActive    = isDark ? '#38BDF8' : '#0EA5E9'   // sky-400 dark / sky-500 light
-  const tabInactive  = isDark ? '#525252' : '#A3A3A3'   // neutral-600 dark / neutral-400 light
+  const tabBg = isDark ? '#1C1C1E' : '#FFFFFF'
+  const tabBorder = isDark ? '#38383A' : '#F0F0F0'
+  const tabActive = isDark ? '#38BDF8' : '#0EA5E9' // sky-400 dark / sky-500 light
+  const tabInactive = isDark ? '#525252' : '#A3A3A3' // neutral-600 dark / neutral-400 light
 
   return (
     <Tabs
@@ -107,12 +110,7 @@ export default function TabsLayout() {
         options={{
           title: 'Eşleşmelerim',
           tabBarIcon: ({ color, focused }) => (
-            <Icon
-              name="Users"
-              size={22}
-              color={color}
-              strokeWidth={focused ? 2.25 : 1.75}
-            />
+            <Icon name="Users" size={22} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />
@@ -121,12 +119,7 @@ export default function TabsLayout() {
         options={{
           title: 'Ayarlar',
           tabBarIcon: ({ color, focused }) => (
-            <Icon
-              name="Settings"
-              size={22}
-              color={color}
-              strokeWidth={focused ? 2.25 : 1.75}
-            />
+            <Icon name="Settings" size={22} color={color} strokeWidth={focused ? 2.25 : 1.75} />
           ),
         }}
       />

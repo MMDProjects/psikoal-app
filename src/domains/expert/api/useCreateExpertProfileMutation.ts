@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query'
 
-import { post } from '@/lib/api'
-
 import type { ExpertOnboarding } from '../schemas/expert.schema'
+
+import { post } from '@/lib/api'
 
 export function useCreateExpertProfileMutation() {
   return useMutation({

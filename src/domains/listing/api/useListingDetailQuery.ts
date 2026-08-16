@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { get } from '@/lib/api'
-
 import { listingKeys, LISTING_STALE_TIME } from '../listing.constants'
 import { ListingSchema } from '../schemas/listing.schema'
+
+import { get } from '@/lib/api'
 
 export function useListingDetailQuery(id: string) {
   return useQuery({

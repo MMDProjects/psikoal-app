@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { get } from '@/lib/api'
-
 import { notificationKeys, NOTIFICATION_STALE_TIME } from '../notification.constants'
 import { NotificationListResponseSchema } from '../schemas/notification.schema'
+
+import { get } from '@/lib/api'
 
 export function useNotificationsQuery() {
   return useQuery({

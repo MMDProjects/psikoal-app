@@ -1,6 +1,8 @@
 import { ScrollView, View } from 'react-native'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useLocalSearchParams, useRouter } from 'expo-router'
 
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
 import { Avatar } from '@/core/components/atoms/Avatar'
@@ -10,15 +12,15 @@ import { Icon } from '@/core/components/atoms/Icon'
 import { Skeleton } from '@/core/components/atoms/Skeleton'
 import { Text } from '@/core/components/atoms/Text'
 import { BackButton } from '@/core/components/molecules/BackButton'
-import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { EmptyState } from '@/core/components/molecules/EmptyState'
 import { RatingRow } from '@/core/components/molecules/RatingRow'
+import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { StatPill } from '@/core/components/molecules/StatPill'
 import { useRefresh } from '@/core/hooks'
-import { getFullName, getInitials } from '@/core/utils/personName'
 import { formatDate } from '@/core/utils/formatDate'
-import { SESSION_TYPE_LABELS } from '@/domains/listing'
+import { getFullName, getInitials } from '@/core/utils/personName'
 import { useExpertProfileQuery, useExpertReviewsQuery } from '@/domains/expert'
+import { SESSION_TYPE_LABELS } from '@/domains/listing'
 
 export default function ExpertProfileScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -39,10 +41,10 @@ export default function ExpertProfileScreen() {
 
       {isLoading && (
         <View style={{ paddingTop: insets.top + 8 }}>
-          <View className="pt-2 pb-3 items-center">
+          <View className="items-center pb-3 pt-2">
             <Skeleton variant="line" width="30%" height={14} />
           </View>
-          <View className="px-4 py-5 gap-4">
+          <View className="gap-4 px-4 py-5">
             <View className="flex-row items-center gap-4">
               <Skeleton variant="circle" width={80} height={80} />
               <View className="flex-1 gap-2">
@@ -52,7 +54,7 @@ export default function ExpertProfileScreen() {
             </View>
           </View>
           <Divider spacing="none" className="mx-4" />
-          <View className="px-4 py-5 gap-3">
+          <View className="gap-3 px-4 py-5">
             <Skeleton variant="line" width="30%" height={11} />
             <View className="flex-row gap-2">
               <Skeleton variant="rect" width={90} height={28} borderRadius="full" />
@@ -80,7 +82,7 @@ export default function ExpertProfileScreen() {
           >
             <ScreenTitle title="Uzman Profili" />
 
-            <View className="px-4 py-5 gap-4">
+            <View className="gap-4 px-4 py-5">
               <View className="flex-row items-center gap-4">
                 <Avatar
                   size="xl"
@@ -90,15 +92,17 @@ export default function ExpertProfileScreen() {
                 />
                 <View className="flex-1 gap-1">
                   <Text variant="subheading">{getFullName(expert)}</Text>
-                  <Text variant="body" color="secondary">{expert.title}</Text>
+                  <Text variant="body" color="secondary">
+                    {expert.title}
+                  </Text>
                   <RatingRow rating={expert.rating} reviewCount={expert.reviewCount} size="sm" />
                 </View>
               </View>
 
               {expert.status === 'pending' && (
-                <View className="bg-amber-50 dark:bg-amber-950 rounded-xl px-4 py-3 flex-row items-center gap-3">
+                <View className="flex-row items-center gap-3 rounded-xl bg-amber-50 px-4 py-3 dark:bg-amber-950">
                   <Icon name="Clock" size={18} color="#CA8A04" />
-                  <Text variant="caption" className="text-amber-700 dark:text-amber-400 flex-1">
+                  <Text variant="caption" className="flex-1 text-amber-700 dark:text-amber-400">
                     Bu profil henüz admin onayı bekliyor.
                   </Text>
                 </View>
@@ -108,8 +112,12 @@ export default function ExpertProfileScreen() {
             {expert.specializations.length > 0 && (
               <>
                 <Divider spacing="none" className="mx-4" />
-                <View className="px-4 py-5 gap-2.5">
-                  <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+                <View className="gap-2.5 px-4 py-5">
+                  <Text
+                    variant="caption"
+                    color="secondary"
+                    className="font-semibold uppercase tracking-widest"
+                  >
                     Uzmanlık Alanları
                   </Text>
                   <View className="flex-row flex-wrap gap-1.5">
@@ -135,8 +143,12 @@ export default function ExpertProfileScreen() {
             {expert.bio ? (
               <>
                 <Divider spacing="none" className="mx-4" />
-                <View className="px-4 py-5 gap-2">
-                  <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+                <View className="gap-2 px-4 py-5">
+                  <Text
+                    variant="caption"
+                    color="secondary"
+                    className="font-semibold uppercase tracking-widest"
+                  >
                     Biyografi
                   </Text>
                   <Text variant="body" color="secondary" className="leading-relaxed">
@@ -149,8 +161,12 @@ export default function ExpertProfileScreen() {
             {expert.education ? (
               <>
                 <Divider spacing="none" className="mx-4" />
-                <View className="px-4 py-5 gap-2">
-                  <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+                <View className="gap-2 px-4 py-5">
+                  <Text
+                    variant="caption"
+                    color="secondary"
+                    className="font-semibold uppercase tracking-widest"
+                  >
                     Eğitim
                   </Text>
                   <Text variant="body" color="secondary" className="leading-relaxed">
@@ -160,18 +176,26 @@ export default function ExpertProfileScreen() {
               </>
             ) : null}
 
-            {(expert.cvUrl || (expert.certificates && expert.certificates.length > 0) || expert.personalWebsite) && (
+            {(expert.cvUrl ||
+              (expert.certificates && expert.certificates.length > 0) ||
+              expert.personalWebsite) && (
               <>
                 <Divider spacing="none" className="mx-4" />
-                <View className="px-4 py-5 gap-3">
-                  <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+                <View className="gap-3 px-4 py-5">
+                  <Text
+                    variant="caption"
+                    color="secondary"
+                    className="font-semibold uppercase tracking-widest"
+                  >
                     Belgeler ve Bağlantılar
                   </Text>
                   <View className="flex-row flex-wrap gap-1.5">
                     {expert.cvUrl && (
-                      <View className="flex-row items-center gap-1.5 rounded-full bg-neutral-100 dark:bg-dark-control px-3 py-1.5">
+                      <View className="flex-row items-center gap-1.5 rounded-full bg-neutral-100 px-3 py-1.5 dark:bg-dark-control">
                         <Icon name="FileCheck2" size={13} color="#0EA5E9" />
-                        <Text variant="caption" className="font-medium">CV Mevcut</Text>
+                        <Text variant="caption" className="font-medium">
+                          CV Mevcut
+                        </Text>
                       </View>
                     )}
                     {expert.certificates?.map((cert) => (
@@ -181,7 +205,9 @@ export default function ExpertProfileScreen() {
                   {expert.personalWebsite && (
                     <View className="flex-row items-center gap-1.5">
                       <Icon name="Globe" size={13} color="#A3A3A3" />
-                      <Text variant="caption" color="tertiary">{expert.personalWebsite}</Text>
+                      <Text variant="caption" color="tertiary">
+                        {expert.personalWebsite}
+                      </Text>
                     </View>
                   )}
                 </View>
@@ -191,8 +217,12 @@ export default function ExpertProfileScreen() {
             {reviews && reviews.length > 0 && (
               <>
                 <Divider spacing="none" className="mx-4" />
-                <View className="px-4 py-5 gap-4">
-                  <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+                <View className="gap-4 px-4 py-5">
+                  <Text
+                    variant="caption"
+                    color="secondary"
+                    className="font-semibold uppercase tracking-widest"
+                  >
                     Değerlendirmeler ({reviews.length})
                   </Text>
 
@@ -204,7 +234,9 @@ export default function ExpertProfileScreen() {
                           <View className="flex-row items-center justify-between">
                             <View className="flex-row items-center gap-2">
                               <Avatar size="xs" />
-                              <Text variant="caption" color="tertiary">Danışan</Text>
+                              <Text variant="caption" color="tertiary">
+                                Danışan
+                              </Text>
                             </View>
                             <Text variant="caption" color="tertiary">
                               {formatDate(review.createdAt, 'long')}
@@ -217,7 +249,9 @@ export default function ExpertProfileScreen() {
                           {review.sessionType && (
                             <View className="flex-row">
                               <Chip
-                                label={SESSION_TYPE_LABELS[review.sessionType] ?? review.sessionType}
+                                label={
+                                  SESSION_TYPE_LABELS[review.sessionType] ?? review.sessionType
+                                }
                                 variant="session"
                                 size="sm"
                                 isSelected

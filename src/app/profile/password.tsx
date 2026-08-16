@@ -1,8 +1,12 @@
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native'
+
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'expo-router'
 import { Controller, useForm } from 'react-hook-form'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useRouter } from 'expo-router'
+
+import type { ChangePasswordRequest } from '@/domains/auth'
 
 import { Text } from '@/core/components/atoms/Text'
 import { BackButton } from '@/core/components/molecules/BackButton'
@@ -10,8 +14,6 @@ import { InputField } from '@/core/components/molecules/InputField'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { useChangePasswordMutation, ChangePasswordSchema } from '@/domains/auth'
-
-import type { ChangePasswordRequest } from '@/domains/auth'
 
 export default function PasswordScreen() {
   const router = useRouter()
@@ -45,15 +47,21 @@ export default function PasswordScreen() {
     <View className="flex-1 bg-surface-base dark:bg-dark-bg">
       <BackButton />
 
-      <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
         <ScrollView
-          contentContainerStyle={{ paddingTop: insets.top + 8, paddingBottom: bottomBarHeight + 16 }}
+          contentContainerStyle={{
+            paddingTop: insets.top + 8,
+            paddingBottom: bottomBarHeight + 16,
+          }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
           <ScreenTitle title="Şifre Yönetimi" />
 
-          <View className="px-4 py-5 gap-4">
+          <View className="gap-4 px-4 py-5">
             <Controller
               control={control}
               name="currentPassword"
@@ -106,20 +114,24 @@ export default function PasswordScreen() {
             />
 
             {apiError && (
-              <View className="bg-red-50 dark:bg-red-950 rounded-xl px-4 py-3">
-                <Text variant="caption" color="error">{apiError}</Text>
+              <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-950">
+                <Text variant="caption" color="error">
+                  {apiError}
+                </Text>
               </View>
             )}
           </View>
         </ScrollView>
 
         <BottomActionBar
-          actions={[{
-            label: 'Şifreyi Güncelle',
-            loadingLabel: 'Güncelleniyor...',
-            onPress: handleSubmit(onSubmit),
-            isLoading: isPending,
-          }]}
+          actions={[
+            {
+              label: 'Şifreyi Güncelle',
+              loadingLabel: 'Güncelleniyor...',
+              onPress: handleSubmit(onSubmit),
+              isLoading: isPending,
+            },
+          ]}
         />
       </KeyboardAvoidingView>
     </View>

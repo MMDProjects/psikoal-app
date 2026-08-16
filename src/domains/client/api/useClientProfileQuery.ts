@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { get } from '@/lib/api'
-
 import { clientKeys } from '../client.constants'
 import { ClientSchema } from '../schemas/client.schema'
+
+import { get } from '@/lib/api'
 
 export function useClientProfileQuery(clientId: string) {
   return useQuery({

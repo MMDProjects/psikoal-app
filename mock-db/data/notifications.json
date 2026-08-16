@@ -1,0 +1,26 @@
+[
+  {
+    "id": "ntf-0001",
+    "type": "OFFER_RECEIVED",
+    "title": "Yeni teklif aldınız",
+    "body": "Kaygı ve panik atak ilanınıza yeni bir teklif geldi.",
+    "createdAt": "2026-07-18T08:40:00.000Z",
+    "read": false
+  },
+  {
+    "id": "ntf-0002",
+    "type": "OFFER_ACCEPTED",
+    "title": "Teklif kabul edildi",
+    "body": "Gönderdiğiniz teklif danışan tarafından kabul edildi.",
+    "createdAt": "2026-07-18T06:00:00.000Z",
+    "read": false
+  },
+  {
+    "id": "ntf-0003",
+    "type": "LISTING_EXPIRING",
+    "title": "İlanınız sona eriyor",
+    "body": "\"Depresyon için destek arıyorum\" ilanınız 3 gün içinde sona erecek.",
+    "createdAt": "2026-07-17T09:00:00.000Z",
+    "read": true
+  }
+]

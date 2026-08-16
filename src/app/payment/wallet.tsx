@@ -1,6 +1,8 @@
 import { ScrollView, View } from 'react-native'
-import { useRouter } from 'expo-router'
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useRouter } from 'expo-router'
 
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
 import { Icon } from '@/core/components/atoms/Icon'
@@ -30,7 +32,7 @@ export default function WalletScreen() {
 
       {isLoading && (
         <View style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, gap: 16 }}>
-          <View className="pt-2 pb-3 items-center">
+          <View className="items-center pb-3 pt-2">
             <Skeleton variant="line" width="30%" height={14} />
           </View>
           <Skeleton variant="rect" height={110} borderRadius="xl" />
@@ -52,7 +54,10 @@ export default function WalletScreen() {
       {!isLoading && !isError && wallet && (
         <>
           <ScrollView
-            contentContainerStyle={{ paddingTop: insets.top + 8, paddingBottom: bottomBarHeight + 16 }}
+            contentContainerStyle={{
+              paddingTop: insets.top + 8,
+              paddingBottom: bottomBarHeight + 16,
+            }}
             showsVerticalScrollIndicator={false}
             refreshControl={<AppRefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
           >
@@ -62,14 +67,18 @@ export default function WalletScreen() {
               <WalletBalance />
             </View>
 
-            <View className="px-4 pt-6 pb-2">
-              <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+            <View className="px-4 pb-2 pt-6">
+              <Text
+                variant="caption"
+                color="secondary"
+                className="font-semibold uppercase tracking-widest"
+              >
                 İşlem Geçmişi
               </Text>
             </View>
 
             {wallet.transactions.length === 0 ? (
-              <View className="items-center gap-2 py-6 px-4">
+              <View className="items-center gap-2 px-4 py-6">
                 <Icon name="ReceiptText" size={28} color="#A3A3A3" />
                 <Text variant="caption" color="secondary" align="center">
                   Henüz işlem yok. Paket satın aldığınızda burada görünecek.
@@ -80,7 +89,9 @@ export default function WalletScreen() {
                 <View key={tx.id}>
                   {index > 0 && <View className="mx-4 h-px bg-neutral-200 dark:bg-neutral-800" />}
                   <View className="flex-row items-center gap-3 px-4 py-3.5">
-                    <View className={`w-9 h-9 rounded-full items-center justify-center ${tx.type === 'credit' ? 'bg-green-100 dark:bg-green-900' : 'bg-red-50 dark:bg-red-950'}`}>
+                    <View
+                      className={`h-9 w-9 items-center justify-center rounded-full ${tx.type === 'credit' ? 'bg-green-100 dark:bg-green-900' : 'bg-red-50 dark:bg-red-950'}`}
+                    >
                       <Icon
                         name={tx.type === 'credit' ? 'ArrowDownLeft' : 'ArrowUpRight'}
                         size={16}
@@ -88,12 +99,20 @@ export default function WalletScreen() {
                       />
                     </View>
                     <View className="flex-1 gap-0.5">
-                      <Text variant="label" className="font-medium" numberOfLines={1}>{tx.description}</Text>
-                      <Text variant="caption" color="tertiary">{formatDate(tx.createdAt, 'long')}</Text>
+                      <Text variant="label" className="font-medium" numberOfLines={1}>
+                        {tx.description}
+                      </Text>
+                      <Text variant="caption" color="tertiary">
+                        {formatDate(tx.createdAt, 'long')}
+                      </Text>
                     </View>
                     <Text
                       variant="label"
-                      className={tx.type === 'credit' ? 'font-semibold text-green-700 dark:text-green-400' : 'font-semibold text-red-600 dark:text-red-400'}
+                      className={
+                        tx.type === 'credit'
+                          ? 'font-semibold text-green-700 dark:text-green-400'
+                          : 'font-semibold text-red-600 dark:text-red-400'
+                      }
                     >
                       {tx.type === 'credit' ? '+' : '-'}₺{tx.amount.toLocaleString('tr-TR')}
                     </Text>
@@ -104,10 +123,12 @@ export default function WalletScreen() {
           </ScrollView>
 
           <BottomActionBar
-            actions={[{
-              label: 'Seans Paketleri',
-              onPress: () => router.push('/payment/packages' as never),
-            }]}
+            actions={[
+              {
+                label: 'Seans Paketleri',
+                onPress: () => router.push('/payment/packages' as never),
+              },
+            ]}
           />
         </>
       )}
