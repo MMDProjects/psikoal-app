@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 
 import type { ExpertOnboarding } from '@/domains/expert'
+import type { PickedDocument } from '@/domains/expert'
 
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Text } from '@/core/components/atoms/Text'
@@ -24,6 +25,8 @@ import {
   OnboardingStepBio,
   OnboardingStepDocuments,
   OnboardingStepPhoto,
+  useUploadExpertDocumentMutation,
+  pickExpertDocument,
 } from '@/domains/expert'
 
 const TOTAL_STEPS = 7
@@ -94,8 +97,63 @@ export default function ExpertOnboardingScreen() {
     setSpecsError(undefined)
   }
 
-  const showComingSoon = (featureTitle: string) => {
-    Alert.alert(featureTitle, 'Bu özellik yakında aktif olacak.')
+  // Belgeler ONBOARDING SIRASINDA YÜKLENEMEZ: yükleme uçları
+  // (POST /experts/profile/cv) `experts` satırını arıyor ve o satır ancak profil
+  // oluşturulduktan sonra var oluyor. Onboarding'de yüklemeye kalkmak
+  // EXPERT_NOT_FOUND verirdi. Bu yüzden dosya burada yalnız SEÇİLİR, profil
+  // oluştuktan hemen sonra yüklenir.
+  const [pendingCv, setPendingCv] = useState<PickedDocument | null>(null)
+  const [pendingCertificate, setPendingCertificate] = useState<PickedDocument | null>(null)
+
+  const { mutateAsync: uploadCv } = useUploadExpertDocumentMutation('cv')
+  const { mutateAsync: uploadCertificate } = useUploadExpertDocumentMutation('certificate')
+
+  const chooseDocument = async (label: string, keep: (document: PickedDocument) => void) => {
+    const picked = await pickExpertDocument()
+
+    // İptal sessiz geçilir; reddedilen dosya mutlaka söylenir, yoksa dokunma
+    // hiçbir şey yapmamış gibi görünür.
+    if (picked.status === 'canceled') return
+    if (picked.status === 'rejected') {
+      Alert.alert(label, picked.message)
+      return
+    }
+
+    keep(picked.document)
+  }
+
+  /**
+   * Profil oluştuktan sonra seçilen belgeleri yükler.
+   *
+   * Yükleme hatası profil oluşturmayı GERİ ALMAZ: profil zaten kaydedildi ve
+   * kullanıcıyı onboarding'de tutmak daha kötü olurdu. Bunun yerine ne olduğu
+   * açıkça söylenir ve nereden tekrar denenebileceği gösterilir.
+   */
+  const uploadPendingDocuments = async () => {
+    const failed: string[] = []
+
+    if (pendingCv) {
+      try {
+        await uploadCv(pendingCv)
+      } catch {
+        failed.push('CV')
+      }
+    }
+
+    if (pendingCertificate) {
+      try {
+        await uploadCertificate(pendingCertificate)
+      } catch {
+        failed.push('sertifika')
+      }
+    }
+
+    if (failed.length > 0) {
+      Alert.alert(
+        'Profiliniz oluşturuldu',
+        `${failed.join(' ve ')} yüklenemedi. Ayarlar → Belgeler bölümünden tekrar deneyebilirsiniz.`
+      )
+    }
   }
 
   const validateAndNext = () => {
@@ -141,7 +199,10 @@ export default function ExpertOnboardingScreen() {
             personalWebsite: personalWebsite.trim() || null,
           }
           createProfile(data, {
-            onSuccess: () => router.replace('/(tabs)'),
+            onSuccess: async () => {
+              await uploadPendingDocuments()
+              router.replace('/(tabs)')
+            },
           })
         },
       }
@@ -234,8 +295,10 @@ export default function ExpertOnboardingScreen() {
             <OnboardingStepDocuments
               personalWebsite={personalWebsite}
               onPersonalWebsiteChange={setPersonalWebsite}
-              onUploadCv={() => showComingSoon('CV Yükle')}
-              onAddCertificate={() => showComingSoon('Sertifika Ekle')}
+              cvName={pendingCv?.name ?? null}
+              certificateName={pendingCertificate?.name ?? null}
+              onUploadCv={() => void chooseDocument('CV Yükle', setPendingCv)}
+              onAddCertificate={() => void chooseDocument('Sertifika Ekle', setPendingCertificate)}
             />
           )}
 
