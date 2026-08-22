@@ -60,10 +60,15 @@ export default function WelcomeScreen() {
   const bottomBarHeight = 56 + insets.bottom
 
   return (
-    <View className="flex-1 bg-sky-500 dark:bg-sky-950" style={{ overflow: 'hidden' }}>
+    <View
+      testID="screen-welcome"
+      className="flex-1 bg-sky-500 dark:bg-sky-950"
+      style={{ overflow: 'hidden' }}
+    >
       <DecorCircles phase={slide} />
 
       <Pressable
+        testID="welcome-skip"
         onPress={() => finish('/(auth)/login')}
         hitSlop={8}
         accessibilityRole="button"
@@ -130,6 +135,7 @@ export default function WelcomeScreen() {
           isLast
             ? [
                 {
+                  testID: 'welcome-login',
                   label: 'Giriş Yap',
                   onPress: () => finish('/(auth)/login'),
                   variant: 'inverseGhost',

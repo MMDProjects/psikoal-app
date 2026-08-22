@@ -62,7 +62,7 @@ export function ClientHomeScreen() {
   )
 
   return (
-    <View className="flex-1 bg-surface-base dark:bg-dark-bg">
+    <View testID="screen-home-client" className="flex-1 bg-surface-base dark:bg-dark-bg">
       <HeaderActions
         actions={[
           {
@@ -157,7 +157,7 @@ export function ClientHomeScreen() {
           />
         </View>
 
-        <View className="mt-2">
+        <View testID="category-list" className="mt-2">
           <DiscoverMore
             icon="HeartHandshake"
             label="Desteğe mi ihtiyacınız var?"
@@ -166,6 +166,7 @@ export function ClientHomeScreen() {
           {categories?.map((category) => (
             <Pressable
               key={category.id}
+              testID={`category-item-${category.slug}`}
               onPress={() => router.push(`/category/${category.slug}`)}
               className="flex-row items-center gap-3 px-4 py-4 active:opacity-90"
             >
