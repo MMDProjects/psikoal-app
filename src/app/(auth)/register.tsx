@@ -19,6 +19,7 @@ import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { StepProgress } from '@/core/components/molecules/StepProgress'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { RegisterRequestSchema, useRegisterMutation, RoleCard } from '@/domains/auth'
+import { useOnboardingStore } from '@/store/onboardingStore'
 
 const TOTAL_STEPS = 2
 const STEP_LABELS = ['Rol Seçimi', 'Bilgilerin']
@@ -28,6 +29,8 @@ export default function RegisterScreen() {
   const insets = useSafeAreaInsets()
   const [step, setStep] = useState<1 | 2>(1)
   const [role, setRole] = useState<UserRole | null>(null)
+
+  const setOnboardIntent = useOnboardingStore((state) => state.setOnboardIntent)
 
   const { mutate: register, isPending, error } = useRegisterMutation()
 
@@ -42,14 +45,23 @@ export default function RegisterScreen() {
 
   const onSubmit = (data: RegisterRequest) => {
     if (!role) return
+
+    const target = role === 'expert' ? '/(auth)/onboarding/expert' : '/(auth)/onboarding/client'
+
+    // setOnboardIntent ŞART, tek başına router.replace YETMEZ.
+    // Kayıt başarılı olur olmaz isAuthenticated true'ya döner ve (auth)/_layout
+    // henüz `register` segmentindeyken <Redirect href="/(tabs)" /> döndürür;
+    // bu, hemen ardından gelen replace'i EZER. Belirti sessizdir: kullanıcı
+    // profilsiz olarak Fırsatlar feed'ine düşer, onboarding'i hiç görmez ve
+    // teklif göndermeye kalkınca anlamsız bir EXPERT_NOT_FOUND alır.
+    // onboardIntent tam bu yarış için var; bugüne kadar yalnız giriş ekranındaki
+    // test butonları kuruyordu, gerçek kayıt akışı kurmuyordu.
+    setOnboardIntent(target)
+
     register(
       { ...data, role },
       {
-        onSuccess: () => {
-          router.replace(
-            role === 'expert' ? '/(auth)/onboarding/expert' : '/(auth)/onboarding/client'
-          )
-        },
+        onSuccess: () => router.replace(target as never),
       }
     )
   }
