@@ -33,7 +33,10 @@ export const ListingSchema = z.object({
     (v) => (v === 'fark_etmez' ? 'yüz_yüze_online' : v),
     z.enum(['online', 'yüz_yüze', 'yüz_yüze_online'])
   ),
-  city: z.string().optional(),
+  // .nullable(): sehirsiz acilan ilanda ListingDto.City null ve JSON'a
+  // "city": null yaziliyor. Yalniz .optional() ile feed'in TAMAMI parse
+  // hatasina duser ve kullanici bos liste gorur.
+  city: z.string().nullable().optional(),
   offerCount: z.number().int().min(0).default(0),
   status: ListingStatusSchema,
   budgetLabel: z.string(),
@@ -41,7 +44,7 @@ export const ListingSchema = z.object({
   createdAt: z.string().datetime(),
   createdAtRelative: z.string(),
   viewerHasOffered: z.boolean().optional(),
-  viewerOfferId: z.string().uuid().optional(),
+  viewerOfferId: z.string().uuid().nullable().optional(),
   assessmentResult: z
     .object({
       id: z.string(),
@@ -50,6 +53,7 @@ export const ListingSchema = z.object({
       summary: z.string(),
       assessmentTitle: z.string(),
     })
+    .nullable()
     .optional(),
 })
 
