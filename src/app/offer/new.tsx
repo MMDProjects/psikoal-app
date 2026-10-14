@@ -16,6 +16,7 @@ import { BackButton } from '@/core/components/molecules/BackButton'
 import { InputField } from '@/core/components/molecules/InputField'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
+import { isInsufficientCreditsError, useOfferCreditGate } from '@/domains/credit'
 import { useExpertApprovalGate } from '@/domains/expert'
 import { usePushRegistration } from '@/domains/notification'
 import { useSendOfferMutation, SendOfferSchema } from '@/domains/offer'
@@ -60,7 +61,9 @@ export default function NewOfferScreen() {
     })
   }
 
-  const apiError = error ? getErrorMessage(error) : undefined
+  const creditGate = useOfferCreditGate({ submitError: error })
+  // Kredi yetersizliği kredi kutusunda gösterilir; aynı mesaj iki kez çıkmasın.
+  const apiError = error && !isInsufficientCreditsError(error) ? getErrorMessage(error) : undefined
 
   if (!canSendOffer) {
     return (
@@ -211,6 +214,27 @@ export default function NewOfferScreen() {
             )}
           />
 
+          <View
+            testID="offer-credit-info"
+            className="gap-1 rounded-xl bg-sky-600 px-4 py-3 dark:bg-sky-900"
+          >
+            <View className="flex-row items-center justify-between gap-3">
+              <Text variant="label" className="font-semibold text-white">
+                {creditGate.costLabel ?? 'Teklif maliyeti yükleniyor...'}
+              </Text>
+              {creditGate.balanceLabel && (
+                <Text variant="caption" className="text-sky-100">
+                  Bakiye: {creditGate.balanceLabel}
+                </Text>
+              )}
+            </View>
+            {creditGate.insufficientMessage && (
+              <Text variant="caption" className="text-white" testID="offer-credit-insufficient">
+                {creditGate.insufficientMessage}
+              </Text>
+            )}
+          </View>
+
           {apiError && (
             <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-950">
               <Text variant="caption" className="text-red-600 dark:text-red-300">
@@ -227,7 +251,9 @@ export default function NewOfferScreen() {
               loadingLabel: 'Gönderiliyor...',
               onPress: handleSubmit(onSubmit),
               isLoading: isPending,
+              isDisabled: creditGate.isBlocked,
               variant: 'inverse',
+              testID: 'offer-submit',
             },
           ]}
         />
