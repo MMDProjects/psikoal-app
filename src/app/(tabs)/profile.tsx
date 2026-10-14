@@ -13,7 +13,7 @@ import { MenuRow } from '@/core/components/molecules/MenuRow'
 import { useThemeColors } from '@/core/theme'
 import { getFullName, getInitials } from '@/core/utils/personName'
 import { useAuthStore, useLogoutMutation } from '@/domains/auth'
-import { env } from '@/lib/env'
+import { APP_VERSION } from '@/lib/appVersion'
 import { openNotificationSettings, openSupportEmail, requestStoreReview } from '@/lib/externalLinks'
 import { useThemeStore } from '@/store/themeStore'
 
@@ -239,7 +239,7 @@ export default function SettingsScreen() {
             variant="caption"
             color="secondary"
             align="center"
-          >{`PsikoAl v${env.EXPO_PUBLIC_APP_VERSION}`}</Text>
+          >{`PsikoAl v${APP_VERSION}`}</Text>
         </View>
       </ScrollView>
     </View>

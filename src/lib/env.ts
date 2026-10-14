@@ -12,7 +12,6 @@ export const envSchema = z
   .object({
     EXPO_PUBLIC_API_URL: z.string().min(1, 'EXPO_PUBLIC_API_URL is required'),
     EXPO_PUBLIC_APP_ENV: z.enum(['development', 'staging', 'production']).default('production'),
-    EXPO_PUBLIC_APP_VERSION: z.string().default('1.0.0'),
     EXPO_PUBLIC_SUPPORT_EMAIL: z.string().email('EXPO_PUBLIC_SUPPORT_EMAIL must be an e-mail'),
     EXPO_PUBLIC_PRIVACY_URL: z.string().url('EXPO_PUBLIC_PRIVACY_URL must be a URL'),
     EXPO_PUBLIC_TERMS_URL: z.string().url('EXPO_PUBLIC_TERMS_URL must be a URL'),
@@ -39,7 +38,6 @@ export function parseEnv(source: Record<string, string | undefined>) {
   const result = envSchema.safeParse({
     EXPO_PUBLIC_API_URL: source['EXPO_PUBLIC_API_URL'],
     EXPO_PUBLIC_APP_ENV: source['EXPO_PUBLIC_APP_ENV'],
-    EXPO_PUBLIC_APP_VERSION: source['EXPO_PUBLIC_APP_VERSION'],
     EXPO_PUBLIC_SUPPORT_EMAIL: source['EXPO_PUBLIC_SUPPORT_EMAIL'],
     EXPO_PUBLIC_PRIVACY_URL: source['EXPO_PUBLIC_PRIVACY_URL'],
     EXPO_PUBLIC_TERMS_URL: source['EXPO_PUBLIC_TERMS_URL'],
@@ -60,7 +58,6 @@ export function parseEnv(source: Record<string, string | undefined>) {
 export const env = parseEnv({
   EXPO_PUBLIC_API_URL: process.env.EXPO_PUBLIC_API_URL,
   EXPO_PUBLIC_APP_ENV: process.env.EXPO_PUBLIC_APP_ENV,
-  EXPO_PUBLIC_APP_VERSION: process.env.EXPO_PUBLIC_APP_VERSION,
   EXPO_PUBLIC_SUPPORT_EMAIL: process.env.EXPO_PUBLIC_SUPPORT_EMAIL,
   EXPO_PUBLIC_PRIVACY_URL: process.env.EXPO_PUBLIC_PRIVACY_URL,
   EXPO_PUBLIC_TERMS_URL: process.env.EXPO_PUBLIC_TERMS_URL,
