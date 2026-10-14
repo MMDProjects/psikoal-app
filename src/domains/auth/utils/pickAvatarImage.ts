@@ -45,14 +45,8 @@ export function resolveImageContentType(
  * yapar; buradaki kontrol yalnız boşa giden yüklemeyi önler.
  */
 export async function pickAvatarImage(): Promise<PickImageResult> {
-  const permission = await ImagePicker.requestMediaLibraryPermissionsAsync()
-  if (!permission.granted) {
-    return {
-      status: 'rejected',
-      message: 'Fotoğraf seçebilmek için cihaz ayarlarından fotoğraflara erişim izni vermelisiniz.',
-    }
-  }
-
+  // İzin istenmez: iOS (PHPicker) ve Android (sistem fotoğraf seçici) galeriyi
+  // izinsiz açar. Bu sayede Android depolama izinleri manifestten engellenebiliyor.
   const result = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ['images'],
     allowsEditing: true,

@@ -5,7 +5,14 @@ import { ApiError, axiosInstance, get } from './api'
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(async () => null),
   setItem: jest.fn(async () => undefined),
+  multiGet: jest.fn(async (keys: string[]) => keys.map((k) => [k, null])),
   multiRemove: jest.fn(async () => undefined),
+}))
+
+jest.mock('expo-secure-store', () => ({
+  getItemAsync: jest.fn(async () => null),
+  setItemAsync: jest.fn(async () => undefined),
+  deleteItemAsync: jest.fn(async () => undefined),
 }))
 
 describe('api error mapping', () => {
@@ -87,8 +94,8 @@ describe('401 yenileme yarışı', () => {
   })
 
   it('aynı anda 401 alan İKİ istek de sonuçlanır ve yenileme bir kez yapılır', async () => {
-    const storage = jest.requireMock('@react-native-async-storage/async-storage')
-    storage.getItem.mockImplementation(async () => 'eski-token')
+    const secureStore = jest.requireMock('expo-secure-store')
+    secureStore.getItemAsync.mockImplementation(async () => 'eski-token')
 
     let refreshCount = 0
     mock.onPost('/auth/refresh').reply(() => {
@@ -124,14 +131,14 @@ describe('401 yenileme yarışı', () => {
   // kalıyor ve bundan sonraki HER 401 sonsuza kadar kuyrukta ölüyor.
   // Doğru davranış: oturum bitmiştir, hata yukarı çıkar ve token'lar temizlenir.
   it('yenileme isteğinin kendisi 401 alırsa kilitlenmez, oturum sonlanır', async () => {
-    const storage = jest.requireMock('@react-native-async-storage/async-storage')
-    storage.getItem.mockImplementation(async () => 'suresi-gecmis-token')
+    const secureStore = jest.requireMock('expo-secure-store')
+    secureStore.getItemAsync.mockImplementation(async () => 'suresi-gecmis-token')
 
     mock.onPost('/auth/refresh').reply(401, {})
     mock.onGet('/notifications').reply(401, {})
 
     await expect(get('/notifications')).rejects.toMatchObject({ status: 401 })
-    expect(storage.multiRemove).toHaveBeenCalled()
+    expect(secureStore.deleteItemAsync).toHaveBeenCalled()
 
     // Kilitlenme kalıcıysa BU istek de asla sonuçlanmaz — asıl siper burası.
     await expect(get('/notifications')).rejects.toMatchObject({ status: 401 })
