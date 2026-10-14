@@ -31,4 +31,4 @@ açık değildir:
   RLS'i atlatan bir erişim bulursanız bu **geçerli bir bildirimdir**, lütfen iletin.
 - Test fikstürleri (`src/**/__fixtures__`) tamamen kurgusaldır, gerçek kullanıcı verisi içermez.
 
-Backend ve veritabanı `MMDProjects/psikoal-backend` (private) reposundadır.
+Backend ve veritabanı `psikologmobile/psikoal-backend` (public) reposundadır.
