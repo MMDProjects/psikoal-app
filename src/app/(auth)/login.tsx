@@ -13,7 +13,6 @@ import { Text } from '@/core/components/atoms/Text'
 import { InputField } from '@/core/components/molecules/InputField'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { LoginRequestSchema, useLoginMutation } from '@/domains/auth'
-import { useOnboardingStore } from '@/store/onboardingStore'
 
 const LOGO_PLACEHOLDER = require('../../../assets/images/brand/logo-placeholder.png')
 
@@ -21,8 +20,6 @@ export default function LoginScreen() {
   const router = useRouter()
   const insets = useSafeAreaInsets()
   const { mutate: login, isPending, error } = useLoginMutation()
-  const resetWelcome = useOnboardingStore((s) => s.resetWelcome)
-  const setOnboardIntent = useOnboardingStore((s) => s.setOnboardIntent)
 
   const {
     control,
@@ -37,20 +34,6 @@ export default function LoginScreen() {
     login(data, {
       onSuccess: () => router.replace('/(tabs)'),
     })
-  }
-
-  const quickLogin = (email: string) => {
-    login(
-      { email, password: 'password123' },
-      {
-        onSuccess: () => router.replace('/(tabs)'),
-      }
-    )
-  }
-
-  const quickOnboard = (email: string, target: string) => {
-    setOnboardIntent(target)
-    login({ email, password: 'password123' })
   }
 
   const apiErrorMessage = error instanceof Error ? error.message : undefined
@@ -155,77 +138,6 @@ export default function LoginScreen() {
               </Text>
             </Pressable>
           </View>
-
-          {process.env.EXPO_PUBLIC_APP_ENV !== 'production' && (
-            <View className="mt-8 gap-2">
-              <View className="flex-row items-center gap-3">
-                <View className="h-px flex-1 bg-sky-400 dark:bg-sky-800" />
-                <Text variant="caption" className="text-sky-100">
-                  Test Girişi
-                </Text>
-                <View className="h-px flex-1 bg-sky-400 dark:bg-sky-800" />
-              </View>
-              <View className="flex-row gap-3">
-                <Pressable
-                  onPress={() => quickLogin('uzman@psikoal.com')}
-                  disabled={isPending}
-                  className="flex-1 items-center rounded-xl bg-sky-600 py-3 active:bg-sky-700 dark:bg-sky-900 dark:active:bg-sky-800"
-                >
-                  <Text variant="caption" className="font-semibold text-white">
-                    Uzman Girişi
-                  </Text>
-                  <Text variant="caption" className="text-sky-100">
-                    Dr. Ayşe Kaya
-                  </Text>
-                </Pressable>
-                <Pressable
-                  onPress={() => quickLogin('danisan@psikoal.com')}
-                  disabled={isPending}
-                  className="flex-1 items-center rounded-xl bg-sky-600 py-3 active:bg-sky-700 dark:bg-sky-900 dark:active:bg-sky-800"
-                >
-                  <Text variant="caption" className="font-semibold text-white">
-                    Danışan Girişi
-                  </Text>
-                  <Text variant="caption" className="text-sky-100">
-                    Zeynep Yılmaz
-                  </Text>
-                </Pressable>
-              </View>
-
-              <View className="flex-row gap-3">
-                <Pressable
-                  onPress={() => quickOnboard('uzman@psikoal.com', '/(auth)/onboarding/expert')}
-                  disabled={isPending}
-                  className="flex-1 items-center rounded-xl bg-sky-600 py-3 active:bg-sky-700 dark:bg-sky-900 dark:active:bg-sky-800"
-                >
-                  <Text variant="caption" className="font-semibold text-white">
-                    Onboard Uzman
-                  </Text>
-                  <Text variant="caption" className="text-sky-100">
-                    Profil tamamlama akışı
-                  </Text>
-                </Pressable>
-                <Pressable
-                  onPress={() => quickOnboard('danisan@psikoal.com', '/(auth)/onboarding/client')}
-                  disabled={isPending}
-                  className="flex-1 items-center rounded-xl bg-sky-600 py-3 active:bg-sky-700 dark:bg-sky-900 dark:active:bg-sky-800"
-                >
-                  <Text variant="caption" className="font-semibold text-white">
-                    Onboard Danışan
-                  </Text>
-                  <Text variant="caption" className="text-sky-100">
-                    Profil tamamlama akışı
-                  </Text>
-                </Pressable>
-              </View>
-
-              <Pressable onPress={resetWelcome} className="items-center py-2 active:opacity-70">
-                <Text variant="caption" className="text-sky-100 underline">
-                  Karşılama turunu sıfırla (ilk açılışı test et)
-                </Text>
-              </Pressable>
-            </View>
-          )}
         </ScrollView>
 
         <BottomActionBar

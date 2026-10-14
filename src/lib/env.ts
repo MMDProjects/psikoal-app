@@ -1,10 +1,10 @@
 import { z } from 'zod'
 
+// Varsayılan 'production': değişken unutulursa uygulama en sıkı modda açılır
+// (fail-safe). Geliştirme ortamı bunu .env içinde açıkça söylemek zorunda.
 const envSchema = z.object({
   EXPO_PUBLIC_API_URL: z.string().min(1, 'EXPO_PUBLIC_API_URL is required'),
-  EXPO_PUBLIC_APP_ENV: z
-    .enum(['development', 'staging', 'production', 'mock'])
-    .default('development'),
+  EXPO_PUBLIC_APP_ENV: z.enum(['development', 'staging', 'production']).default('production'),
   EXPO_PUBLIC_APP_VERSION: z.string().default('1.0.0'),
 })
 
