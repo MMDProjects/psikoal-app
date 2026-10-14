@@ -327,11 +327,6 @@ export default function ExpertOnboardingScreen() {
             step === TOTAL_STEPS
               ? [
                   {
-                    label: 'Şimdilik Atla',
-                    onPress: () => router.replace('/(tabs)'),
-                    variant: 'inverseGhost',
-                  },
-                  {
                     label: 'Profili Tamamla',
                     onPress: validateAndNext,
                     variant: 'inverse',
