@@ -26,14 +26,10 @@ import {
 import { useMatchesQuery } from '@/domains/match'
 import { useUnreadNotificationCount } from '@/domains/notification'
 import { useExpertOffersQuery } from '@/domains/offer'
-import { useSuggestionsQuery, SuggestionSlide } from '@/domains/suggestion'
 
 export function ExpertHomeScreen() {
   const router = useRouter()
   const { user } = useAuthStore()
-
-  const suggestionsQuery = useSuggestionsQuery('expert')
-  const suggestions = suggestionsQuery.data
 
   const offersQuery = useExpertOffersQuery()
   const pendingOfferCount = offersQuery.data?.meta.pendingCount ?? 0
@@ -53,12 +49,7 @@ export function ExpertHomeScreen() {
   const listings = listingsQuery.data?.data ?? []
   const listingCount = listingsQuery.data?.meta.total ?? 0
 
-  const { isRefreshing, onRefresh } = useRefresh(
-    listingsQuery,
-    offersQuery,
-    matchesQuery,
-    suggestionsQuery
-  )
+  const { isRefreshing, onRefresh } = useRefresh(listingsQuery, offersQuery, matchesQuery)
 
   const activeFilterCount = [
     (filters.specialization?.length ?? 0) > 0,
@@ -97,32 +88,29 @@ export function ExpertHomeScreen() {
               firstName={user?.firstName}
               subtitle="Bugün hangi fırsatı değerlendireceksiniz?"
               textRightInset={64}
-              pages={[
-                ...(suggestions ?? []).map((s) => <SuggestionSlide key={s.id} suggestion={s} />),
-                <HeroQuickActions
-                  key="quick-actions"
-                  actions={[
-                    {
-                      icon: 'Briefcase',
-                      label: 'Fırsatlar',
-                      badge: listingCount,
-                    },
-                    {
-                      icon: 'SendHorizonal',
-                      label: 'Tekliflerim',
-                      badge: pendingOfferCount,
-                      onPress: () => router.push('/(tabs)/offers'),
-                    },
-                    {
-                      icon: 'Users',
-                      label: 'Eşleşmelerim',
-                      badge: activeMatchCount,
-                      onPress: () => router.push('/(tabs)/matches'),
-                    },
-                  ]}
-                />,
-              ]}
-            />
+            >
+              <HeroQuickActions
+                actions={[
+                  {
+                    icon: 'Briefcase',
+                    label: 'Fırsatlar',
+                    badge: listingCount,
+                  },
+                  {
+                    icon: 'SendHorizonal',
+                    label: 'Tekliflerim',
+                    badge: pendingOfferCount,
+                    onPress: () => router.push('/(tabs)/offers'),
+                  },
+                  {
+                    icon: 'Users',
+                    label: 'Eşleşmelerim',
+                    badge: activeMatchCount,
+                    onPress: () => router.push('/(tabs)/matches'),
+                  },
+                ]}
+              />
+            </HomeHero>
 
             <View className="px-4 pb-3 pt-4">
               <View className="flex-row gap-2">
