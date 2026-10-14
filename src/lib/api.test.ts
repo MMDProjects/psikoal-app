@@ -1,6 +1,15 @@
 import MockAdapter from 'axios-mock-adapter'
 
-import { ApiError, axiosInstance, get } from './api'
+import {
+  ApiError,
+  ERROR_MESSAGES,
+  NetworkError,
+  axiosInstance,
+  get,
+  getErrorMessage,
+  post,
+  toApiError,
+} from './api'
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(async () => null),
@@ -63,12 +72,78 @@ describe('api error mapping', () => {
     })
   })
 
-  it('falls back to UNKNOWN_ERROR for an unmapped status', async () => {
+  it('falls back to UNKNOWN_ERROR with a Turkish message for an empty 500', async () => {
     mock.onGet('/listings').reply(500, {})
 
     const error = await get('/listings').catch((e: unknown) => e)
     expect(error).toBeInstanceOf(ApiError)
-    expect((error as ApiError).code).toBe('UNKNOWN_ERROR')
+    expect(error).toMatchObject({ code: 'UNKNOWN_ERROR', message: ERROR_MESSAGES.server })
+  })
+
+  // Sözleşme §3: backend artık 404/403/409/500'de de ApiErrorDto dönebiliyor.
+  it.each([403, 404, 409, 500])('uses body code + message for status %i', async (status) => {
+    mock
+      .onGet('/listings/1')
+      .reply(status, { code: 'SOME_CODE', message: 'Türkçe mesaj', errors: [] })
+
+    await expect(get('/listings/1')).rejects.toMatchObject({
+      status,
+      code: 'SOME_CODE',
+      message: 'Türkçe mesaj',
+    })
+  })
+
+  it('never shows the English ValidationProblemDetails title', async () => {
+    mock.onPost('/auth/register').reply(400, {
+      title: 'One or more validation errors occurred.',
+      status: 400,
+      errors: { TermsAccepted: ['Kullanım koşullarını kabul etmelisiniz.'] },
+    })
+
+    await expect(post('/auth/register', {})).rejects.toMatchObject({
+      message: 'Kullanım koşullarını kabul etmelisiniz.',
+    })
+  })
+
+  it('maps a network failure to a Turkish NetworkError', async () => {
+    mock.onGet('/listings').networkError()
+
+    const error = await get('/listings').catch((e: unknown) => e)
+    expect(error).toBeInstanceOf(NetworkError)
+    expect(getErrorMessage(error)).toBe(ERROR_MESSAGES.network)
+  })
+
+  it('does not treat a 401 on an unauthenticated request as session expiry', async () => {
+    mock
+      .onPost('/auth/login')
+      .reply(401, { code: 'INVALID_CREDENTIALS', message: 'E-posta veya şifre hatalı.' })
+
+    await expect(post('/auth/login', {})).rejects.toMatchObject({
+      status: 401,
+      code: 'INVALID_CREDENTIALS',
+      message: 'E-posta veya şifre hatalı.',
+    })
+    expect(mock.history.post.filter((r) => r.url === '/auth/refresh')).toHaveLength(0)
+  })
+})
+
+describe('toApiError / getErrorMessage', () => {
+  it.each([
+    [400, ERROR_MESSAGES.validation],
+    [403, ERROR_MESSAGES.forbidden],
+    [404, ERROR_MESSAGES.notFound],
+    [422, ERROR_MESSAGES.validation],
+    [429, ERROR_MESSAGES.rateLimited],
+    [503, ERROR_MESSAGES.server],
+    [418, ERROR_MESSAGES.unknown],
+  ])('status %i without a body falls back to Turkish', (status, message) => {
+    expect(toApiError(status, null).message).toBe(message)
+  })
+
+  it('hides non-API error messages (e.g. Zod) behind a Turkish text', () => {
+    expect(getErrorMessage(new Error('Expected string, received null'))).toBe(
+      ERROR_MESSAGES.unknown
+    )
   })
 })
 
