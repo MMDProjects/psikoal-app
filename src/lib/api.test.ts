@@ -128,6 +128,37 @@ describe('api error mapping', () => {
 })
 
 describe('toApiError / getErrorMessage', () => {
+  it('reads the flat ApiErrorDto { code, message, field }', () => {
+    const error = toApiError(409, {
+      code: 'REVIEW_ALREADY_EXISTS',
+      message: 'Bu eşleşme için değerlendirmenizi zaten bıraktınız.',
+      field: 'matchId',
+    })
+    expect(error).toMatchObject({
+      code: 'REVIEW_ALREADY_EXISTS',
+      message: 'Bu eşleşme için değerlendirmenizi zaten bıraktınız.',
+      validationErrors: [{ field: 'matchId' }],
+    })
+  })
+
+  it('never shows a raw error code as the message', () => {
+    const error = toApiError(400, {
+      title: 'One or more validation errors occurred.',
+      errors: { TermsAccepted: ['AUTH_TERMS_NOT_ACCEPTED'] },
+    })
+    expect(error.code).toBe('AUTH_TERMS_NOT_ACCEPTED')
+    expect(error.message).toBe(ERROR_MESSAGES.validation)
+  })
+
+  it('uses the Turkish message of AUTH_RATE_LIMITED / INTERNAL_ERROR', () => {
+    expect(
+      toApiError(429, { code: 'AUTH_RATE_LIMITED', message: 'Çok fazla deneme.' }).message
+    ).toBe('Çok fazla deneme.')
+    expect(toApiError(500, { code: 'INTERNAL_ERROR', message: 'Beklenmeyen hata.' }).code).toBe(
+      'INTERNAL_ERROR'
+    )
+  })
+
   it.each([
     [400, ERROR_MESSAGES.validation],
     [403, ERROR_MESSAGES.forbidden],

@@ -19,6 +19,7 @@ export type ValidationError = { field: string; message: string }
 type ApiErrorBody = {
   code?: string
   message?: string
+  field?: string | null
   title?: string
   errors?: unknown[] | Record<string, string[] | string>
 }
@@ -151,19 +152,39 @@ function toValidationErrors(errors: ApiErrorBody['errors']): ValidationError[] |
   )
 }
 
+// FluentValidation mesajı bazen Türkçe metin değil hata KODUDUR
+// (ör. "AUTH_TERMS_NOT_ACCEPTED"); ham kod kullanıcıya gösterilmez.
+const ERROR_CODE_PATTERN = /^[A-Z][A-Z0-9_]+$/
+
+function readableMessage(message: string | undefined | null): string | undefined {
+  if (!message || ERROR_CODE_PATTERN.test(message.trim())) return undefined
+  return message
+}
+
 /** HTTP hata yanıtını tek tip ApiError'a çevirir. Saf fonksiyon — test edilebilir. */
 export function toApiError(status: number, body: ApiErrorBody | undefined | null): ApiError {
   const data = typeof body === 'object' && body !== null ? body : {}
-  const validationErrors = toValidationErrors(data.errors)
+  const fieldMessage = readableMessage(data.message)
+  const validationErrors =
+    toValidationErrors(data.errors) ??
+    (typeof data.field === 'string' && data.field.length > 0
+      ? [{ field: data.field, message: fieldMessage ?? ERROR_MESSAGES.validation }]
+      : undefined)
 
   // ValidationProblemDetails'in title'ı İngilizce ("One or more validation
   // errors occurred.") — kullanıcıya gösterilmez; alan mesajı varsa o kullanılır.
   const message =
-    data.message ??
-    (status === 400 ? validationErrors?.[0]?.message : undefined) ??
+    readableMessage(data.message) ??
+    (status === 400 ? readableMessage(validationErrors?.[0]?.message) : undefined) ??
     fallbackMessage(status)
 
-  return new ApiError(data.code ?? fallbackCode(status), message, status, validationErrors)
+  // ValidationProblemDetails'te alan mesajı bir kodsa (AUTH_*), o kod en iyi tanımlayıcıdır.
+  const firstValidationCode = validationErrors?.find((e) =>
+    ERROR_CODE_PATTERN.test(e.message.trim())
+  )?.message
+  const code = data.code ?? firstValidationCode ?? fallbackCode(status)
+
+  return new ApiError(code, message, status, validationErrors)
 }
 
 /** Herhangi bir hatayı kullanıcıya gösterilebilir Türkçe metne çevirir. */
