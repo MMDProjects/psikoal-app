@@ -21,7 +21,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import { EmptyState } from '@/core/components/molecules/EmptyState'
 import { AppProviders } from '@/core/components/templates/AppProviders'
 import '@/domains/notification/pushNotificationHandler'
-import { useAuthStore } from '@/domains/auth'
+import { useAuthStore, useMeQuery } from '@/domains/auth'
 import { registerUnauthenticatedHandler } from '@/lib/api'
 import { queryClient } from '@/lib/queryClient'
 import { useThemeStore } from '@/store/themeStore'
@@ -43,6 +43,13 @@ export function ErrorBoundary({ retry }: ErrorBoundaryProps) {
       />
     </View>
   )
+}
+
+// Oturumla ilgili arka plan senkronizasyonu; sağlayıcıların İÇİNDE çalışmak
+// zorunda (TanStack Query). Görsel çıktısı yok.
+function SessionSync() {
+  useMeQuery()
+  return null
 }
 
 export default function RootLayout() {
@@ -83,6 +90,7 @@ export default function RootLayout() {
 
   return (
     <AppProviders>
+      <SessionSync />
       <Stack screenOptions={{ headerShown: false }} />
     </AppProviders>
   )
