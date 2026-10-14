@@ -4,6 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useLocalSearchParams, useRouter } from 'expo-router'
 
+import type { CreateReviewRequest } from '@/domains/expert'
+
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
 import { Avatar } from '@/core/components/atoms/Avatar'
 import { Chip } from '@/core/components/atoms/Chip'
@@ -19,10 +21,43 @@ import { useRefresh } from '@/core/hooks'
 import { formatDate } from '@/core/utils/formatDate'
 import { AssessmentResultSummary } from '@/domains/assessment'
 import { useAuthStore } from '@/domains/auth'
+import { ReviewForm, useMatchReview } from '@/domains/expert'
 import { SESSION_TYPE_LABELS } from '@/domains/listing'
 import { useMatchDetailQuery, useReleaseMatchMutation, MATCH_STATUS_CONFIG } from '@/domains/match'
 import { OFFER_STATUS_CONFIG } from '@/domains/offer'
 import { openEmail, openPhone } from '@/lib/externalLinks'
+
+type MatchReviewSectionProps = {
+  expertId: string
+  matchId: string
+  sessionType?: CreateReviewRequest['sessionType']
+}
+
+function MatchReviewSection({ expertId, matchId, sessionType }: MatchReviewSectionProps) {
+  const { submit, isSubmitting, isDone, doneMessage, errorMessage } = useMatchReview({
+    expertId,
+    matchId,
+    sessionType,
+  })
+
+  return (
+    <View className="gap-3 px-4 py-5">
+      <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+        Uzmanı Değerlendir
+      </Text>
+      {isDone ? (
+        <View className="flex-row items-center gap-2">
+          <Icon name="CheckCircle2" size={16} color="#16A34A" />
+          <Text variant="body" color="secondary" className="flex-1">
+            {doneMessage}
+          </Text>
+        </View>
+      ) : (
+        <ReviewForm onSubmit={submit} isSubmitting={isSubmitting} errorMessage={errorMessage} />
+      )}
+    </View>
+  )
+}
 
 export default function MatchDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -392,6 +427,17 @@ export default function MatchDetailScreen() {
                   />
                 </View>
               </View>
+            </>
+          )}
+
+          {isClient && (match.status === 'COMPLETED' || match.status === 'RELEASED') && (
+            <>
+              <Divider spacing="none" className="mx-4" />
+              <MatchReviewSection
+                expertId={match.expertId}
+                matchId={match.id}
+                sessionType={match.offer?.sessionType}
+              />
             </>
           )}
         </ScrollView>
