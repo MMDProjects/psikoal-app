@@ -15,6 +15,7 @@ import {
 } from '@/domains/auth'
 import { BlogLikeResponseSchema, BlogListResponseSchema, BlogSchema } from '@/domains/blog'
 import { CategoryDetailSchema, CategorySchema } from '@/domains/category'
+import { CreditBalanceResponseSchema, CreditTransactionListResponseSchema } from '@/domains/credit'
 import { ExpertSchema, ReviewSchema } from '@/domains/expert'
 import { ListingSchema } from '@/domains/listing'
 import { MatchDetailSchema, MatchSchema } from '@/domains/match'
@@ -361,5 +362,47 @@ describeLive('canlı sözleşme — uzman', () => {
 
     const detail = await fetchJson(`/matches/${matchId}`, token)
     expectMatchesContract('/matches/{id}', MatchDetailSchema, detail)
+  })
+})
+
+// Uzman kredisi (backend CREDIT-1, docs/PAYMENTS.md). Uçlar henüz yayında olmayan
+// bir backend'e karşı koşulursa (lokal dev API'si o dalı çalıştırmıyorsa) bu blok
+// sessizce geçer: uç yoksa ASP.NET çıplak 404 döner. Uzmanın profili yoksa da 404
+// gelir ama gövdesinde EXPERT_NOT_FOUND kodu bulunur — o durum bir kurulum hatasıdır
+// ve test kırmızıya döner.
+describeLive('canlı sözleşme — uzman kredisi', () => {
+  let expertToken = ''
+  let available = false
+
+  beforeAll(async () => {
+    expertToken = await login(EXPERT)
+    const probe = await request('GET', '/credits/me', expertToken)
+    const code = (probe.body as { code?: string } | null)?.code
+    available = !(probe.status === 404 && code !== 'EXPERT_NOT_FOUND')
+  })
+
+  it('uzman: GET /credits/me şemaya uyar', async () => {
+    if (!available) return
+    expectMatchesContract(
+      '/credits/me',
+      CreditBalanceResponseSchema,
+      await fetchJson('/credits/me', expertToken)
+    )
+  })
+
+  it('uzman: GET /credits/transactions şemaya uyar ve perPage uygulanır', async () => {
+    if (!available) return
+    const path = '/credits/transactions?page=1&perPage=5'
+    const body = await fetchJson(path, expertToken)
+    expectMatchesContract(path, CreditTransactionListResponseSchema, body)
+    expect(CreditTransactionListResponseSchema.parse(body).meta.perPage).toBe(5)
+  })
+
+  it('danışan: GET /credits/me 403 EXPERT_ROLE_REQUIRED döner', async () => {
+    if (!available) return
+    const clientToken = await login(CLIENT)
+    const response = await request('GET', '/credits/me', clientToken)
+    expect(response.status).toBe(403)
+    expect(response.body).toMatchObject({ code: 'EXPERT_ROLE_REQUIRED' })
   })
 })
