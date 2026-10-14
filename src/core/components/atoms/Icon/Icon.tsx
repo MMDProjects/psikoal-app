@@ -1,5 +1,7 @@
 import type { ComponentType } from 'react'
 
+import type { ColorValue } from 'react-native'
+
 import * as LucideIcons from 'lucide-react-native'
 
 import type { SvgProps } from 'react-native-svg'
@@ -11,7 +13,7 @@ export type IconName = keyof typeof LucideIcons
 export type IconProps = {
   name: IconName
   size?: number
-  color?: string
+  color?: ColorValue
   strokeWidth?: number
   className?: string
 }

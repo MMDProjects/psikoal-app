@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { Platform } from 'react-native'
 
-import { NativeTabs, Label, Icon as NativeIcon } from 'expo-router/unstable-native-tabs'
+import { NativeTabs } from 'expo-router/unstable-native-tabs'
 import { useColorScheme } from 'nativewind'
 
 import { Tabs, useRouter } from 'expo-router'
@@ -39,23 +39,25 @@ export default function TabsLayout() {
     return (
       <NativeTabs>
         <NativeTabs.Trigger name="index">
-          <NativeIcon sf={isExpert ? 'doc.text.fill' : 'safari.fill'} />
-          <Label>{isExpert ? 'Fırsatlar' : 'Keşfet'}</Label>
+          <NativeTabs.Trigger.Icon sf={isExpert ? 'doc.text.fill' : 'safari.fill'} />
+          <NativeTabs.Trigger.Label>{isExpert ? 'Fırsatlar' : 'Keşfet'}</NativeTabs.Trigger.Label>
         </NativeTabs.Trigger>
 
         <NativeTabs.Trigger name="offers">
-          <NativeIcon sf={isExpert ? 'paperplane.fill' : 'list.bullet'} />
-          <Label>{isExpert ? 'Tekliflerim' : 'İlanlarım'}</Label>
+          <NativeTabs.Trigger.Icon sf={isExpert ? 'paperplane.fill' : 'list.bullet'} />
+          <NativeTabs.Trigger.Label>
+            {isExpert ? 'Tekliflerim' : 'İlanlarım'}
+          </NativeTabs.Trigger.Label>
         </NativeTabs.Trigger>
 
         <NativeTabs.Trigger name="matches">
-          <NativeIcon sf="person.2.fill" />
-          <Label>Eşleşmelerim</Label>
+          <NativeTabs.Trigger.Icon sf="person.2.fill" />
+          <NativeTabs.Trigger.Label>Eşleşmelerim</NativeTabs.Trigger.Label>
         </NativeTabs.Trigger>
 
         <NativeTabs.Trigger name="profile">
-          <NativeIcon sf="gearshape.fill" />
-          <Label>Ayarlar</Label>
+          <NativeTabs.Trigger.Icon sf="gearshape.fill" />
+          <NativeTabs.Trigger.Label>Ayarlar</NativeTabs.Trigger.Label>
         </NativeTabs.Trigger>
       </NativeTabs>
     )
