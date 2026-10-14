@@ -119,6 +119,10 @@ jobs:
         env:
           EXPO_PUBLIC_API_URL: https://api.example.invalid
           EXPO_PUBLIC_APP_ENV: production
+          EXPO_PUBLIC_SUPPORT_EMAIL: destek@example.invalid
+          EXPO_PUBLIC_PRIVACY_URL: https://example.invalid/gizlilik
+          EXPO_PUBLIC_TERMS_URL: https://example.invalid/kosullar
+          EXPO_PUBLIC_KVKK_URL: https://example.invalid/kvkk
         run: npx expo export --platform android --output-dir dist
 
   enforce-promotion:

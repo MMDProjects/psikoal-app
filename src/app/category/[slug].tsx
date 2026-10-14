@@ -189,7 +189,7 @@ export default function CategoryDetailScreen() {
               <View className="items-center gap-2 px-4 py-6">
                 <Icon name="FileText" size={28} color="#A3A3A3" />
                 <Text variant="caption" color="secondary" align="center">
-                  Bu konuyla ilgili henüz blog yazısı yok. Yakında eklenecek.
+                  Bu konuyla ilgili henüz yazı yok.
                 </Text>
               </View>
             )}

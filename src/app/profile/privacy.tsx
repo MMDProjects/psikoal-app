@@ -10,6 +10,7 @@ import { BackButton } from '@/core/components/molecules/BackButton'
 import { MenuRow } from '@/core/components/molecules/MenuRow'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { useFreezeAccountMutation, useDeleteAccountMutation } from '@/domains/auth'
+import { openLegalDocument } from '@/lib/externalLinks'
 
 export default function PrivacyScreen() {
   const insets = useSafeAreaInsets()
@@ -73,10 +74,6 @@ export default function PrivacyScreen() {
     )
   }
 
-  const handlePrivacyPolicy = () => {
-    Alert.alert('Gizlilik Politikası', 'Bu özellik yakında aktif olacak.')
-  }
-
   const isBusy = isFreezing || isDeleting
 
   return (
@@ -118,10 +115,24 @@ export default function PrivacyScreen() {
             color="secondary"
             className="font-semibold uppercase tracking-widest"
           >
-            Gizlilik
+            Yasal Metinler
           </Text>
         </View>
-        <MenuRow icon="ShieldCheck" label="Gizlilik Politikası" onPress={handlePrivacyPolicy} />
+        <MenuRow
+          icon="ShieldCheck"
+          label="Gizlilik Politikası"
+          onPress={() => openLegalDocument('privacy')}
+        />
+        <MenuRow
+          icon="FileText"
+          label="Kullanım Koşulları"
+          onPress={() => openLegalDocument('terms')}
+        />
+        <MenuRow
+          icon="Scale"
+          label="KVKK Aydınlatma Metni"
+          onPress={() => openLegalDocument('kvkk')}
+        />
       </ScrollView>
     </View>
   )
