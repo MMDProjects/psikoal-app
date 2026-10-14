@@ -16,6 +16,8 @@ export type BottomBarAction = {
   isLoading?: boolean
   loadingLabel?: string
   isDisabled?: boolean
+  /** E2E tutamağı — bkz. docs/E2E-TESTID.md */
+  testID?: string
 }
 
 export type BottomActionBarProps = {
@@ -61,6 +63,7 @@ export function BottomActionBar({ actions = [], children }: BottomActionBarProps
             return (
               <Pressable
                 key={action.label}
+                testID={action.testID}
                 onPress={busy || action.isDisabled ? undefined : action.onPress}
                 disabled={busy || action.isDisabled}
                 className={cn(

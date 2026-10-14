@@ -57,7 +57,11 @@ export default function LoginScreen() {
   const bottomBarHeight = 56 + insets.bottom
 
   return (
-    <View className="flex-1 bg-sky-500 dark:bg-sky-950" style={{ overflow: 'hidden' }}>
+    <View
+      testID="screen-login"
+      className="flex-1 bg-sky-500 dark:bg-sky-950"
+      style={{ overflow: 'hidden' }}
+    >
       <DecorCircles />
 
       <KeyboardAvoidingView
@@ -92,6 +96,7 @@ export default function LoginScreen() {
               name="email"
               render={({ field: { onChange, onBlur, value } }) => (
                 <InputField
+                  testID="login-email"
                   tone="onBrand"
                   label="E-posta"
                   placeholder="ornek@mail.com"
@@ -111,6 +116,7 @@ export default function LoginScreen() {
               name="password"
               render={({ field: { onChange, onBlur, value } }) => (
                 <InputField
+                  testID="login-password"
                   tone="onBrand"
                   label="Şifre"
                   placeholder="••••••••"
@@ -225,6 +231,7 @@ export default function LoginScreen() {
         <BottomActionBar
           actions={[
             {
+              testID: 'login-submit',
               label: 'Giriş Yap',
               onPress: handleSubmit(onSubmit),
               variant: 'inverse',

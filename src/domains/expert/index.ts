@@ -3,7 +3,12 @@ export {
   useExpertProfileQuery,
   useExpertProfileMutation,
   useExpertReviewsQuery,
+  useUploadExpertDocumentMutation,
+  DOCUMENT_CONTENT_TYPES,
+  DOCUMENT_MAX_BYTES,
 } from './api'
+export { pickExpertDocument } from './utils/pickDocument'
+export type { PickedDocument } from './utils/pickDocument'
 export { ExpertSchema, ExpertOnboardingSchema } from './schemas/expert.schema'
 export { ReviewSchema } from './schemas/review.schema'
 export {
