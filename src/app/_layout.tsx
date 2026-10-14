@@ -22,6 +22,7 @@ import { EmptyState } from '@/core/components/molecules/EmptyState'
 import { AppProviders } from '@/core/components/templates/AppProviders'
 import '@/domains/notification/pushNotificationHandler'
 import { useAuthStore, useMeQuery } from '@/domains/auth'
+import { useNotificationResponseRouting, useSilentPushRegistration } from '@/domains/notification'
 import { registerUnauthenticatedHandler } from '@/lib/api'
 import { queryClient } from '@/lib/queryClient'
 import { useThemeStore } from '@/store/themeStore'
@@ -48,7 +49,12 @@ export function ErrorBoundary({ retry }: ErrorBoundaryProps) {
 // Oturumla ilgili arka plan senkronizasyonu; sağlayıcıların İÇİNDE çalışmak
 // zorunda (TanStack Query). Görsel çıktısı yok.
 function SessionSync() {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const userId = useAuthStore((s) => s.userId)
   useMeQuery()
+  // İzin önceden verilmişse token her girişte/açılışta tazelenir; izin İSTENMEZ.
+  useSilentPushRegistration(isAuthenticated ? userId : null)
+  useNotificationResponseRouting(isAuthenticated)
   return null
 }
 

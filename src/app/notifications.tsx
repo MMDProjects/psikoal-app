@@ -2,6 +2,8 @@ import { Pressable, ScrollView, useColorScheme, View } from 'react-native'
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
+import { useRouter } from 'expo-router'
+
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
 import { Icon } from '@/core/components/atoms/Icon'
 import { Skeleton } from '@/core/components/atoms/Skeleton'
@@ -15,11 +17,13 @@ import {
   useMarkNotificationReadMutation,
   useMarkAllNotificationsReadMutation,
   usePushTokenRegistration,
+  resolveNotificationRoute,
   NOTIFICATION_TYPE_CONFIG,
 } from '@/domains/notification'
 
 export default function NotificationsScreen() {
   const insets = useSafeAreaInsets()
+  const router = useRouter()
   const isDark = useColorScheme() === 'dark'
   const notificationsQuery = useNotificationsQuery()
   const { data, isLoading, isError, refetch } = notificationsQuery
@@ -86,6 +90,9 @@ export default function NotificationsScreen() {
                 <Pressable
                   onPress={() => {
                     if (!notif.read) markRead(notif.id)
+                    const route = resolveNotificationRoute(notif)
+                    // REASON: typed routes dinamik string'i tanımaz; değer resolveNotificationRoute'un sınırlı kümesinden
+                    if (route !== '/notifications') router.push(route as never)
                   }}
                   className="flex-row items-start gap-3 px-4 py-4 active:opacity-70"
                   accessibilityRole="button"

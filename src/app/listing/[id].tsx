@@ -19,6 +19,7 @@ import { getFullName, getInitials } from '@/core/utils/personName'
 import { useAuthStore } from '@/domains/auth'
 import { useExpertApprovalGate } from '@/domains/expert'
 import { useListingDetailQuery, useCloseListingMutation, ListingDetail } from '@/domains/listing'
+import { usePushTokenRegistration } from '@/domains/notification'
 import { useListingOffersQuery, useOfferDetailQuery, OFFER_STATUS_CONFIG } from '@/domains/offer'
 
 export default function ListingDetailScreen() {
@@ -41,6 +42,9 @@ export default function ListingDetailScreen() {
   const offers = listingOffersQuery.data?.data ?? []
 
   const { isRefreshing, onRefresh } = useRefresh(listingQuery, listingOffersQuery)
+
+  // Bildirim izni ilk teklif anında istenir (CLAUDE.md kural 7).
+  usePushTokenRegistration(isClient && offers.length > 0)
 
   const hasAlreadySentOffer = !isClient && (listing?.viewerHasOffered ?? false)
   const { data: myOffer } = useOfferDetailQuery(!isClient ? (listing?.viewerOfferId ?? '') : '')

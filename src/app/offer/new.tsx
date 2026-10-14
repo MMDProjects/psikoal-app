@@ -17,6 +17,7 @@ import { InputField } from '@/core/components/molecules/InputField'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { useExpertApprovalGate } from '@/domains/expert'
+import { usePushRegistration } from '@/domains/notification'
 import { useSendOfferMutation, SendOfferSchema } from '@/domains/offer'
 import { getErrorMessage } from '@/lib/api'
 
@@ -25,6 +26,7 @@ export default function NewOfferScreen() {
   const { listingId } = useLocalSearchParams<{ listingId?: string }>()
 
   const { mutate: sendOffer, isPending, error } = useSendOfferMutation()
+  const registerPush = usePushRegistration()
   const { canAct: canSendOffer, isPendingApproval } = useExpertApprovalGate()
 
   const {
@@ -50,6 +52,9 @@ export default function NewOfferScreen() {
   const onSubmit = (data: SendOfferRequest) => {
     sendOffer(data, {
       onSuccess: () => {
+        // Uzman için "ilk teklif anı": teklifinin kabulünden haberdar olsun diye
+        // bildirim izni burada istenir (CLAUDE.md kural 7). İzin zaten varsa sessizdir.
+        void registerPush({ prompt: true })
         router.back()
       },
     })
