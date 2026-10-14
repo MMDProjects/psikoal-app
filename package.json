@@ -29,7 +29,7 @@
     "expo-store-review": "~57.0.3",
     "expo-web-browser": "~57.0.3",
     "lucide-react-native": "^1.17.0",
-    "nativewind": "^4.1.23",
+    "nativewind": "^4.2.7",
     "react": "19.2.3",
     "react-hook-form": "^7.78.0",
     "react-native": "0.86.3",
