@@ -218,7 +218,7 @@ src/
     client/
     offer/
     match/
-    payment/
+    credit/
     assessment/
   lib/                    ← Axios, TanStack Query, MMKV
   store/                  ← Zustand root store

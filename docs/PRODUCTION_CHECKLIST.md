@@ -46,7 +46,11 @@
 
 ## Akışlar
 
-- [x] Ödeme (cüzdan, paketler, checkout) v1'den tamamen söküldü; v2 kapsamında.
+- [x] Eski danışan ödeme modeli (cüzdan, paketler, checkout, Iyzico) tamamen söküldü; danışandan para alınmaz.
+- [x] Uzman kredisi (Armut modeli, backend `docs/PAYMENTS.md`): ana sayfada bakiye kartı, Ayarlar → Kredilerim, `/credits` geçmişi (sayfalı, pull-to-refresh), teklif ekranında maliyet + bakiye; bakiye < maliyet ise gönderim kilitli. Teklif ve uygulama öne gelişi kredi sorgularını tazeler.
+- [x] **Mağaza kuralı (App Store 3.1.1 / Play ödeme politikası):** uygulamada satın alma butonu, bağlantı, adres veya fiyat YOK; yalnız düz metin "Kredi yüklemek için web sitemizi ziyaret edin." Yeni ekranlarda da bu korunmalı (`INSUFFICIENT_CREDITS_MESSAGE` testi bağlantı/fiyat içermediğini denetler).
+- [ ] **Backend:** CREDIT-1 dalı (`/credits/*`, `POST /offers` 422 `INSUFFICIENT_CREDITS`) yayına alınmalı; o zamana kadar uzman ana sayfasındaki bakiye kartı "—" gösterir. Canlı sözleşme testindeki kredi denetimleri uç yoksa (çıplak 404) kendini atlar.
+- [ ] Web sitesinde kredi satın alma sayfası (PayTR) — uygulama kapsamı dışında.
 - [x] Öneriler (`/suggestions`) ve kullanılmayan `client/[id]` ekranı söküldü.
 - [x] "Yakında" uyarılarının tamamı gerçek akışa bağlandı (değerlendirme, bildirim ayarları, destek, yasal metinler, profil fotoğrafı).
 - [x] Profil fotoğrafı yükleme (`POST /auth/me/avatar`, JPEG/PNG/WebP ≤ 5 MB).
