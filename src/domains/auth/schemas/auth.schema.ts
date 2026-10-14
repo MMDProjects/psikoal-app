@@ -78,3 +78,20 @@ export const ChangePasswordSchema = z
 export const ForgotPasswordSchema = z.object({
   email: z.string().email('Geçerli bir e-posta giriniz'),
 })
+
+// Şifre sıfırlama formu — yeni şifre kuralı kayıtla aynı (≥ 8).
+export const ResetPasswordFormSchema = z
+  .object({
+    newPassword: z.string().min(8, 'Şifre en az 8 karakter olmalı'),
+    confirmPassword: z.string().min(1, 'Şifreyi tekrar giriniz'),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'Şifreler eşleşmiyor',
+    path: ['confirmPassword'],
+  })
+
+// POST /auth/reset-password gövdesi (sözleşme §2).
+export const ResetPasswordRequestSchema = z.object({
+  accessToken: z.string().min(1),
+  newPassword: z.string().min(8),
+})

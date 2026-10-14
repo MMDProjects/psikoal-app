@@ -10,7 +10,11 @@ export {
   useDeleteAccountMutation,
   useUploadAvatarMutation,
   useMeQuery,
+  useResetPasswordMutation,
+  RESET_TOKEN_INVALID,
 } from './api'
+export { parseRecoveryLink } from './utils/parseRecoveryLink'
+export type { RecoveryLink } from './utils/parseRecoveryLink'
 export { authKeys } from './auth.constants'
 export { useChangeAvatar } from './hooks/useChangeAvatar'
 export {
@@ -29,6 +33,8 @@ export {
   UpdateProfileSchema,
   ChangePasswordSchema,
   ForgotPasswordSchema,
+  ResetPasswordFormSchema,
+  ResetPasswordRequestSchema,
 } from './schemas/auth.schema'
 export type {
   UserRole,
@@ -40,6 +46,8 @@ export type {
   UpdateProfileRequest,
   ChangePasswordRequest,
   ForgotPasswordRequest,
+  ResetPasswordForm,
+  ResetPasswordRequest,
 } from './types/auth.types'
 export { RoleCard } from './components/RoleCard'
 export type { RoleCardProps } from './components/RoleCard'
