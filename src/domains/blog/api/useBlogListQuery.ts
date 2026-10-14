@@ -1,15 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { z } from 'zod'
 
 import { blogKeys, BLOG_STALE_TIME } from '../blog.constants'
-import { BlogListItemSchema } from '../schemas/blog.schema'
+import { BlogListResponseSchema } from '../schemas/blog.schema'
 
 import { get } from '@/lib/api'
-
-const BlogListResponseSchema = z.object({
-  data: z.array(BlogListItemSchema),
-  meta: z.object({ page: z.number(), total: z.number(), perPage: z.number() }),
-})
 
 type BlogListParams = {
   category?: string

@@ -7,6 +7,7 @@ import {
   RegisterRequestSchema,
   ResetPasswordRequestSchema,
 } from '@/domains/auth'
+import { BlogLikeResponseSchema, BlogListResponseSchema, BlogSchema } from '@/domains/blog'
 import { CategoryDetailSchema, CategorySchema } from '@/domains/category'
 import { ExpertSchema, ReviewSchema } from '@/domains/expert'
 import { ListingSchema } from '@/domains/listing'
@@ -208,6 +209,61 @@ describeLive('canlı sözleşme — kayıt ve şifre sıfırlama', () => {
 
     expect(response.status).toBe(422)
     expect(response.body).toMatchObject({ code: 'RESET_TOKEN_INVALID' })
+  })
+})
+
+async function request(
+  method: 'GET' | 'POST',
+  path: string,
+  token?: string
+): Promise<{ status: number; body: unknown }> {
+  const response = await fetch(`${API}${path}`, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: method === 'POST' ? '{}' : undefined,
+  })
+  const text = await response.text()
+  return { status: response.status, body: text ? JSON.parse(text) : null }
+}
+
+// Sözleşme §6: blog uçları uygulamanın Zod şemalarına göre kuruldu.
+describeLive('canlı sözleşme — blog', () => {
+  it('GET /blogs?limit=3 liste şemasına uyar ve perPage=3', async () => {
+    const { status, body } = await request('GET', '/blogs?limit=3')
+    expect(status).toBe(200)
+    expectMatchesContract('/blogs?limit=3', BlogListResponseSchema, body)
+    expect(BlogListResponseSchema.parse(body).meta.perPage).toBe(3)
+  })
+
+  it('GET /blogs?category=anksiyete yalnız o kategoriyi döner', async () => {
+    const { body } = await request('GET', '/blogs?category=anksiyete')
+    const list = BlogListResponseSchema.parse(body)
+    for (const blog of list.data) expect(blog.categories).toContain('anksiyete')
+  })
+
+  it('GET /blogs/{slug} içerikli BlogSchema döner; beğeni token ister ve tersine çevrilir', async () => {
+    const list = BlogListResponseSchema.parse((await request('GET', '/blogs?limit=1')).body)
+    const slug = list.data[0]?.slug
+    expect(slug).toBeDefined()
+
+    const detail = await request('GET', `/blogs/${slug}`)
+    expectMatchesContract('/blogs/{slug}', BlogSchema, detail.body)
+    expect(BlogSchema.parse(detail.body).content?.trim().length ?? 0).toBeGreaterThan(0)
+
+    expect((await request('POST', `/blogs/${slug}/like`)).status).toBe(401)
+
+    const token = await login(CLIENT)
+    const first = BlogLikeResponseSchema.parse(
+      (await request('POST', `/blogs/${slug}/like`, token)).body
+    )
+    const second = BlogLikeResponseSchema.parse(
+      (await request('POST', `/blogs/${slug}/like`, token)).body
+    )
+    expect(second.liked).toBe(!first.liked)
+    expect(Math.abs(second.likeCount - first.likeCount)).toBe(1)
   })
 })
 

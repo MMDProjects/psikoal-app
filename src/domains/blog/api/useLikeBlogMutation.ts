@@ -1,11 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { z } from 'zod'
 
 import { blogKeys } from '../blog.constants'
+import { BlogLikeResponseSchema } from '../schemas/blog.schema'
 
 import { post } from '@/lib/api'
-
-const LikeResponseSchema = z.object({ likeCount: z.number(), liked: z.boolean() })
 
 type LikeParams = { slug: string }
 
@@ -14,7 +12,7 @@ export function useLikeBlogMutation() {
   return useMutation({
     mutationFn: async ({ slug }: LikeParams) => {
       const raw = await post(`/blogs/${slug}/like`, {})
-      return LikeResponseSchema.parse(raw)
+      return BlogLikeResponseSchema.parse(raw)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: blogKeys.all })
