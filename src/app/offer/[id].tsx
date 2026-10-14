@@ -57,7 +57,13 @@ export default function OfferDetailScreen() {
         { text: 'Vazgeç', style: 'cancel' },
         {
           text: 'Kabul Et',
-          onPress: () => acceptOffer(id, { onSuccess: () => router.replace('/(tabs)' as never) }),
+          onPress: () =>
+            acceptOffer(id, {
+              onSuccess: (accepted) =>
+                router.replace(
+                  (accepted.matchId ? `/match/${accepted.matchId}` : '/(tabs)/offers') as never
+                ),
+            }),
         },
       ]
     )
