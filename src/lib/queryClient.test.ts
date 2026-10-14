@@ -3,6 +3,13 @@ import { Alert } from 'react-native'
 import { ApiError, ERROR_MESSAGES } from './api'
 import { handleMutationError } from './queryClient'
 
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  getItem: jest.fn(async () => null),
+  setItem: jest.fn(async () => undefined),
+  multiGet: jest.fn(async () => []),
+  multiRemove: jest.fn(async () => undefined),
+}))
+
 jest.mock('expo-secure-store', () => ({
   getItemAsync: jest.fn(async () => null),
   setItemAsync: jest.fn(async () => undefined),
