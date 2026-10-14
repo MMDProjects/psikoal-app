@@ -15,7 +15,7 @@ import { HeaderActions } from '@/core/components/molecules/HeaderActions'
 import { HeroQuickActions } from '@/core/components/organisms/HeroQuickActions'
 import { useRefresh } from '@/core/hooks'
 import { useThemeColors } from '@/core/theme'
-import { useAssessmentListQuery, useMyAssessmentResultsQuery } from '@/domains/assessment'
+import { useMyAssessmentResultsQuery, usePlayableAssessments } from '@/domains/assessment'
 import { useAuthStore } from '@/domains/auth'
 import { useBlogListQuery, BlogCarousel } from '@/domains/blog'
 import { useCategoriesQuery } from '@/domains/category'
@@ -35,7 +35,7 @@ export function ClientHomeScreen() {
     router.push(url as never)
   }
 
-  const assessmentsQuery = useAssessmentListQuery()
+  const assessmentsQuery = usePlayableAssessments()
   const assessmentList = assessmentsQuery.data
   const myResultsQuery = useMyAssessmentResultsQuery()
   const myResultCount = myResultsQuery.data?.meta.total ?? 0

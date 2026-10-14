@@ -16,7 +16,7 @@ import { EmptyState } from '@/core/components/molecules/EmptyState'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { useRefresh } from '@/core/hooks'
-import { useAssessmentListQuery } from '@/domains/assessment'
+import { usePlayableAssessments } from '@/domains/assessment'
 import { useBlogListQuery, BlogCard } from '@/domains/blog'
 import { useCategoryDetailQuery } from '@/domains/category'
 
@@ -28,7 +28,7 @@ export default function CategoryDetailScreen() {
   const categoryQuery = useCategoryDetailQuery(slug ?? '')
   const { data: category, isLoading: categoryLoading, isError: categoryError } = categoryQuery
 
-  const assessmentsQuery = useAssessmentListQuery(category?.assessmentCategory ?? undefined)
+  const assessmentsQuery = usePlayableAssessments(category?.assessmentCategory ?? undefined)
   const assessments = assessmentsQuery.data
   const blogsQuery = useBlogListQuery({ category: category?.blogTag })
   const { isLoading: blogsLoading } = blogsQuery
@@ -140,7 +140,7 @@ export default function CategoryDetailScreen() {
                   <View key={a.id}>
                     {i > 0 && <Divider spacing="none" className="mx-4" />}
                     <Pressable
-                      onPress={() => router.push('/assessment/list' as never)}
+                      onPress={() => router.push('/assessment' as never)}
                       className="flex-row items-center justify-between gap-3 px-4 py-4 active:opacity-80"
                     >
                       <View className="flex-1 gap-0.5">
