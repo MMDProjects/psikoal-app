@@ -1,3 +1,9 @@
+// Node çekirdek modülleri (node:http) yalnız bu dosyada; tsconfig "types" listesi jest ile sınırlı.
+/// <reference types="node" />
+
+import http from 'node:http'
+import https from 'node:https'
+
 import { z } from 'zod'
 
 import { AssessmentListItemSchema, MyAssessmentResultSchema } from '@/domains/assessment'
@@ -56,8 +62,67 @@ const EXPERT = { email: 'demo-expert-1@psikoal.test', password: 'DemoExpert123!'
 
 const listOf = <T extends z.ZodTypeAny>(item: T) => z.object({ data: z.array(item) })
 
+type LiveResponse = {
+  status: number
+  ok: boolean
+  text: () => Promise<string>
+  json: () => Promise<unknown>
+}
+
+type LiveRequestInit = {
+  method?: 'GET' | 'POST'
+  headers?: Record<string, string>
+  body?: string
+}
+
+/**
+ * Gerçek HTTP isteği — global `fetch` KULLANILMAZ.
+ *
+ * SDK 57'de jest-expo kurulumu `expo/src/winter`'ı yükler ve global `fetch`'i
+ * expo/fetch ile değiştirir; o da testte sahte native sınıflara bağlıdır. Sonuç:
+ * her istek ağa hiç çıkmadan sahte bir Response döner (`status` undefined) ve
+ * bütün canlı denetimler "login ...: undefined" ile düşer. Node çekirdek modülü
+ * bu yamadan etkilenmez.
+ */
+function liveFetch(url: string, init: LiveRequestInit = {}): Promise<LiveResponse> {
+  const target = new URL(url)
+  const client = target.protocol === 'https:' ? https : http
+  const body = init.body === undefined ? undefined : Buffer.from(init.body, 'utf8')
+
+  return new Promise((resolve, reject) => {
+    const req = client.request(
+      target,
+      {
+        method: init.method ?? 'GET',
+        headers: {
+          ...init.headers,
+          ...(body ? { 'Content-Length': String(body.byteLength) } : {}),
+        },
+      },
+      (res) => {
+        const chunks: Buffer[] = []
+        res.on('data', (chunk: Buffer) => chunks.push(chunk))
+        res.on('error', reject)
+        res.on('end', () => {
+          const raw = Buffer.concat(chunks).toString('utf8')
+          const status = res.statusCode ?? 0
+          resolve({
+            status,
+            ok: status >= 200 && status < 300,
+            text: async () => raw,
+            json: async () => JSON.parse(raw),
+          })
+        })
+      }
+    )
+    req.on('error', reject)
+    if (body) req.write(body)
+    req.end()
+  })
+}
+
 async function login(account: { email: string; password: string }): Promise<string> {
-  const response = await fetch(`${API}/auth/login`, {
+  const response = await liveFetch(`${API}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(account),
@@ -68,7 +133,9 @@ async function login(account: { email: string; password: string }): Promise<stri
 }
 
 async function fetchJson(path: string, token: string): Promise<unknown> {
-  const response = await fetch(`${API}${path}`, { headers: { Authorization: `Bearer ${token}` } })
+  const response = await liveFetch(`${API}${path}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
   if (!response.ok) throw new Error(`GET ${path}: ${response.status}`)
   return response.json()
 }
@@ -159,7 +226,7 @@ describeLive('canlı sözleşme — danışan', () => {
 })
 
 async function postJson(path: string, body: unknown): Promise<{ status: number; body: unknown }> {
-  const response = await fetch(`${API}${path}`, {
+  const response = await liveFetch(`${API}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -217,7 +284,7 @@ async function request(
   path: string,
   token?: string
 ): Promise<{ status: number; body: unknown }> {
-  const response = await fetch(`${API}${path}`, {
+  const response = await liveFetch(`${API}${path}`, {
     method,
     headers: {
       'Content-Type': 'application/json',
