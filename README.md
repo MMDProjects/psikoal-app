@@ -11,14 +11,14 @@
 
 `native-atomic` is a **reusable core layer** for Expo projects that gives you:
 
-| Layer | What you get |
-|---|---|
-| **Atoms** | Button, Text, Input, Badge, Chip, Avatar, Icon, Divider, Skeleton |
-| **Molecules** | InputField, SearchBar, RatingRow, PriceDisplay, StatCard, IconButton |
-| **Hooks** | useDebounce, useThrottle, useKeyboard, useBoolean, useAppState, useMount, usePrevious, useUnmount |
-| **Utils** | formatPrice, formatDate, cn, truncate, slugify, initials, groupBy, uniqueBy, isEmail, isPhone |
-| **Lib** | Axios instance (JWT refresh, 401/422 handling), TanStack Query client, MMKV storage, typed env |
-| **Auth store** | Zustand + MMKV persist slice with role-based state |
+| Layer          | What you get                                                                                      |
+| -------------- | ------------------------------------------------------------------------------------------------- |
+| **Atoms**      | Button, Text, Input, Badge, Chip, Avatar, Icon, Divider, Skeleton                                 |
+| **Molecules**  | InputField, SearchBar, RatingRow, PriceDisplay, StatCard, IconButton                              |
+| **Hooks**      | useDebounce, useThrottle, useKeyboard, useBoolean, useAppState, useMount, usePrevious, useUnmount |
+| **Utils**      | formatPrice, formatDate, cn, truncate, slugify, initials, groupBy, uniqueBy, isEmail, isPhone     |
+| **Lib**        | Axios instance (JWT refresh, 401/422 handling), TanStack Query client, MMKV storage, typed env    |
+| **Auth store** | Zustand + MMKV persist slice with role-based state                                                |
 
 Everything is **TypeScript-strict**, **zero `any`**, **Zod-validated** at API boundaries, and has **≥ 95% test coverage** on all atoms and utilities.
 
@@ -26,20 +26,20 @@ Everything is **TypeScript-strict**, **zero `any`**, **Zod-validated** at API bo
 
 ## Tech Stack
 
-| Tool | Version | Role |
-|---|---|---|
-| Expo | ~56 | Build & bundler |
-| React Native | 0.85 | Runtime |
-| Expo Router | ~56.2 | File-based navigation |
-| NativeWind | ^4.2 | Tailwind CSS for RN |
-| TanStack Query | ^5 | Server state |
-| Zustand | ^5 | Global UI state |
-| Zod | ^4 | Schema validation |
-| React Hook Form | ^7 | Form state |
-| MMKV | ^4 | Persistent storage |
-| Reanimated | 4.3 | Animations |
-| TypeScript | ~6 | Type safety |
-| Jest | ^29 | Testing |
+| Tool            | Version | Role                  |
+| --------------- | ------- | --------------------- |
+| Expo            | ^57     | Build & bundler       |
+| React Native    | 0.86    | Runtime               |
+| Expo Router     | ~57.0   | File-based navigation |
+| NativeWind      | ^4.2.7  | Tailwind CSS for RN   |
+| TanStack Query  | ^5      | Server state          |
+| Zustand         | ^5      | Global UI state       |
+| Zod             | ^4      | Schema validation     |
+| React Hook Form | ^7      | Form state            |
+| MMKV            | ^4      | Persistent storage    |
+| Reanimated      | 4.5     | Animations            |
+| TypeScript      | ~6      | Type safety           |
+| Jest            | ^29     | Testing               |
 
 ---
 
@@ -84,8 +84,8 @@ Then wire up the path alias in `tsconfig.json`:
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": { "@/*": ["./src/*"] }
-  }
+    "paths": { "@/*": ["./src/*"] },
+  },
 }
 ```
 
@@ -143,10 +143,10 @@ const { formatPrice, cn } = utils
 ```tsx
 import { useDebounce, useKeyboard, useBoolean, useThrottle } from '@/core/hooks'
 
-const query = useDebounce(searchText, 300)        // debounced value
-const { isVisible } = useKeyboard()               // keyboard state
-const modal = useBoolean()                        // { value, toggle, setTrue, setFalse }
-const throttledSave = useThrottle(save, 1000)     // throttled function
+const query = useDebounce(searchText, 300) // debounced value
+const { isVisible } = useKeyboard() // keyboard state
+const modal = useBoolean() // { value, toggle, setTrue, setFalse }
+const throttledSave = useThrottle(save, 1000) // throttled function
 ```
 
 ### Utils
@@ -154,11 +154,11 @@ const throttledSave = useThrottle(save, 1000)     // throttled function
 ```tsx
 import { formatPrice, formatDate, truncate, initials, cn } from '@/core/utils'
 
-formatPrice(1500)                        // "₺1.500"
-formatDate(new Date(), 'relative')       // "3 dakika önce"
-truncate('Uzun bir başlık', 20)          // "Uzun bir başlık..."
-initials('Ayşe Kaya')                    // "AK"
-cn('px-4', isActive && 'bg-iris-50')    // conditional className merge
+formatPrice(1500) // "₺1.500"
+formatDate(new Date(), 'relative') // "3 dakika önce"
+truncate('Uzun bir başlık', 20) // "Uzun bir başlık..."
+initials('Ayşe Kaya') // "AK"
+cn('px-4', isActive && 'bg-iris-50') // conditional className merge
 ```
 
 ---
@@ -175,7 +175,7 @@ module.exports = {
       colors: {
         // Replace the primary brand color
         iris: {
-          50:  '#F0EEFF',
+          50: '#F0EEFF',
           500: '#YOUR_BRAND_PRIMARY',
           600: '#YOUR_BRAND_DARK',
         },
@@ -185,7 +185,7 @@ module.exports = {
       },
       fontFamily: {
         display: ['YourDisplayFont_700Bold'],
-        body:    ['YourBodyFont_400Regular'],
+        body: ['YourBodyFont_400Regular'],
       },
     },
   },
@@ -218,7 +218,7 @@ src/
     client/
     offer/
     match/
-    payment/
+    credit/
     assessment/
   lib/                    ← Axios, TanStack Query, MMKV
   store/                  ← Zustand root store
@@ -239,14 +239,14 @@ Reverse imports (`Atom → Molecule`) are **banned** and caught by ESLint.
 
 ## Architecture Decisions
 
-| Decision | Why |
-|---|---|
-| **TanStack Query for server state** | Automatic caching, background refetch, stale-while-revalidate |
-| **Zustand + MMKV for global/persistent state** | Tiny bundle, synchronous MMKV reads, no boilerplate |
-| **Zod at API boundaries** | Runtime safety — bad API responses fail loudly instead of silently corrupting state |
-| **NativeWind v4 over StyleSheet** | Consistent design system, no style object sprawl, IDE autocomplete |
-| **Expo Router** | File-based routing = zero manual stack configuration |
-| **No `React.FC`** | Better inference, props type exported separately for extensibility |
+| Decision                                       | Why                                                                                 |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------- |
+| **TanStack Query for server state**            | Automatic caching, background refetch, stale-while-revalidate                       |
+| **Zustand + MMKV for global/persistent state** | Tiny bundle, synchronous MMKV reads, no boilerplate                                 |
+| **Zod at API boundaries**                      | Runtime safety — bad API responses fail loudly instead of silently corrupting state |
+| **NativeWind v4 over StyleSheet**              | Consistent design system, no style object sprawl, IDE autocomplete                  |
+| **Expo Router**                                | File-based routing = zero manual stack configuration                                |
+| **No `React.FC`**                              | Better inference, props type exported separately for extensibility                  |
 
 ---
 
@@ -280,11 +280,11 @@ npx madge --circular --extensions ts,tsx src/core/index.ts
 
 ### Coverage Thresholds
 
-| Scope | Requirement |
-|---|---|
+| Scope                    | Requirement |
+| ------------------------ | ----------- |
 | `core/components/atoms/` | ≥ 95% lines |
-| `core/utils/` | 100% lines |
-| `core/hooks/` | ≥ 90% lines |
+| `core/utils/`            | 100% lines  |
+| `core/hooks/`            | ≥ 90% lines |
 
 ---
 
@@ -347,4 +347,4 @@ MIT © [Tekin Labs](https://github.com/tekin-labs)
 
 ---
 
-*Built with ♥ using Expo SDK 56 · TypeScript 6 · NativeWind v4 · Tekin Labs*
+_Built with ♥ using Expo SDK 57 · TypeScript 6 · NativeWind v4 · Tekin Labs_

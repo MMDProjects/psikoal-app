@@ -676,17 +676,17 @@ bg-[#F2F2F7] zemin
 
 ### 3. Domain Mimarisi
 
-| Domain         | Sorumluluk                                   | Kritik Kurallar                            |
-| -------------- | -------------------------------------------- | ------------------------------------------ |
-| `auth`         | Kayıt, giriş, token yönetimi, rol belirleme  | JWT refresh, role-based guard              |
-| `expert`       | Psikolog profili, lisans doğrulama, uzmanlık | Profil yayınlanmadan önce admin onayı şart |
-| `client`       | Danışan profili, test geçmişi                | Platform'a doğrudan kayıt olur             |
-| `listing`      | Danışan ilanları                             | OPEN→MATCHED→CLOSED/EXPIRED state machine  |
-| `match`        | Eşleşme yönetimi                             | Yalnızca teklif kabulüyle oluşur           |
-| `offer`        | Teklifler (ilan bazlı)                       | PENDING→ACCEPTED/REJECTED/WITHDRAWN        |
-| `payment`      | Kontör, paket satışı, ödeme geçmişi          | Iyzico entegrasyonu                        |
-| `assessment`   | Psikolojik test modülü                       | Ücretsiz, auth gerektirmez                 |
-| `notification` | Push, in-app, SMS bildirimleri               | Event-driven, rate limited                 |
+| Domain         | Sorumluluk                                     | Kritik Kurallar                                 |
+| -------------- | ---------------------------------------------- | ----------------------------------------------- |
+| `auth`         | Kayıt, giriş, token yönetimi, rol belirleme    | JWT refresh, role-based guard                   |
+| `expert`       | Psikolog profili, lisans doğrulama, uzmanlık   | Profil yayınlanmadan önce admin onayı şart      |
+| `client`       | Danışan profili, test geçmişi                  | Platform'a doğrudan kayıt olur                  |
+| `listing`      | Danışan ilanları                               | OPEN→MATCHED→CLOSED/EXPIRED state machine       |
+| `match`        | Eşleşme yönetimi                               | Yalnızca teklif kabulüyle oluşur                |
+| `offer`        | Teklifler (ilan bazlı)                         | PENDING→ACCEPTED/REJECTED/WITHDRAWN             |
+| `credit`       | Uzman kredisi: bakiye, defter, teklif maliyeti | Satın alma YALNIZ web sitesinde (mağaza kuralı) |
+| `assessment`   | Psikolojik test modülü                         | Ücretsiz, auth gerektirmez                      |
+| `notification` | Push, in-app, SMS bildirimleri                 | Event-driven, rate limited                      |
 
 ---
 
@@ -730,13 +730,15 @@ Durum makinesi: ACTIVE → COMPLETED | RELEASED
 - Eşleşme backend kaynaklı — optimistic update yapılmaz.
 ```
 
-**Paket Kuralları:**
+**Kredi Kuralları (Armut modeli — backend `docs/PAYMENTS.md`):**
 
 ```
-Min seans: 3, Max seans: 20 (tek pakette)
-Paket fiyatı <= (tekil seans fiyatı × seans sayısı) olmak zorunda (indirim şart)
-Paket satın alındıktan itibaren 6 ay geçerli
-Paket süresi dolunca kullanılmayan seanslar otomatik iptal edilir (refund trigger)
+- Danışandan para alınmaz. Uzman ilana teklif GÖNDERİRKEN kredi harcar (offerCost).
+- Harcanan kredi iade edilmez; başlangıç kredisi yoktur.
+- Bakiye < offerCost ise teklif gönderimi kilitlenir; sunucu 422 INSUFFICIENT_CREDITS döner.
+- Kredi YALNIZ web sitesinden alınır. Uygulamada satın alma butonu, bağlantı, adres,
+  fiyat yoktur (App Store 3.1.1 / Play); yalnız düz metin:
+  "Teklif göndermek için yeterli krediniz yok. Kredi yüklemek için web sitemizi ziyaret edin."
 ```
 
 ---
@@ -787,9 +789,8 @@ app/
     [slug].tsx          → /blog/[slug] — blog detayı
   category/
     [slug].tsx          → /category/[slug] — kategori detayı (testler + blog + ilan CTA)
-  payment/
-    packages.tsx        → /payment/packages
-    checkout.tsx        → /payment/checkout
+  credits/
+    index.tsx           → /credits — kredi bakiyesi + geçmiş (expert only)
 ```
 
 **Not — kök `store/`:** `onboardingStore` ve `themeStore` domain'e ait olmayan global UI state'leridir; kök `src/store/` altında tutulur. Domain'e özgü store'lar (örn. `authStore`) kendi domain klasöründe kalır.
@@ -856,7 +857,7 @@ type ApiError = {
 - `OfferCard` — fiyat, açıklama, uzman avatar, durum badge, aksiyon butonları
 - `MatchBanner` — aktif eşleşme durumu (ACTIVE/COMPLETED/RELEASED)
 - `AssessmentResultCard` — test sonucu + uzman önerisi CTA
-- `PackagePicker` — paket seçim kartları
+- `CreditBalanceCard` / `CreditTransactionRow` — uzman kredi bakiyesi ve defter satırı
 
 ---
 
@@ -872,7 +873,7 @@ type ApiError = {
 
 5. **Assessment testi auth gerektirmez:** Bu route'lar `(auth)` grubunun dışında kalır. Test tamamlandıktan sonra email lead capture opsiyonel — zorlamaz.
 
-6. **Ödeme akışı:** Iyzico 3D Secure, WebView içinde açılır. `expo-web-browser` değil `WebView` kullan (deep link callback için).
+6. **Ödeme yok:** Uygulamada ödeme akışı yoktur (eski cüzdan/paket/Iyzico modeli terk edildi). Uzman kredisi web sitesinden alınır; uygulama yalnız bakiye, geçmiş ve teklif maliyetini gösterir.
 
 7. **Bildirim izni:** İlk login'de değil, ilk teklif geldiğinde sor. `expo-notifications` ile `PermissionStatus` kontrol et.
 

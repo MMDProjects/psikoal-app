@@ -1,3 +1,9 @@
+// Node çekirdek modülleri (node:http) yalnız bu dosyada; tsconfig "types" listesi jest ile sınırlı.
+/// <reference types="node" />
+
+import http from 'node:http'
+import https from 'node:https'
+
 import { z } from 'zod'
 
 import { AssessmentListItemSchema, MyAssessmentResultSchema } from '@/domains/assessment'
@@ -9,6 +15,7 @@ import {
 } from '@/domains/auth'
 import { BlogLikeResponseSchema, BlogListResponseSchema, BlogSchema } from '@/domains/blog'
 import { CategoryDetailSchema, CategorySchema } from '@/domains/category'
+import { CreditBalanceResponseSchema, CreditTransactionListResponseSchema } from '@/domains/credit'
 import { ExpertSchema, ReviewSchema } from '@/domains/expert'
 import { ListingSchema } from '@/domains/listing'
 import { MatchDetailSchema, MatchSchema } from '@/domains/match'
@@ -56,8 +63,67 @@ const EXPERT = { email: 'demo-expert-1@psikoal.test', password: 'DemoExpert123!'
 
 const listOf = <T extends z.ZodTypeAny>(item: T) => z.object({ data: z.array(item) })
 
+type LiveResponse = {
+  status: number
+  ok: boolean
+  text: () => Promise<string>
+  json: () => Promise<unknown>
+}
+
+type LiveRequestInit = {
+  method?: 'GET' | 'POST'
+  headers?: Record<string, string>
+  body?: string
+}
+
+/**
+ * Gerçek HTTP isteği — global `fetch` KULLANILMAZ.
+ *
+ * SDK 57'de jest-expo kurulumu `expo/src/winter`'ı yükler ve global `fetch`'i
+ * expo/fetch ile değiştirir; o da testte sahte native sınıflara bağlıdır. Sonuç:
+ * her istek ağa hiç çıkmadan sahte bir Response döner (`status` undefined) ve
+ * bütün canlı denetimler "login ...: undefined" ile düşer. Node çekirdek modülü
+ * bu yamadan etkilenmez.
+ */
+function liveFetch(url: string, init: LiveRequestInit = {}): Promise<LiveResponse> {
+  const target = new URL(url)
+  const client = target.protocol === 'https:' ? https : http
+  const body = init.body === undefined ? undefined : Buffer.from(init.body, 'utf8')
+
+  return new Promise((resolve, reject) => {
+    const req = client.request(
+      target,
+      {
+        method: init.method ?? 'GET',
+        headers: {
+          ...init.headers,
+          ...(body ? { 'Content-Length': String(body.byteLength) } : {}),
+        },
+      },
+      (res) => {
+        const chunks: Buffer[] = []
+        res.on('data', (chunk: Buffer) => chunks.push(chunk))
+        res.on('error', reject)
+        res.on('end', () => {
+          const raw = Buffer.concat(chunks).toString('utf8')
+          const status = res.statusCode ?? 0
+          resolve({
+            status,
+            ok: status >= 200 && status < 300,
+            text: async () => raw,
+            json: async () => JSON.parse(raw),
+          })
+        })
+      }
+    )
+    req.on('error', reject)
+    if (body) req.write(body)
+    req.end()
+  })
+}
+
 async function login(account: { email: string; password: string }): Promise<string> {
-  const response = await fetch(`${API}/auth/login`, {
+  const response = await liveFetch(`${API}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(account),
@@ -68,7 +134,9 @@ async function login(account: { email: string; password: string }): Promise<stri
 }
 
 async function fetchJson(path: string, token: string): Promise<unknown> {
-  const response = await fetch(`${API}${path}`, { headers: { Authorization: `Bearer ${token}` } })
+  const response = await liveFetch(`${API}${path}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
   if (!response.ok) throw new Error(`GET ${path}: ${response.status}`)
   return response.json()
 }
@@ -159,7 +227,7 @@ describeLive('canlı sözleşme — danışan', () => {
 })
 
 async function postJson(path: string, body: unknown): Promise<{ status: number; body: unknown }> {
-  const response = await fetch(`${API}${path}`, {
+  const response = await liveFetch(`${API}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -217,7 +285,7 @@ async function request(
   path: string,
   token?: string
 ): Promise<{ status: number; body: unknown }> {
-  const response = await fetch(`${API}${path}`, {
+  const response = await liveFetch(`${API}${path}`, {
     method,
     headers: {
       'Content-Type': 'application/json',
@@ -294,5 +362,47 @@ describeLive('canlı sözleşme — uzman', () => {
 
     const detail = await fetchJson(`/matches/${matchId}`, token)
     expectMatchesContract('/matches/{id}', MatchDetailSchema, detail)
+  })
+})
+
+// Uzman kredisi (backend CREDIT-1, docs/PAYMENTS.md). Uçlar henüz yayında olmayan
+// bir backend'e karşı koşulursa (lokal dev API'si o dalı çalıştırmıyorsa) bu blok
+// sessizce geçer: uç yoksa ASP.NET çıplak 404 döner. Uzmanın profili yoksa da 404
+// gelir ama gövdesinde EXPERT_NOT_FOUND kodu bulunur — o durum bir kurulum hatasıdır
+// ve test kırmızıya döner.
+describeLive('canlı sözleşme — uzman kredisi', () => {
+  let expertToken = ''
+  let available = false
+
+  beforeAll(async () => {
+    expertToken = await login(EXPERT)
+    const probe = await request('GET', '/credits/me', expertToken)
+    const code = (probe.body as { code?: string } | null)?.code
+    available = !(probe.status === 404 && code !== 'EXPERT_NOT_FOUND')
+  })
+
+  it('uzman: GET /credits/me şemaya uyar', async () => {
+    if (!available) return
+    expectMatchesContract(
+      '/credits/me',
+      CreditBalanceResponseSchema,
+      await fetchJson('/credits/me', expertToken)
+    )
+  })
+
+  it('uzman: GET /credits/transactions şemaya uyar ve perPage uygulanır', async () => {
+    if (!available) return
+    const path = '/credits/transactions?page=1&perPage=5'
+    const body = await fetchJson(path, expertToken)
+    expectMatchesContract(path, CreditTransactionListResponseSchema, body)
+    expect(CreditTransactionListResponseSchema.parse(body).meta.perPage).toBe(5)
+  })
+
+  it('danışan: GET /credits/me 403 EXPERT_ROLE_REQUIRED döner', async () => {
+    if (!available) return
+    const clientToken = await login(CLIENT)
+    const response = await request('GET', '/credits/me', clientToken)
+    expect(response.status).toBe(403)
+    expect(response.body).toMatchObject({ code: 'EXPERT_ROLE_REQUIRED' })
   })
 })

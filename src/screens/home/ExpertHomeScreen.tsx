@@ -18,6 +18,12 @@ import { HeroQuickActions } from '@/core/components/organisms/HeroQuickActions'
 import { useRefresh } from '@/core/hooks'
 import { useAuthStore } from '@/domains/auth'
 import {
+  CreditBalanceCard,
+  offerCostLabel,
+  useCreditBalanceQuery,
+  useCreditsForegroundRefresh,
+} from '@/domains/credit'
+import {
   useListingListQuery,
   ListingCard,
   ListingFilterModal,
@@ -48,7 +54,13 @@ export function ExpertHomeScreen() {
   const { isLoading, isError, refetch } = listingsQuery
   const listings = listingsQuery.data?.data ?? []
 
-  const { isRefreshing, onRefresh } = useRefresh(listingsQuery, offersQuery, matchesQuery)
+  const creditQuery = useCreditBalanceQuery()
+  // Kredi web sitesinden yüklenir: uygulama öne gelince ve yenilemede bakiye tazelenir.
+  const { invalidateCredits } = useCreditsForegroundRefresh()
+
+  const { isRefreshing, onRefresh } = useRefresh(listingsQuery, offersQuery, matchesQuery, {
+    refetch: invalidateCredits,
+  })
 
   const activeFilterCount = [
     (filters.specialization?.length ?? 0) > 0,
@@ -105,6 +117,17 @@ export function ExpertHomeScreen() {
                 ]}
               />
             </HomeHero>
+
+            <View className="px-4 pt-4">
+              <CreditBalanceCard
+                balanceLabel={creditQuery.data?.balanceLabel}
+                costLabel={
+                  creditQuery.data ? offerCostLabel(creditQuery.data.offerCost) : undefined
+                }
+                isLoading={creditQuery.isLoading}
+                onPress={() => router.push('/credits')}
+              />
+            </View>
 
             <View className="px-4 pb-3 pt-4">
               <View className="flex-row gap-2">
