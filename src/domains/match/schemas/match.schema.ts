@@ -17,8 +17,8 @@ export const MatchSchema = z.object({
     .object({
       id: z.string().uuid(),
       fullName: z.string(),
-      initials: z.string().optional(),
-      email: z.string().optional(),
+      initials: z.string().nullable().optional(),
+      email: z.string().nullable().optional(),
       phone: z.string().nullable().optional(),
     })
     .optional(),
@@ -27,8 +27,13 @@ export const MatchSchema = z.object({
       id: z.string().uuid(),
       name: z.string(),
       title: z.string(),
-      initials: z.string().optional(),
+      initials: z.string().nullable().optional(),
+      // Uzmanın iletişim bilgisi API tarafından henüz dönülmüyor; geldiğinde
+      // eşleşme ekranı ek değişiklik gerektirmeden gösterir.
+      email: z.string().nullable().optional(),
+      phone: z.string().nullable().optional(),
     })
+    .nullable()
     .optional(),
   listing: z
     .object({
@@ -97,8 +102,8 @@ export const MatchDetailSchema = MatchSchema.extend({
   client: z.object({
     id: z.string().uuid(),
     fullName: z.string(),
-    initials: z.string().optional(),
-    email: z.string().optional(),
+    initials: z.string().nullable().optional(),
+    email: z.string().nullable().optional(),
     phone: z.string().nullable().optional(),
     createdAt: z.string().datetime().optional(),
   }),

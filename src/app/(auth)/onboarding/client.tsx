@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native'
+import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native'
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -12,34 +12,24 @@ import { Text } from '@/core/components/atoms/Text'
 import { InputField } from '@/core/components/molecules/InputField'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
-import { cn } from '@/core/utils/cn'
 import { useAuthStore, useUpdateProfileMutation } from '@/domains/auth'
 
 export default function ClientOnboardingScreen() {
   const router = useRouter()
   const insets = useSafeAreaInsets()
   const user = useAuthStore((s) => s.user)
-  const { mutate: updateProfile, isPending, error } = useUpdateProfileMutation()
+  const { mutate: updateProfile, isPending } = useUpdateProfileMutation()
 
   const [phone, setPhone] = useState('')
   const [city, setCity] = useState('')
-  const [kvkkAccepted, setKvkkAccepted] = useState(false)
-  const [kvkkError, setKvkkError] = useState<string | undefined>()
 
   const onSubmit = () => {
-    if (!kvkkAccepted) {
-      setKvkkError('Devam etmek için KVKK metnini onaylamalısınız')
-      return
-    }
-    setKvkkError(undefined)
-
     updateProfile(
       { phone: phone || null, city: city || null },
       { onSuccess: () => router.replace('/(tabs)') }
     )
   }
 
-  const apiErrorMessage = error instanceof Error ? error.message : undefined
   const bottomBarHeight = 56 + insets.bottom
 
   return (
@@ -91,71 +81,11 @@ export default function ClientOnboardingScreen() {
               onChangeText={setCity}
               hint="İsteğe bağlı"
             />
-
-            <Pressable
-              onPress={() => {
-                setKvkkAccepted((v) => !v)
-                setKvkkError(undefined)
-              }}
-              className={cn(
-                'flex-row items-start gap-3 rounded-xl p-4',
-                kvkkAccepted
-                  ? 'bg-white dark:bg-white'
-                  : 'bg-sky-600 dark:bg-sky-900 active:bg-sky-700 dark:active:bg-sky-800'
-              )}
-            >
-              <View
-                className={cn(
-                  'mt-0.5 h-5 w-5 items-center justify-center rounded border-2',
-                  kvkkAccepted ? 'bg-sky-500 border-sky-500' : 'border-sky-300 dark:border-sky-700'
-                )}
-              >
-                {kvkkAccepted && <Icon name="Check" size={12} color="#FFFFFF" />}
-              </View>
-              <Text
-                variant="caption"
-                className={cn(
-                  'flex-1',
-                  kvkkAccepted ? 'text-neutral-600 dark:text-neutral-600' : 'text-sky-100'
-                )}
-              >
-                <Text
-                  variant="caption"
-                  className={
-                    kvkkAccepted
-                      ? 'text-sky-600 dark:text-sky-600 font-semibold'
-                      : 'text-white font-semibold'
-                  }
-                >
-                  KVKK Aydınlatma Metni
-                </Text>
-                {"'ni okudum ve kişisel verilerimin işlenmesini kabul ediyorum."}
-              </Text>
-            </Pressable>
-
-            {kvkkError && (
-              <Text variant="caption" className="text-red-100">
-                {kvkkError}
-              </Text>
-            )}
-
-            {apiErrorMessage && (
-              <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-950">
-                <Text variant="caption" className="text-red-600 dark:text-red-300">
-                  {apiErrorMessage}
-                </Text>
-              </View>
-            )}
           </View>
         </ScrollView>
 
         <BottomActionBar
           actions={[
-            {
-              label: 'Şimdilik Atla',
-              onPress: () => router.replace('/(tabs)'),
-              variant: 'inverseGhost',
-            },
             {
               label: 'Devam Et',
               onPress: onSubmit,

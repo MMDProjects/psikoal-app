@@ -1,0 +1,75 @@
+{
+  "data": [
+    {
+      "id": "01a025d8-f9fe-7b9d-9fa6-2c3f08f7e7f6",
+      "listingId": "01a025d8-f8c9-78db-aa2b-aa72da13dfae",
+      "expertId": "ebd85687-7c16-481d-a456-b09565928a2a",
+      "title": "Panik atak odaklı program",
+      "price": 1350,
+      "description": "Nefes ve maruz bırakma teknikleriyle sekiz haftalık yapılandırılmış program.",
+      "sessionType": "online",
+      "status": "REJECTED",
+      "matchId": null,
+      "createdAt": "2026-08-21T19:42:51.901863Z",
+      "createdAtRelative": "32 dakika önce",
+      "listing": {
+        "id": "01a025d8-f8c9-78db-aa2b-aa72da13dfae",
+        "title": "Panik atak ataklarım için haftalık online destek arıyorum",
+        "clientId": "a20e139a-2652-47f6-924a-59e402c13726",
+        "city": "İstanbul",
+        "clientDisplayName": "Ayşe Yılmaz",
+        "client": {
+          "id": "a20e139a-2652-47f6-924a-59e402c13726",
+          "initials": "AY",
+          "avatarUrl": null
+        }
+      },
+      "expert": {
+        "id": "ebd85687-7c16-481d-a456-b09565928a2a",
+        "name": "Mehmet Demir",
+        "title": "Uzman Psikolog",
+        "initials": "MD",
+        "avatarUrl": "https://images.psikoal.test/avatars/mehmet-demir.jpg",
+        "rating": 0
+      }
+    },
+    {
+      "id": "01a025d8-f9ac-7103-8658-2314d6e6a081",
+      "listingId": "01a025d8-f8c9-78db-aa2b-aa72da13dfae",
+      "expertId": "c519bd04-67c3-4e6a-af6f-f88999a8a53f",
+      "title": "Haftalık BDT paketi",
+      "price": 1200,
+      "description": "İlk seans değerlendirme, sonrasında haftalık 50 dakikalık online seanslar. Ara ödevlerle ilerleriz.",
+      "sessionType": "online",
+      "status": "ACCEPTED",
+      "matchId": "ed14dc39-8062-4216-bdfc-1e94d366075f",
+      "createdAt": "2026-08-21T19:42:51.834701Z",
+      "createdAtRelative": "32 dakika önce",
+      "listing": {
+        "id": "01a025d8-f8c9-78db-aa2b-aa72da13dfae",
+        "title": "Panik atak ataklarım için haftalık online destek arıyorum",
+        "clientId": "a20e139a-2652-47f6-924a-59e402c13726",
+        "city": "İstanbul",
+        "clientDisplayName": "Ayşe Yılmaz",
+        "client": {
+          "id": "a20e139a-2652-47f6-924a-59e402c13726",
+          "initials": "AY",
+          "avatarUrl": null
+        }
+      },
+      "expert": {
+        "id": "c519bd04-67c3-4e6a-af6f-f88999a8a53f",
+        "name": "Elif Kaya",
+        "title": "Klinik Psikolog",
+        "initials": "EK",
+        "avatarUrl": "https://images.psikoal.test/avatars/elif-kaya.jpg",
+        "rating": 5
+      }
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "total": 2,
+    "perPage": 2
+  }
+}

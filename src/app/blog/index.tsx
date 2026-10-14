@@ -59,11 +59,7 @@ export default function BlogFeedScreen() {
               onCta={refetch}
             />
           ) : (
-            <EmptyState
-              icon="FileText"
-              title="Henüz içerik yok"
-              description="Yakında yeni yazılar eklenecek."
-            />
+            <EmptyState icon="FileText" title="Henüz içerik yok" description="Henüz yazı yok." />
           )
         }
         renderItem={({ item }) => (

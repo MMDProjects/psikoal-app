@@ -1,42 +1,73 @@
 # Production'a Geçiş Kontrol Listesi
 
-> Gerçek API'ye bağlanırken ve store'a çıkarken yapılması zorunlu temizlik adımları. Her madde tamamlandığında işaretlenmeli.
+> Store'a çıkmadan önce uygulamada kalan işler. Kodla kapatılan maddeler `[x]`,
+> sahibinin (kimlik, içerik, hesap) kararı/girdisi gerekenler `[ ]`.
+> Kaynak dal: `fix/APP-1-yayin-temizligi`.
 
-## Mock Altyapısının Sökülmesi
+## Mock ve geliştirici yüzeyi
 
-- [ ] `native-atomic/src/lib/api.ts` içindeki `// ⚠️ MOCK ... // END MOCK` bloğunu sil (axios-mock-adapter kurulumu).
-- [ ] `native-atomic/metro.config.js` içindeki `// MOCK ... // END MOCK` bloğunu sil (mock-db watchFolder).
-- [ ] `psikoAL/mock-db/` klasörünün tamamını sil (handlers + data + helpers).
-- [ ] `package.json`'dan `axios-mock-adapter` dev bağımlılığını kaldır.
-- [ ] `native-atomic/src/lib/env.ts` — `EXPO_PUBLIC_APP_ENV` enum'undan `'mock'` değerini kaldır.
+- [x] `src/lib/api.ts` mock bloğu silindi; `axios-mock-adapter` pakete girmiyor (yalnız birim testlerinde devDependency).
+- [x] Repo içi `mock-db/` klasörü silindi (hiçbir test/CI adımı import etmiyordu). Blog davranış referansı gerekirse: `git log -- mock-db` ile son sürümü bulup `git show <commit>:mock-db/handlers/blog.handlers.js`.
+- [x] `EXPO_PUBLIC_APP_ENV` enum'unda `mock` yok; değişken verilmezse **`production`** kabul edilir (fail-safe).
+- [x] Giriş ekranındaki "Test Girişi" paneli ve sabit kimlik bilgileri (`password123`, demo e-postaları) tamamen silindi.
 
-## Ortam Değişkenleri (`.env`)
+## Ortam değişkenleri (`.env` / EAS)
 
-- [ ] `EXPO_PUBLIC_APP_ENV=mock` → `production`.
-- [ ] `EXPO_PUBLIC_API_URL=http://192.168.1.13:3000` (yerel LAN IP!) → gerçek API URL'i (HTTPS).
-- [ ] `EXPO_PUBLIC_APP_VERSION` sürümle senkron tutulmalı (Ayarlar ekranındaki sürüm satırı buradan okunur).
+Şema: `src/lib/env.ts` (Zod, açılışta doğrulanır; eksik/yanlışsa uygulama açılmaz).
 
-## Dev-Only UI
+- [ ] `EXPO_PUBLIC_API_URL` — gerçek API adresi (HTTPS).
+- [ ] `EXPO_PUBLIC_APP_ENV=production`.
+- [ ] `EXPO_PUBLIC_SUPPORT_EMAIL` — Ayarlar → "Destek, Talep ve Öneri" bu adrese e-posta açar.
+- [ ] `EXPO_PUBLIC_PRIVACY_URL`, `EXPO_PUBLIC_TERMS_URL`, `EXPO_PUBLIC_KVKK_URL` — yayınlanmış yasal metinler (production'da **https zorunlu**). Kayıt ekranındaki onay kutuları ve Ayarlar → Veri ve Gizlilik bu sayfaları açar.
+- [ ] `EXPO_PUBLIC_STORE_URL` (opsiyonel) — mağaza sayfası; uygulama içi değerlendirme penceresi açılamazsa kullanılır.
+- [x] `EXPO_PUBLIC_APP_VERSION` kaldırıldı; Ayarlar'daki sürüm `expo-application` (native sürüm) / `app.json` `version`'dan okunur.
 
-- [ ] `native-atomic/src/app/(auth)/login.tsx` — "Test Girişi" hızlı giriş paneli (`quickLogin`/`quickOnboard`, hardcoded `password123`, `uzman@psikoal.com`, `danisan@psikoal.com`, "karşılama turunu sıfırla" butonu). `EXPO_PUBLIC_APP_ENV !== 'production'` ile gate'li; production build öncesi tamamen silinmesi önerilir.
+## Uygulama kimliği ve görseller (sahibi karar verecek)
 
-## Placeholder İçerikler
+- [ ] `app.json` → `android.package`, `ios.bundleIdentifier`, `owner`, `extra.eas.projectId`; `eas.json` (bu dalda bilinçli olarak dokunulmadı).
+- [ ] Gerçek logo: şu an `src/core/components/atoms/BrandMark` "PsikoAl" metin işareti çiziyor; logo gelince yalnız bu dosya değişir.
+- [ ] Uygulama ikonu, adaptive icon ve splash görselleri (`assets/`) — yer tutucu.
+- [x] Instagram kaynaklı `logo-placeholder*.png` görselleri silindi.
 
-- [ ] Marka logosu: `assets/images/brand/logo-placeholder.png` → gerçek logo (`HomeHero`, `welcome.tsx`, `login.tsx` kullanıyor).
-- [ ] "Bu özellik yakında aktif olacak" alert'leri: Ayarlar (Bildirim Ayarları, Destek, Bizi Değerlendir), Kişisel Bilgiler (profil fotoğrafı), Belgeler (CV/Sertifika yükleme), Gizlilik Politikası, expert onboarding foto adımı. Gerçek akışlar bağlanmalı ya da menüden kaldırılmalı.
-- [ ] Hesap dondurma / silme aksiyonları (`profile/privacy.tsx`) şu an no-op — gerçek endpoint'lere bağlanmalı.
-- [ ] Iyzico checkout mock formu — gerçek 3D Secure WebView akışı doğrulanmalı.
+## Güvenlik ve oturum
+
+- [x] Access/refresh token `expo-secure-store`'da; eski AsyncStorage anahtarları ilk açılışta taşınıp siliniyor.
+- [x] Android `allowBackup: false`; `READ/WRITE_EXTERNAL_STORAGE` ve `SYSTEM_ALERT_WINDOW` engelli (galeri seçici izin istemiyor, kamera/mikrofon izni kapalı).
+- [x] Zorunlu oturum düşmesinde önbellek (`queryClient.clear()`) temizleniyor; çıkış/dondurma/silme öncesi push token backend'den siliniyor.
+- [x] Kök `ErrorBoundary` (Türkçe hata ekranı + "Tekrar Dene").
+- [x] Açılışta `GET /auth/me` ile kullanıcı tazeleniyor.
+
+## KVKK ve hesap
+
+- [x] Kayıtta iki ayrı zorunlu onay: Kullanım Koşulları + Gizlilik Politikası ve sağlık verisi açık rızası (`termsAccepted`, `healthDataConsent`).
+- [x] Şifre sıfırlama: `psikoal://reset-password#access_token=...` → `(auth)/reset-password` → `POST /auth/reset-password`.
+- [ ] Supabase `Auth:PasswordResetRedirectUrl` production'da `psikoal://reset-password` olmalı ve GoTrue "Redirect URLs" listesine eklenmeli (backend/panel ayarı).
+- [x] Hesap dondurma / silme gerçek uçlara bağlı (`POST /auth/freeze`, `DELETE /auth/me`).
+
+## Akışlar
+
+- [x] Ödeme (cüzdan, paketler, checkout) v1'den tamamen söküldü; v2 kapsamında.
+- [x] Öneriler (`/suggestions`) ve kullanılmayan `client/[id]` ekranı söküldü.
+- [x] "Yakında" uyarılarının tamamı gerçek akışa bağlandı (değerlendirme, bildirim ayarları, destek, yasal metinler, profil fotoğrafı).
+- [x] Profil fotoğrafı yükleme (`POST /auth/me/avatar`, JPEG/PNG/WebP ≤ 5 MB).
+- [x] Hatalar Türkçe; sessiz kalan mutation'lar için global uyarı; liste ekranlarında hata ≠ boş.
+- [x] Danışan teklif veren uzmanın profilini inceleyebiliyor; tamamlanan eşleşmede uzmanı değerlendirebiliyor.
+- [x] Eşleşme detayı rol bazlı, telefon/e-posta dokunulabilir.
+- [ ] **Backend:** eşleşme yanıtında uzmanın iletişim bilgisi (`expert.email/phone`) yok — danışan tarafında "uzman sizinle iletişime geçecek" metni gösteriliyor. İstenirse `MatchExpertDto`'ya eklenmeli; uygulama şeması hazır.
+- [ ] **Backend:** test oynatma yalnız `GET /assessment/active`; birden çok test için `GET /assessment/{id}` gerekir. O zamana kadar listede yalnız aktif test görünüyor.
 
 ## Bildirimler
 
-- [ ] `expo-notifications` push kaydı ve gerçek `GET /notifications` beslemesi (mock endpoint sözleşmesi: `docs/BACKEND_REQUIREMENTS.md`).
-- [ ] Bildirim izni ilk teklif geldiğinde istenmeli (CLAUDE.md kural 7) — henüz implement edilmedi.
+- [x] İzin önceden verilmişse token açılışta sessizce kaydediliyor; izin "ilk teklif anında" isteniyor (CLAUDE.md kural 7).
+- [x] Push dokunuşu `{ type, entityId }` ile ilgili ekrana yönleniyor (soğuk açılış dahil).
+- [ ] **Backend:** uygulama içi `NotificationDto`'da `entityId` yok; liste satırları şimdilik türün sekmesine gidiyor. Eklenince şema hazır.
+- [ ] EAS `projectId` tanımlanmadan Expo push token alınamaz (kimlik maddesine bağlı).
 
-## Kod Hijyeni (yapıldı, regresyon kontrolü)
+## Kod hijyeni (regresyon kontrolü)
 
-- [x] Frontend'de iş mantığı hesaplaması yok (sayaçlar/filtreler/sıralama/maskeler/etiketler backend'den).
-- [x] `console.log/warn/error` çağrıları src'den temizlendi (mock handler'daki tanımsız-endpoint uyarısı mock ile birlikte silinecek).
-- [x] Yorum satırları temizlendi; yalnızca `REASON:` gerekçeleri ve MOCK blok işaretleri kaldı.
-- [x] Tüm veri ekranlarında pull-to-refresh (`useRefresh` + `AppRefreshControl`).
+- [x] Frontend'de iş mantığı hesaplaması yok (sayaçlar/filtreler/sıralama/maskeler backend'den).
+- [x] `console.*` çağrısı yok.
+- [x] Tüm veri ekranlarında pull-to-refresh.
+- [x] `npx expo export` paketinde `password123`, `mock-db`, `axios-mock-adapter`, `logo-placeholder` geçmiyor.
 
-_Son güncelleme: 18 Temmuz 2026_
+_Son güncelleme: 14 Ekim 2026_

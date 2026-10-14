@@ -21,3 +21,10 @@ export const BlogSchema = z.object({
 })
 
 export const BlogListItemSchema = BlogSchema.omit({ content: true })
+
+export const BlogListResponseSchema = z.object({
+  data: z.array(BlogListItemSchema),
+  meta: z.object({ page: z.number(), total: z.number(), perPage: z.number() }),
+})
+
+export const BlogLikeResponseSchema = z.object({ likeCount: z.number(), liked: z.boolean() })

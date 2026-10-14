@@ -10,6 +10,10 @@ const CHEVRON_ON_BRAND = '#E0F2FE'
 export type OnboardingStepDocumentsProps = {
   personalWebsite: string
   onPersonalWebsiteChange: (value: string) => void
+  /** Seçilen CV dosyasının adı; henüz seçilmediyse null. */
+  cvName: string | null
+  /** Seçilen sertifika dosyasının adı; henüz seçilmediyse null. */
+  certificateName: string | null
   onUploadCv: () => void
   onAddCertificate: () => void
 }
@@ -17,6 +21,8 @@ export type OnboardingStepDocumentsProps = {
 export function OnboardingStepDocuments({
   personalWebsite,
   onPersonalWebsiteChange,
+  cvName,
+  certificateName,
   onUploadCv,
   onAddCertificate,
 }: OnboardingStepDocumentsProps) {
@@ -27,20 +33,28 @@ export function OnboardingStepDocuments({
         className="flex-row items-center gap-3 rounded-xl bg-sky-600 px-4 py-4 active:bg-sky-700 dark:bg-sky-900 dark:active:bg-sky-800"
       >
         <Icon name="FileUp" size={20} color={ICON_ON_BRAND} />
-        <Text variant="label" className="flex-1 text-white">
-          CV Yükle
+        {/* Seçilen dosyanın adı gösterilir: dokunmanın bir şey yaptığının tek
+            kanıtı bu. Belgeler onboarding'de yalnız SEÇİLİR, profil
+            oluşturulduktan sonra yüklenir (yükleme ucu experts satırını arıyor
+            ve o satır henüz yok). */}
+        <Text variant="label" className="flex-1 text-white" numberOfLines={1}>
+          {cvName ?? 'CV Yükle'}
         </Text>
-        <Icon name="ChevronRight" size={16} color={CHEVRON_ON_BRAND} />
+        <Icon name={cvName ? 'CheckCircle2' : 'ChevronRight'} size={16} color={CHEVRON_ON_BRAND} />
       </Pressable>
       <Pressable
         onPress={onAddCertificate}
         className="flex-row items-center gap-3 rounded-xl bg-sky-600 px-4 py-4 active:bg-sky-700 dark:bg-sky-900 dark:active:bg-sky-800"
       >
         <Icon name="Award" size={20} color={ICON_ON_BRAND} />
-        <Text variant="label" className="flex-1 text-white">
-          Sertifika Ekle
+        <Text variant="label" className="flex-1 text-white" numberOfLines={1}>
+          {certificateName ?? 'Sertifika Ekle'}
         </Text>
-        <Icon name="ChevronRight" size={16} color={CHEVRON_ON_BRAND} />
+        <Icon
+          name={certificateName ? 'CheckCircle2' : 'ChevronRight'}
+          size={16}
+          color={CHEVRON_ON_BRAND}
+        />
       </Pressable>
       <InputField
         tone="onBrand"

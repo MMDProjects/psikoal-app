@@ -16,20 +16,29 @@ export default function AuthLayout() {
   // .at(1) kullanılıyor çünkü expo-router'ın typedRoutes tipleri `.expo/types/` altında
   // ÜRETİLİR ve gitignore'dadır. Temiz bir CI klonunda segments `[string]` tuple'ına düşer
   // ve `segments[1]` derleme hatası verir. `.at()` her iki durumda da `string | undefined`.
-  const current = segments.at(1)
+  const current: string | undefined = segments.at(1)
 
   useEffect(() => {
     if (current === 'onboarding' && onboardIntent) clearOnboardIntent()
   }, [current, onboardIntent, clearOnboardIntent])
 
-  if (isAuthenticated && current !== 'onboarding') {
+  // Şifre sıfırlama bağlantısı oturum durumundan bağımsız açılabilmeli.
+  const isPasswordReset = current === 'reset-password'
+
+  if (isAuthenticated && current !== 'onboarding' && !isPasswordReset) {
     if (onboardIntent) {
       return <Redirect href={onboardIntent as never} />
     }
     return <Redirect href="/(tabs)" />
   }
 
-  if (!isAuthenticated && hasHydrated && !hasSeenWelcome && current !== 'welcome') {
+  if (
+    !isAuthenticated &&
+    hasHydrated &&
+    !hasSeenWelcome &&
+    current !== 'welcome' &&
+    !isPasswordReset
+  ) {
     return <Redirect href="/(auth)/welcome" />
   }
 

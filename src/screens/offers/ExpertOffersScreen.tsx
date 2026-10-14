@@ -122,7 +122,13 @@ export function ExpertOffersScreen() {
           const cfg = OFFER_STATUS_CONFIG[item.status]
           return (
             <Pressable
-              onPress={() => router.push(`/offer/${item.id}`)}
+              onPress={() =>
+                router.push(
+                  item.status === 'ACCEPTED' && item.matchId
+                    ? `/match/${item.matchId}`
+                    : `/offer/${item.id}`
+                )
+              }
               className="gap-3 px-4 py-4 active:opacity-90"
             >
               <View className="flex-row items-start justify-between gap-2">

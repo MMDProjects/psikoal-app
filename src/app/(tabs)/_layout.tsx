@@ -9,6 +9,7 @@ import { Tabs, useRouter } from 'expo-router'
 
 import { Icon } from '@/core/components/atoms/Icon'
 import { useAuthStore } from '@/domains/auth'
+import { useExpertApprovalGate } from '@/domains/expert'
 
 export default function TabsLayout() {
   const router = useRouter()
@@ -23,6 +24,16 @@ export default function TabsLayout() {
       router.replace('/(auth)/login')
     }
   }, [isAuthenticated, router])
+
+  // Uzman rolünde olup uzman profili hiç oluşmamış kullanıcı (onboarding yarıda
+  // kalmış) uygulamayı kullanamaz: teklif göndermeye kalkınca EXPERT_NOT_FOUND
+  // alır. Profil tamamlamaya geri gönderilir.
+  const { needsOnboarding } = useExpertApprovalGate()
+  useEffect(() => {
+    if (isAuthenticated && needsOnboarding) {
+      router.replace('/(auth)/onboarding/expert')
+    }
+  }, [isAuthenticated, needsOnboarding, router])
 
   if (Platform.OS === 'ios') {
     return (

@@ -14,11 +14,15 @@ import type { UserRole } from '@/domains/auth'
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Text } from '@/core/components/atoms/Text'
 import { BackButton } from '@/core/components/molecules/BackButton'
+import { CheckboxRow } from '@/core/components/molecules/CheckboxRow'
 import { InputField } from '@/core/components/molecules/InputField'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { StepProgress } from '@/core/components/molecules/StepProgress'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { RegisterRequestSchema, useRegisterMutation, RoleCard } from '@/domains/auth'
+import { getErrorMessage } from '@/lib/api'
+import { openLegalDocument } from '@/lib/externalLinks'
+import { useOnboardingStore } from '@/store/onboardingStore'
 
 const TOTAL_STEPS = 2
 const STEP_LABELS = ['Rol Seçimi', 'Bilgilerin']
@@ -29,32 +33,54 @@ export default function RegisterScreen() {
   const [step, setStep] = useState<1 | 2>(1)
   const [role, setRole] = useState<UserRole | null>(null)
 
+  const setOnboardIntent = useOnboardingStore((state) => state.setOnboardIntent)
+
   const { mutate: register, isPending, error } = useRegisterMutation()
 
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<RegisterRequest>({
     resolver: zodResolver(RegisterRequestSchema),
-    defaultValues: { email: '', password: '', firstName: '', lastName: '', role: 'client' },
+    defaultValues: {
+      email: '',
+      password: '',
+      firstName: '',
+      lastName: '',
+      role: 'client',
+      termsAccepted: false,
+      healthDataConsent: false,
+    },
   })
+
+  const hasAllConsents = watch('termsAccepted') && watch('healthDataConsent')
 
   const onSubmit = (data: RegisterRequest) => {
     if (!role) return
+
+    const target = role === 'expert' ? '/(auth)/onboarding/expert' : '/(auth)/onboarding/client'
+
+    // setOnboardIntent ŞART, tek başına router.replace YETMEZ.
+    // Kayıt başarılı olur olmaz isAuthenticated true'ya döner ve (auth)/_layout
+    // henüz `register` segmentindeyken <Redirect href="/(tabs)" /> döndürür;
+    // bu, hemen ardından gelen replace'i EZER. Belirti sessizdir: kullanıcı
+    // profilsiz olarak Fırsatlar feed'ine düşer, onboarding'i hiç görmez ve
+    // teklif göndermeye kalkınca anlamsız bir EXPERT_NOT_FOUND alır.
+    // onboardIntent tam bu yarış için var; bugüne kadar yalnız giriş ekranındaki
+    // test butonları kuruyordu, gerçek kayıt akışı kurmuyordu.
+    setOnboardIntent(target)
+
     register(
       { ...data, role },
       {
-        onSuccess: () => {
-          router.replace(
-            role === 'expert' ? '/(auth)/onboarding/expert' : '/(auth)/onboarding/client'
-          )
-        },
+        onSuccess: () => router.replace(target as never),
       }
     )
   }
 
-  const apiErrorMessage = error instanceof Error ? error.message : undefined
+  const apiErrorMessage = error ? getErrorMessage(error) : undefined
   const bottomBarHeight = 56 + insets.bottom
 
   return (
@@ -188,6 +214,69 @@ export default function RegisterScreen() {
                 )}
               />
 
+              <View className="mt-1 gap-3">
+                <Controller
+                  control={control}
+                  name="termsAccepted"
+                  render={({ field: { onChange, value } }) => (
+                    <CheckboxRow
+                      testID="register-terms"
+                      tone="onBrand"
+                      checked={value}
+                      onToggle={() => onChange(!value)}
+                      accessibilityLabel="Kullanım Koşulları ve Gizlilik Politikası'nı okudum, kabul ediyorum"
+                    >
+                      <Text
+                        variant="caption"
+                        className="font-semibold text-white underline"
+                        onPress={() => void openLegalDocument('terms')}
+                      >
+                        Kullanım Koşulları
+                      </Text>
+                      {' ve '}
+                      <Text
+                        variant="caption"
+                        className="font-semibold text-white underline"
+                        onPress={() => void openLegalDocument('privacy')}
+                      >
+                        Gizlilik Politikası
+                      </Text>
+                      {"'nı okudum, kabul ediyorum."}
+                    </CheckboxRow>
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name="healthDataConsent"
+                  render={({ field: { onChange, value } }) => (
+                    <CheckboxRow
+                      testID="register-health-consent"
+                      tone="onBrand"
+                      checked={value}
+                      onToggle={() => onChange(!value)}
+                      accessibilityLabel="Sağlık verilerimin işlenmesine açık rıza veriyorum"
+                    >
+                      {
+                        'Psikolojik test sonuçlarım ve ilanlarımdaki bilgiler dahil sağlık verilerimin, '
+                      }
+                      <Text
+                        variant="caption"
+                        className="font-semibold text-white underline"
+                        onPress={() => void openLegalDocument('kvkk')}
+                      >
+                        KVKK Aydınlatma Metni
+                      </Text>
+                      {' kapsamında uzmanlarla eşleşme amacıyla işlenmesine açık rıza veriyorum.'}
+                    </CheckboxRow>
+                  )}
+                />
+                {errors.termsAccepted?.message || errors.healthDataConsent?.message ? (
+                  <Text variant="caption" className="text-red-100">
+                    {errors.termsAccepted?.message ?? errors.healthDataConsent?.message}
+                  </Text>
+                ) : null}
+              </View>
+
               {apiErrorMessage && (
                 <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-950">
                   <Text variant="caption" className="text-red-600 dark:text-red-300">
@@ -227,6 +316,7 @@ export default function RegisterScreen() {
                     onPress: handleSubmit(onSubmit),
                     variant: 'inverse',
                     isLoading: isPending,
+                    isDisabled: !hasAllConsents,
                     loadingLabel: 'Kayıt yapılıyor...',
                   },
                 ]

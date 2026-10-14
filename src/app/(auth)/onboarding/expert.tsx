@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 
 import type { ExpertOnboarding } from '@/domains/expert'
+import type { PickedDocument } from '@/domains/expert'
 
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Text } from '@/core/components/atoms/Text'
@@ -14,7 +15,7 @@ import { BackButton } from '@/core/components/molecules/BackButton'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { StepProgress } from '@/core/components/molecules/StepProgress'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
-import { useUpdateProfileMutation } from '@/domains/auth'
+import { useAuthStore, useChangeAvatar, useUpdateProfileMutation } from '@/domains/auth'
 import {
   useCreateExpertProfileMutation,
   OnboardingStepTitle,
@@ -24,7 +25,10 @@ import {
   OnboardingStepBio,
   OnboardingStepDocuments,
   OnboardingStepPhoto,
+  useUploadExpertDocumentMutation,
+  pickExpertDocument,
 } from '@/domains/expert'
+import { getErrorMessage } from '@/lib/api'
 
 const TOTAL_STEPS = 7
 const STEP_LABELS = [
@@ -80,6 +84,9 @@ export default function ExpertOnboardingScreen() {
   const [education, setEducation] = useState('')
   const [personalWebsite, setPersonalWebsite] = useState('')
 
+  const avatarUrl = useAuthStore((s) => s.user?.avatarUrl ?? null)
+  const { changeAvatar, isUploading: isUploadingAvatar } = useChangeAvatar()
+
   const isPending = isCreatingProfile || isUpdatingAuthProfile
 
   const goBack = () => {
@@ -94,8 +101,63 @@ export default function ExpertOnboardingScreen() {
     setSpecsError(undefined)
   }
 
-  const showComingSoon = (featureTitle: string) => {
-    Alert.alert(featureTitle, 'Bu özellik yakında aktif olacak.')
+  // Belgeler ONBOARDING SIRASINDA YÜKLENEMEZ: yükleme uçları
+  // (POST /experts/profile/cv) `experts` satırını arıyor ve o satır ancak profil
+  // oluşturulduktan sonra var oluyor. Onboarding'de yüklemeye kalkmak
+  // EXPERT_NOT_FOUND verirdi. Bu yüzden dosya burada yalnız SEÇİLİR, profil
+  // oluştuktan hemen sonra yüklenir.
+  const [pendingCv, setPendingCv] = useState<PickedDocument | null>(null)
+  const [pendingCertificate, setPendingCertificate] = useState<PickedDocument | null>(null)
+
+  const { mutateAsync: uploadCv } = useUploadExpertDocumentMutation('cv')
+  const { mutateAsync: uploadCertificate } = useUploadExpertDocumentMutation('certificate')
+
+  const chooseDocument = async (label: string, keep: (document: PickedDocument) => void) => {
+    const picked = await pickExpertDocument()
+
+    // İptal sessiz geçilir; reddedilen dosya mutlaka söylenir, yoksa dokunma
+    // hiçbir şey yapmamış gibi görünür.
+    if (picked.status === 'canceled') return
+    if (picked.status === 'rejected') {
+      Alert.alert(label, picked.message)
+      return
+    }
+
+    keep(picked.document)
+  }
+
+  /**
+   * Profil oluştuktan sonra seçilen belgeleri yükler.
+   *
+   * Yükleme hatası profil oluşturmayı GERİ ALMAZ: profil zaten kaydedildi ve
+   * kullanıcıyı onboarding'de tutmak daha kötü olurdu. Bunun yerine ne olduğu
+   * açıkça söylenir ve nereden tekrar denenebileceği gösterilir.
+   */
+  const uploadPendingDocuments = async () => {
+    const failed: string[] = []
+
+    if (pendingCv) {
+      try {
+        await uploadCv(pendingCv)
+      } catch {
+        failed.push('CV')
+      }
+    }
+
+    if (pendingCertificate) {
+      try {
+        await uploadCertificate(pendingCertificate)
+      } catch {
+        failed.push('sertifika')
+      }
+    }
+
+    if (failed.length > 0) {
+      Alert.alert(
+        'Profiliniz oluşturuldu',
+        `${failed.join(' ve ')} yüklenemedi. Ayarlar → Belgeler bölümünden tekrar deneyebilirsiniz.`
+      )
+    }
   }
 
   const validateAndNext = () => {
@@ -141,14 +203,17 @@ export default function ExpertOnboardingScreen() {
             personalWebsite: personalWebsite.trim() || null,
           }
           createProfile(data, {
-            onSuccess: () => router.replace('/(tabs)'),
+            onSuccess: async () => {
+              await uploadPendingDocuments()
+              router.replace('/(tabs)')
+            },
           })
         },
       }
     )
   }
 
-  const apiErrorMessage = error instanceof Error ? error.message : undefined
+  const apiErrorMessage = error ? getErrorMessage(error) : undefined
   const bottomBarHeight = 56 + insets.bottom
 
   return (
@@ -234,12 +299,20 @@ export default function ExpertOnboardingScreen() {
             <OnboardingStepDocuments
               personalWebsite={personalWebsite}
               onPersonalWebsiteChange={setPersonalWebsite}
-              onUploadCv={() => showComingSoon('CV Yükle')}
-              onAddCertificate={() => showComingSoon('Sertifika Ekle')}
+              cvName={pendingCv?.name ?? null}
+              certificateName={pendingCertificate?.name ?? null}
+              onUploadCv={() => void chooseDocument('CV Yükle', setPendingCv)}
+              onAddCertificate={() => void chooseDocument('Sertifika Ekle', setPendingCertificate)}
             />
           )}
 
-          {step === 7 && <OnboardingStepPhoto />}
+          {step === 7 && (
+            <OnboardingStepPhoto
+              avatarUrl={avatarUrl}
+              isUploading={isUploadingAvatar}
+              onPickPhoto={() => void changeAvatar()}
+            />
+          )}
 
           {apiErrorMessage && (
             <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-950">
@@ -254,11 +327,6 @@ export default function ExpertOnboardingScreen() {
           actions={
             step === TOTAL_STEPS
               ? [
-                  {
-                    label: 'Şimdilik Atla',
-                    onPress: () => router.replace('/(tabs)'),
-                    variant: 'inverseGhost',
-                  },
                   {
                     label: 'Profili Tamamla',
                     onPress: validateAndNext,

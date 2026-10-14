@@ -42,6 +42,12 @@ export type InputProps = {
   onBlur?: TextInputProps['onBlur']
   onSubmitEditing?: TextInputProps['onSubmitEditing']
   className?: string
+  /**
+   * E2E tutamağı. Android'de `resource-id`, iOS'ta `accessibilityIdentifier` olarak
+   * dışa vurulur; Maestro akışları bu değere `id:` seçicisiyle bağlanır.
+   * Adlandırma sözleşmesi: docs/E2E-TESTID.md
+   */
+  testID?: string
 }
 
 const MULTILINE_MAX_HEIGHT = 120
@@ -103,6 +109,7 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
     autoFocus,
     returnKeyType,
     onSubmitEditing,
+    testID,
   }: InputProps,
   ref
 ) {
@@ -192,6 +199,7 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
 
       <TextInput
         ref={ref}
+        testID={testID}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}

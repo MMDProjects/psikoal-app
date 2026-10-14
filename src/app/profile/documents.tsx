@@ -5,6 +5,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useRouter } from 'expo-router'
 
+import type { PickedDocument } from '@/domains/expert'
+
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
 import { Chip } from '@/core/components/atoms/Chip'
 import { Divider } from '@/core/components/atoms/Divider'
@@ -19,7 +21,13 @@ import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { useRefresh } from '@/core/hooks'
 import { useThemeColors } from '@/core/theme'
 import { useAuthStore } from '@/domains/auth'
-import { useExpertProfileQuery, useExpertProfileMutation } from '@/domains/expert'
+import {
+  useExpertProfileQuery,
+  useExpertProfileMutation,
+  useUploadExpertDocumentMutation,
+  pickExpertDocument,
+} from '@/domains/expert'
+import { getErrorMessage } from '@/lib/api'
 
 type DocumentsForm = { personalWebsite: string }
 
@@ -39,8 +47,27 @@ export default function DocumentsScreen() {
     values: { personalWebsite: expert?.personalWebsite ?? '' },
   })
 
-  const showComingSoon = (title: string) => {
-    Alert.alert(title, 'Bu özellik yakında aktif olacak.')
+  const { mutate: uploadCv, isPending: isUploadingCv } = useUploadExpertDocumentMutation('cv')
+  const { mutate: uploadCertificate, isPending: isUploadingCertificate } =
+    useUploadExpertDocumentMutation('certificate')
+
+  /**
+   * Belge seçer ve yükler.
+   *
+   * Seçim iptal edilirse SESSİZ kalınır: kullanıcı bilinçli olarak vazgeçti,
+   * ona uyarı göstermek gürültüdür. Reddedilen dosya (yanlış tip / çok büyük)
+   * ise mutlaka söylenir, yoksa dokunma hiçbir şey yapmamış gibi görünür.
+   */
+  const uploadDocument = async (label: string, upload: (document: PickedDocument) => void) => {
+    const picked = await pickExpertDocument()
+
+    if (picked.status === 'canceled') return
+    if (picked.status === 'rejected') {
+      Alert.alert(label, picked.message)
+      return
+    }
+
+    upload(picked.document)
   }
 
   const onSubmit = (data: DocumentsForm) => {
@@ -97,12 +124,19 @@ export default function DocumentsScreen() {
                 Özgeçmiş (CV)
               </Text>
               <Pressable
-                onPress={() => showComingSoon('CV Yükle')}
+                onPress={() =>
+                  void uploadDocument('CV Yükle', (document) =>
+                    uploadCv(document, {
+                      onError: (error) => Alert.alert('CV yüklenemedi', getErrorMessage(error)),
+                    })
+                  )
+                }
+                disabled={isUploadingCv}
                 className="flex-row items-center gap-3 py-2 active:opacity-90"
               >
                 <Icon name="FileUp" size={18} color={colors.brand} />
                 <Text variant="body" className="flex-1 dark:text-[#F5F5F7]">
-                  {expert.cvUrl ? 'CV Güncelle' : 'CV Yükle'}
+                  {isUploadingCv ? 'Yükleniyor…' : expert.cvUrl ? 'CV Güncelle' : 'CV Yükle'}
                 </Text>
                 {expert.cvUrl && <Icon name="CheckCircle2" size={16} color={colors.success} />}
                 <Icon name="ChevronRight" size={16} color={colors.contentDisabled} />
@@ -126,12 +160,20 @@ export default function DocumentsScreen() {
                 </View>
               )}
               <Pressable
-                onPress={() => showComingSoon('Sertifika Ekle')}
+                onPress={() =>
+                  void uploadDocument('Sertifika Ekle', (document) =>
+                    uploadCertificate(document, {
+                      onError: (error) =>
+                        Alert.alert('Sertifika yüklenemedi', getErrorMessage(error)),
+                    })
+                  )
+                }
+                disabled={isUploadingCertificate}
                 className="flex-row items-center gap-3 py-2 active:opacity-90"
               >
                 <Icon name="Award" size={18} color={colors.brand} />
                 <Text variant="body" className="flex-1 dark:text-[#F5F5F7]">
-                  Sertifika Ekle
+                  {isUploadingCertificate ? 'Yükleniyor…' : 'Sertifika Ekle'}
                 </Text>
                 <Icon name="ChevronRight" size={16} color={colors.contentDisabled} />
               </Pressable>

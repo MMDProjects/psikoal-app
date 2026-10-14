@@ -32,6 +32,12 @@ export type ButtonProps = {
   fullWidth?: boolean
   width?: number
   className?: string
+  /**
+   * E2E tutamağı. Android'de `resource-id`, iOS'ta `accessibilityIdentifier` olarak
+   * dışa vurulur; Maestro akışları bu değere `id:` seçicisiyle bağlanır.
+   * Adlandırma sözleşmesi: docs/E2E-TESTID.md
+   */
+  testID?: string
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
@@ -100,6 +106,7 @@ export function Button({
   fullWidth = false,
   width,
   className,
+  testID,
 }: ButtonProps) {
   const scale = useSharedValue(1)
 
@@ -138,6 +145,7 @@ export function Button({
       ]}
     >
       <Pressable
+        testID={testID}
         onPress={handlePress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}

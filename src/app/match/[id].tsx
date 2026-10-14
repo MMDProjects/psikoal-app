@@ -1,8 +1,10 @@
-import { Alert, ScrollView, View } from 'react-native'
+import { Alert, Pressable, ScrollView, View } from 'react-native'
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useLocalSearchParams, useRouter } from 'expo-router'
+
+import type { CreateReviewRequest } from '@/domains/expert'
 
 import { AppRefreshControl } from '@/core/components/atoms/AppRefreshControl'
 import { Avatar } from '@/core/components/atoms/Avatar'
@@ -19,14 +21,49 @@ import { useRefresh } from '@/core/hooks'
 import { formatDate } from '@/core/utils/formatDate'
 import { AssessmentResultSummary } from '@/domains/assessment'
 import { useAuthStore } from '@/domains/auth'
+import { ReviewForm, useMatchReview } from '@/domains/expert'
 import { SESSION_TYPE_LABELS } from '@/domains/listing'
 import { useMatchDetailQuery, useReleaseMatchMutation, MATCH_STATUS_CONFIG } from '@/domains/match'
 import { OFFER_STATUS_CONFIG } from '@/domains/offer'
+import { openEmail, openPhone } from '@/lib/externalLinks'
+
+type MatchReviewSectionProps = {
+  expertId: string
+  matchId: string
+  sessionType?: CreateReviewRequest['sessionType']
+}
+
+function MatchReviewSection({ expertId, matchId, sessionType }: MatchReviewSectionProps) {
+  const { submit, isSubmitting, isDone, doneMessage, errorMessage } = useMatchReview({
+    expertId,
+    matchId,
+    sessionType,
+  })
+
+  return (
+    <View className="gap-3 px-4 py-5">
+      <Text variant="caption" color="secondary" className="font-semibold uppercase tracking-widest">
+        Uzmanı Değerlendir
+      </Text>
+      {isDone ? (
+        <View className="flex-row items-center gap-2">
+          <Icon name="CheckCircle2" size={16} color="#16A34A" />
+          <Text variant="body" color="secondary" className="flex-1">
+            {doneMessage}
+          </Text>
+        </View>
+      ) : (
+        <ReviewForm onSubmit={submit} isSubmitting={isSubmitting} errorMessage={errorMessage} />
+      )}
+    </View>
+  )
+}
 
 export default function MatchDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const router = useRouter()
   const role = useAuthStore((s) => s.role)
+  const isClient = role === 'client'
 
   const matchQuery = useMatchDetailQuery(id ?? '')
   const { data: match, isLoading, isError } = matchQuery
@@ -58,6 +95,26 @@ export default function MatchDetailScreen() {
   const clientInitials = match?.client.initials ?? ''
   const expertInitials = match?.expert?.initials ?? ''
   const matchDate = match ? formatDate(match.createdAt, 'long') : ''
+
+  // Danışan uzmanı, uzman danışanı görür. İletişim alanları API'nin döndürdüğü
+  // kadardır — danışanın paylaşım tercihleri sunucuda uygulanır.
+  const counterpart = match
+    ? isClient
+      ? {
+          name: match.expert?.name ?? 'Uzman',
+          subtitle: match.expert?.title ?? null,
+          initials: expertInitials,
+          email: match.expert?.email ?? null,
+          phone: match.expert?.phone ?? null,
+        }
+      : {
+          name: match.client.fullName,
+          subtitle: null,
+          initials: clientInitials,
+          email: match.client.email ?? null,
+          phone: match.client.phone ?? null,
+        }
+    : null
 
   return (
     <View className="flex-1 bg-surface-base dark:bg-dark-bg">
@@ -112,11 +169,28 @@ export default function MatchDetailScreen() {
 
           <View className="gap-4 px-4 py-5">
             <View className="flex-row items-center gap-3">
-              <Avatar size="lg" initials={clientInitials} />
+              <Avatar size="lg" initials={counterpart?.initials ?? ''} />
               <View className="flex-1">
                 <Text variant="subheading" className="font-semibold leading-tight">
-                  {match.client.fullName}
+                  {counterpart?.name}
                 </Text>
+                {counterpart?.subtitle ? (
+                  <Text variant="caption" color="secondary" numberOfLines={1}>
+                    {counterpart.subtitle}
+                  </Text>
+                ) : null}
+                {isClient ? (
+                  <Pressable
+                    onPress={() => router.push(`/expert/${match.expertId}` as never)}
+                    accessibilityRole="button"
+                    hitSlop={8}
+                    className="mt-1 self-start active:opacity-70"
+                  >
+                    <Text variant="caption" color="brand" className="font-semibold">
+                      Uzmanı İncele
+                    </Text>
+                  </Pressable>
+                ) : null}
               </View>
             </View>
 
@@ -143,23 +217,51 @@ export default function MatchDetailScreen() {
                   </Text>
                 </View>
               ) : null}
-              {match.client.email ? (
-                <View className="shrink flex-row items-center gap-1.5">
-                  <Icon name="Mail" size={13} color="#A3A3A3" />
-                  <Text variant="caption" color="tertiary" numberOfLines={1} className="shrink">
-                    {match.client.email}
-                  </Text>
-                </View>
-              ) : null}
-              {match.client.phone ? (
-                <View className="shrink-0 flex-row items-center gap-1.5">
-                  <Icon name="Phone" size={13} color="#A3A3A3" />
-                  <Text variant="caption" color="tertiary">
-                    {match.client.phone}
-                  </Text>
-                </View>
-              ) : null}
             </View>
+          </View>
+
+          <Divider spacing="none" className="mx-4" />
+          <View className="gap-3 px-4 py-5">
+            <Text
+              variant="caption"
+              color="secondary"
+              className="font-semibold uppercase tracking-widest"
+            >
+              İletişim
+            </Text>
+            {counterpart?.phone ? (
+              <Pressable
+                onPress={() => counterpart.phone && openPhone(counterpart.phone)}
+                accessibilityRole="link"
+                accessibilityLabel={`Ara: ${counterpart.phone}`}
+                className="flex-row items-center gap-3 py-1 active:opacity-70"
+              >
+                <Icon name="Phone" size={16} color="#0EA5E9" />
+                <Text variant="body" color="brand">
+                  {counterpart.phone}
+                </Text>
+              </Pressable>
+            ) : null}
+            {counterpart?.email ? (
+              <Pressable
+                onPress={() => counterpart.email && openEmail(counterpart.email)}
+                accessibilityRole="link"
+                accessibilityLabel={`E-posta gönder: ${counterpart.email}`}
+                className="flex-row items-center gap-3 py-1 active:opacity-70"
+              >
+                <Icon name="Mail" size={16} color="#0EA5E9" />
+                <Text variant="body" color="brand" numberOfLines={1} className="shrink">
+                  {counterpart.email}
+                </Text>
+              </Pressable>
+            ) : null}
+            {!counterpart?.phone && !counterpart?.email ? (
+              <Text variant="caption" color="secondary">
+                {isClient
+                  ? 'Uzman, paylaştığınız iletişim bilgileri üzerinden sizinle iletişime geçecek.'
+                  : 'Danışan iletişim bilgilerini paylaşmamayı seçti.'}
+              </Text>
+            ) : null}
           </View>
 
           {match.listing && (
@@ -248,16 +350,18 @@ export default function MatchDetailScreen() {
               color="secondary"
               className="font-semibold uppercase tracking-widest"
             >
-              Danışan Hakkında
+              {isClient ? 'Eşleşme' : 'Danışan Hakkında'}
             </Text>
-            <View className="flex-row items-center gap-3">
-              <Avatar size="sm" initials={clientInitials} />
-              <Text variant="label" className="font-medium">
-                {match.client.fullName}
-              </Text>
-            </View>
+            {!isClient ? (
+              <View className="flex-row items-center gap-3">
+                <Avatar size="sm" initials={clientInitials} />
+                <Text variant="label" className="font-medium">
+                  {match.client.fullName}
+                </Text>
+              </View>
+            ) : null}
             <View className="gap-1">
-              {match.client.createdAt ? (
+              {!isClient && match.client.createdAt ? (
                 <Text variant="caption" color="secondary">
                   {formatDate(match.client.createdAt, 'long')} tarihinde kayıt oldu.
                 </Text>
@@ -323,6 +427,17 @@ export default function MatchDetailScreen() {
                   />
                 </View>
               </View>
+            </>
+          )}
+
+          {isClient && (match.status === 'COMPLETED' || match.status === 'RELEASED') && (
+            <>
+              <Divider spacing="none" className="mx-4" />
+              <MatchReviewSection
+                expertId={match.expertId}
+                matchId={match.id}
+                sessionType={match.offer?.sessionType}
+              />
             </>
           )}
         </ScrollView>
