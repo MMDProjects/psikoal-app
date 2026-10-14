@@ -187,14 +187,6 @@ instance.interceptors.response.use(
   }
 )
 
-// ⚠️ MOCK — gerçek API'ye geçerken bu bloğu ve repo kökündeki mock-db/ klasörünü sil (bkz. docs/PRODUCTION_CHECKLIST.md)
-if (process.env.EXPO_PUBLIC_APP_ENV === 'mock') {
-  const MockAdapter = require('axios-mock-adapter')
-  const { setupMocks } = require('../../mock-db/handlers')
-  setupMocks(new MockAdapter(instance, { delayResponse: 600 }))
-}
-// END MOCK
-
 export async function get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
   const res = await instance.get<T>(url, config)
   return res.data
