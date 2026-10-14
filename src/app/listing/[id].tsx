@@ -192,6 +192,16 @@ export default function ListingDetailScreen() {
                                     {offer.expert.title}
                                   </Text>
                                 ) : null}
+                                <Pressable
+                                  onPress={() => router.push(`/expert/${offer.expertId}` as never)}
+                                  accessibilityRole="button"
+                                  hitSlop={8}
+                                  className="mt-0.5 self-start active:opacity-70"
+                                >
+                                  <Text variant="caption" color="brand" className="font-semibold">
+                                    Uzmanı İncele
+                                  </Text>
+                                </Pressable>
                               </View>
                               {offer.expert?.rating != null && (
                                 <View className="flex-row items-center gap-1">
