@@ -163,21 +163,6 @@ export default function SettingsScreen() {
         },
       ],
     },
-    {
-      title: 'FİNANS',
-      items: [
-        {
-          icon: 'Wallet',
-          label: 'Cüzdanım',
-          onPress: () => router.push('/payment/wallet' as never),
-        },
-        {
-          icon: 'CreditCard',
-          label: 'Seans Paketleri',
-          onPress: () => router.push('/payment/packages' as never),
-        },
-      ],
-    },
     communitySection,
     appSection,
     privacySection,
