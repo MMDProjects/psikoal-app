@@ -7,6 +7,8 @@ import * as Notifications from 'expo-notifications'
 
 import { useRegisterPushTokenMutation } from '../api/useRegisterPushTokenMutation'
 
+import { rememberPushToken } from '@/lib/pushToken'
+
 // PsikoAl kuralı: bildirim izni ilk login'de değil, kullanıcı ilk bildirimiyle
 // karşılaştığında istenir (bkz. CLAUDE.md geliştirici notları). `enabled` bu yüzden
 // çağıran ekran tarafından kontrol edilir (örn. bildirim listesi doluyken).
@@ -46,7 +48,10 @@ export function usePushTokenRegistration(enabled: boolean) {
           projectId ? { projectId } : undefined
         )
 
-        registerToken({ token, platform: Platform.OS === 'ios' ? 'ios' : 'android' })
+        registerToken(
+          { token, platform: Platform.OS === 'ios' ? 'ios' : 'android' },
+          { onSuccess: () => void rememberPushToken(token) }
+        )
       } catch {
         // Simülatör / Expo Go (Android SDK 53+) gibi push desteklemeyen ortamlarda sessizce geç.
       }

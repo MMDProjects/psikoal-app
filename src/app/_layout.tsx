@@ -19,6 +19,7 @@ import { AppProviders } from '@/core/components/templates/AppProviders'
 import '@/domains/notification/pushNotificationHandler'
 import { useAuthStore } from '@/domains/auth'
 import { registerUnauthenticatedHandler } from '@/lib/api'
+import { queryClient } from '@/lib/queryClient'
 import { useThemeStore } from '@/store/themeStore'
 
 SplashScreen.preventAutoHideAsync()
@@ -51,6 +52,8 @@ export default function RootLayout() {
       // clearAuth ÖNCE çağrılmalı — yoksa (auth)/_layout.tsx hâlâ isAuthenticated=true
       // görüp /(tabs)'a geri yönlendirir, orada fetch yine 401 alır: sonsuz döngü.
       useAuthStore.getState().clearAuth()
+      // Önceki kullanıcının önbellekteki verisi bir sonraki girişte görünmesin.
+      queryClient.clear()
       router.replace('/(auth)/login')
     })
   }, [router])
