@@ -113,7 +113,7 @@ jobs:
       - name: Install
         run: npm ci
 
-      # Temiz klonun gerçekten bundle üretebildiğini kanıtlar. mock-db repo dışındayken
+      # Temiz klonun gerçekten bundle üretebildiğini kanıtlar. Eskiden mock-db repo dışındayken
       # bu adım kırmızı dönerdi; repo-içi taşımanın regresyon siperi budur.
       - name: Expo export (android)
         env:
