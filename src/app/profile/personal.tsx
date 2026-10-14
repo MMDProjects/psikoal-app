@@ -1,4 +1,11 @@
-import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native'
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  View,
+} from 'react-native'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
@@ -19,7 +26,12 @@ import { ToggleRow } from '@/core/components/molecules/ToggleRow'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { themeColors } from '@/core/theme'
 import { getFullName, getInitials } from '@/core/utils/personName'
-import { useAuthStore, useUpdateProfileMutation, UpdateProfileSchema } from '@/domains/auth'
+import {
+  useAuthStore,
+  useChangeAvatar,
+  useUpdateProfileMutation,
+  UpdateProfileSchema,
+} from '@/domains/auth'
 
 export default function PersonalInfoScreen() {
   const router = useRouter()
@@ -53,9 +65,7 @@ export default function PersonalInfoScreen() {
     updateProfile(data, { onSuccess: () => router.back() })
   }
 
-  const handleChangePhoto = () => {
-    Alert.alert('Profil Fotoğrafı', 'Bu özellik yakında aktif olacak.')
-  }
+  const { changeAvatar, isUploading } = useChangeAvatar()
 
   return (
     <View className="flex-1 bg-surface-base dark:bg-dark-bg">
@@ -77,7 +87,13 @@ export default function PersonalInfoScreen() {
 
           <View className="gap-4 px-4 py-5">
             <View className="flex-row items-center gap-4">
-              <Pressable onPress={handleChangePhoto} className="relative active:opacity-80">
+              <Pressable
+                onPress={() => void changeAvatar()}
+                disabled={isUploading}
+                accessibilityRole="button"
+                accessibilityLabel="Profil fotoğrafını değiştir"
+                className="relative active:opacity-80"
+              >
                 <Avatar
                   size="xl"
                   src={user?.avatarUrl ?? undefined}
@@ -85,7 +101,11 @@ export default function PersonalInfoScreen() {
                   isVerified={user?.isVerified}
                 />
                 <View className="absolute -bottom-1 -right-1 h-7 w-7 items-center justify-center rounded-full border-2 border-surface-base bg-sky-500 dark:border-dark-bg">
-                  <Icon name="Pencil" size={13} color={themeColors.light.contentInverse} />
+                  {isUploading ? (
+                    <ActivityIndicator size="small" color={themeColors.light.contentInverse} />
+                  ) : (
+                    <Icon name="Pencil" size={13} color={themeColors.light.contentInverse} />
+                  )}
                 </View>
               </Pressable>
               <View className="flex-1 gap-0.5">

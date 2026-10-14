@@ -13,7 +13,8 @@ import { MenuRow } from '@/core/components/molecules/MenuRow'
 import { useThemeColors } from '@/core/theme'
 import { getFullName, getInitials } from '@/core/utils/personName'
 import { useAuthStore, useLogoutMutation } from '@/domains/auth'
-import { env } from '@/lib/env'
+import { APP_VERSION } from '@/lib/appVersion'
+import { openNotificationSettings, openSupportEmail, requestStoreReview } from '@/lib/externalLinks'
 import { useThemeStore } from '@/store/themeStore'
 
 type MenuItem = {
@@ -60,27 +61,6 @@ export default function SettingsScreen() {
     }).catch(() => undefined)
   }
 
-  const handleRateUs = () => {
-    Alert.alert('Bizi Değerlendir', 'Uygulamamızı beğendin mi?', [
-      {
-        text: 'Hayır',
-        onPress: () =>
-          Alert.alert(
-            'Önerin Bizim İçin Değerli',
-            'Öneri formu yakında web sitemizde aktif olacak.'
-          ),
-      },
-      {
-        text: 'Evet',
-        onPress: () => Alert.alert('Teşekkürler!', 'Değerlendirme sayfası yakında aktif olacak.'),
-      },
-    ])
-  }
-
-  const handleComingSoon = (title: string) => {
-    Alert.alert(title, 'Bu özellik yakında aktif olacak.')
-  }
-
   const initials = getInitials(user) || 'K'
 
   const communitySection: MenuSection = {
@@ -92,7 +72,7 @@ export default function SettingsScreen() {
         hasArrow: false,
         onPress: handleInviteFriend,
       },
-      { icon: 'Heart', label: 'Bizi Değerlendir', hasArrow: false, onPress: handleRateUs },
+      { icon: 'Heart', label: 'Bizi Değerlendir', hasArrow: false, onPress: requestStoreReview },
     ],
   }
 
@@ -110,13 +90,13 @@ export default function SettingsScreen() {
         icon: 'Bell',
         label: 'Bildirim Ayarları',
         hasArrow: false,
-        onPress: () => handleComingSoon('Bildirim Ayarları'),
+        onPress: openNotificationSettings,
       },
       {
         icon: 'LifeBuoy',
         label: 'Destek, Talep ve Öneri',
         hasArrow: false,
-        onPress: () => handleComingSoon('Destek, Talep ve Öneri'),
+        onPress: openSupportEmail,
       },
     ],
   }
@@ -160,21 +140,6 @@ export default function SettingsScreen() {
           icon: 'Lock',
           label: 'Şifre Yönetimi',
           onPress: () => router.push('/profile/password' as never),
-        },
-      ],
-    },
-    {
-      title: 'FİNANS',
-      items: [
-        {
-          icon: 'Wallet',
-          label: 'Cüzdanım',
-          onPress: () => router.push('/payment/wallet' as never),
-        },
-        {
-          icon: 'CreditCard',
-          label: 'Seans Paketleri',
-          onPress: () => router.push('/payment/packages' as never),
         },
       ],
     },
@@ -274,7 +239,7 @@ export default function SettingsScreen() {
             variant="caption"
             color="secondary"
             align="center"
-          >{`PsikoAl v${env.EXPO_PUBLIC_APP_VERSION}`}</Text>
+          >{`PsikoAl v${APP_VERSION}`}</Text>
         </View>
       </ScrollView>
     </View>

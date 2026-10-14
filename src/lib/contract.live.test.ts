@@ -1,7 +1,13 @@
 import { z } from 'zod'
 
 import { AssessmentListItemSchema, MyAssessmentResultSchema } from '@/domains/assessment'
-import { AuthUserSchema } from '@/domains/auth'
+import {
+  AuthUserSchema,
+  LoginResponseSchema,
+  RegisterRequestSchema,
+  ResetPasswordRequestSchema,
+} from '@/domains/auth'
+import { BlogLikeResponseSchema, BlogListResponseSchema, BlogSchema } from '@/domains/blog'
 import { CategoryDetailSchema, CategorySchema } from '@/domains/category'
 import { ExpertSchema, ReviewSchema } from '@/domains/expert'
 import { ListingSchema } from '@/domains/listing'
@@ -15,7 +21,14 @@ import { OfferSchema } from '@/domains/offer'
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(async () => null),
   setItem: jest.fn(async () => undefined),
+  multiGet: jest.fn(async (keys: string[]) => keys.map((k) => [k, null])),
   multiRemove: jest.fn(async () => undefined),
+}))
+
+jest.mock('expo-secure-store', () => ({
+  getItemAsync: jest.fn(async () => null),
+  setItemAsync: jest.fn(async () => undefined),
+  deleteItemAsync: jest.fn(async () => undefined),
 }))
 
 /**
@@ -142,6 +155,115 @@ describeLive('canlı sözleşme — danışan', () => {
       z.array(ReviewSchema),
       await fetchJson(`/experts/${expertId}/reviews`, token)
     )
+  })
+})
+
+async function postJson(path: string, body: unknown): Promise<{ status: number; body: unknown }> {
+  const response = await fetch(`${API}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+  const text = await response.text()
+  return { status: response.status, body: text ? JSON.parse(text) : null }
+}
+
+// Kayıt gövdesi UYGULAMANIN şemasından üretiliyor: şemaya alan eklenip backend'e
+// eklenmezse (ya da tersi) bu test kırmızıya döner. Sözleşme §1.
+describeLive('canlı sözleşme — kayıt ve şifre sıfırlama', () => {
+  const uniqueEmail = () => `contract-${Date.now()}-${Math.round(Math.random() * 1e6)}@psikoal.test`
+
+  const registerBody = (overrides: Record<string, unknown> = {}) => ({
+    email: uniqueEmail(),
+    password: 'Sozlesme123!',
+    firstName: 'Sözleşme',
+    lastName: 'Testi',
+    role: 'client',
+    termsAccepted: true,
+    healthDataConsent: true,
+    ...overrides,
+  })
+
+  it('iki KVKK onayıyla kayıt LoginResponseSchema döner', async () => {
+    const body = RegisterRequestSchema.parse(registerBody())
+    const response = await postJson('/auth/register', body)
+
+    expect(response.status).toBe(200)
+    expectMatchesContract('/auth/register', LoginResponseSchema, response.body)
+  })
+
+  it.each([
+    ['termsAccepted', { termsAccepted: false }],
+    ['healthDataConsent', { healthDataConsent: false }],
+  ])('%s false iken kayıt 400 döner', async (_field, overrides) => {
+    const response = await postJson('/auth/register', registerBody(overrides))
+    expect(response.status).toBe(400)
+  })
+
+  it("geçersiz kurtarma token'ı 422 RESET_TOKEN_INVALID döner", async () => {
+    const body = ResetPasswordRequestSchema.parse({
+      accessToken: 'gecersiz-token',
+      newPassword: 'YeniSifre123!',
+    })
+    const response = await postJson('/auth/reset-password', body)
+
+    expect(response.status).toBe(422)
+    expect(response.body).toMatchObject({ code: 'RESET_TOKEN_INVALID' })
+  })
+})
+
+async function request(
+  method: 'GET' | 'POST',
+  path: string,
+  token?: string
+): Promise<{ status: number; body: unknown }> {
+  const response = await fetch(`${API}${path}`, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: method === 'POST' ? '{}' : undefined,
+  })
+  const text = await response.text()
+  return { status: response.status, body: text ? JSON.parse(text) : null }
+}
+
+// Sözleşme §6: blog uçları uygulamanın Zod şemalarına göre kuruldu.
+describeLive('canlı sözleşme — blog', () => {
+  it('GET /blogs?limit=3 liste şemasına uyar ve perPage=3', async () => {
+    const { status, body } = await request('GET', '/blogs?limit=3')
+    expect(status).toBe(200)
+    expectMatchesContract('/blogs?limit=3', BlogListResponseSchema, body)
+    expect(BlogListResponseSchema.parse(body).meta.perPage).toBe(3)
+  })
+
+  it('GET /blogs?category=anksiyete yalnız o kategoriyi döner', async () => {
+    const { body } = await request('GET', '/blogs?category=anksiyete')
+    const list = BlogListResponseSchema.parse(body)
+    for (const blog of list.data) expect(blog.categories).toContain('anksiyete')
+  })
+
+  it('GET /blogs/{slug} içerikli BlogSchema döner; beğeni token ister ve tersine çevrilir', async () => {
+    const list = BlogListResponseSchema.parse((await request('GET', '/blogs?limit=1')).body)
+    const slug = list.data[0]?.slug
+    expect(slug).toBeDefined()
+
+    const detail = await request('GET', `/blogs/${slug}`)
+    expectMatchesContract('/blogs/{slug}', BlogSchema, detail.body)
+    expect(BlogSchema.parse(detail.body).content?.trim().length ?? 0).toBeGreaterThan(0)
+
+    expect((await request('POST', `/blogs/${slug}/like`)).status).toBe(401)
+
+    const token = await login(CLIENT)
+    const first = BlogLikeResponseSchema.parse(
+      (await request('POST', `/blogs/${slug}/like`, token)).body
+    )
+    const second = BlogLikeResponseSchema.parse(
+      (await request('POST', `/blogs/${slug}/like`, token)).body
+    )
+    expect(second.liked).toBe(!first.liked)
+    expect(Math.abs(second.likeCount - first.likeCount)).toBe(1)
   })
 })
 

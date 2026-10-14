@@ -21,6 +21,9 @@ export const NotificationSchema = z.object({
   createdAt: z.string().datetime(),
   timeLabel: z.string(),
   read: z.boolean(),
+  // Backend NotificationDto henüz dönmüyor; gelince liste satırı da ilgili
+  // kayda (ilan/eşleşme) gider. Yokken türün sekmesine yönlenir.
+  entityId: z.string().nullable().optional(),
 })
 
 export const NotificationListResponseSchema = z.object({

@@ -8,6 +8,7 @@ export function useMarkNotificationReadMutation() {
   const queryClient = useQueryClient()
 
   return useMutation({
+    meta: { suppressErrorAlert: true },
     mutationFn: async (notificationId: string) => {
       return post(`/notifications/${notificationId}/read`)
     },

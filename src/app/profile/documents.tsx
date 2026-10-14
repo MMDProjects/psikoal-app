@@ -27,6 +27,7 @@ import {
   useUploadExpertDocumentMutation,
   pickExpertDocument,
 } from '@/domains/expert'
+import { getErrorMessage } from '@/lib/api'
 
 type DocumentsForm = { personalWebsite: string }
 
@@ -126,11 +127,7 @@ export default function DocumentsScreen() {
                 onPress={() =>
                   void uploadDocument('CV Yükle', (document) =>
                     uploadCv(document, {
-                      onError: (error) =>
-                        Alert.alert(
-                          'CV yüklenemedi',
-                          error instanceof Error ? error.message : 'Tekrar deneyin.'
-                        ),
+                      onError: (error) => Alert.alert('CV yüklenemedi', getErrorMessage(error)),
                     })
                   )
                 }
@@ -167,10 +164,7 @@ export default function DocumentsScreen() {
                   void uploadDocument('Sertifika Ekle', (document) =>
                     uploadCertificate(document, {
                       onError: (error) =>
-                        Alert.alert(
-                          'Sertifika yüklenemedi',
-                          error instanceof Error ? error.message : 'Tekrar deneyin.'
-                        ),
+                        Alert.alert('Sertifika yüklenemedi', getErrorMessage(error)),
                     })
                   )
                 }

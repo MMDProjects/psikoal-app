@@ -15,7 +15,7 @@ import { BackButton } from '@/core/components/molecules/BackButton'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { StepProgress } from '@/core/components/molecules/StepProgress'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
-import { useUpdateProfileMutation } from '@/domains/auth'
+import { useAuthStore, useChangeAvatar, useUpdateProfileMutation } from '@/domains/auth'
 import {
   useCreateExpertProfileMutation,
   OnboardingStepTitle,
@@ -28,6 +28,7 @@ import {
   useUploadExpertDocumentMutation,
   pickExpertDocument,
 } from '@/domains/expert'
+import { getErrorMessage } from '@/lib/api'
 
 const TOTAL_STEPS = 7
 const STEP_LABELS = [
@@ -82,6 +83,9 @@ export default function ExpertOnboardingScreen() {
   const [bioError, setBioError] = useState<string | undefined>()
   const [education, setEducation] = useState('')
   const [personalWebsite, setPersonalWebsite] = useState('')
+
+  const avatarUrl = useAuthStore((s) => s.user?.avatarUrl ?? null)
+  const { changeAvatar, isUploading: isUploadingAvatar } = useChangeAvatar()
 
   const isPending = isCreatingProfile || isUpdatingAuthProfile
 
@@ -209,7 +213,7 @@ export default function ExpertOnboardingScreen() {
     )
   }
 
-  const apiErrorMessage = error instanceof Error ? error.message : undefined
+  const apiErrorMessage = error ? getErrorMessage(error) : undefined
   const bottomBarHeight = 56 + insets.bottom
 
   return (
@@ -302,7 +306,13 @@ export default function ExpertOnboardingScreen() {
             />
           )}
 
-          {step === 7 && <OnboardingStepPhoto />}
+          {step === 7 && (
+            <OnboardingStepPhoto
+              avatarUrl={avatarUrl}
+              isUploading={isUploadingAvatar}
+              onPickPhoto={() => void changeAvatar()}
+            />
+          )}
 
           {apiErrorMessage && (
             <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-950">
@@ -317,11 +327,6 @@ export default function ExpertOnboardingScreen() {
           actions={
             step === TOTAL_STEPS
               ? [
-                  {
-                    label: 'Şimdilik Atla',
-                    onPress: () => router.replace('/(tabs)'),
-                    variant: 'inverseGhost',
-                  },
                   {
                     label: 'Profili Tamamla',
                     onPress: validateAndNext,

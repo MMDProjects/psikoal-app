@@ -1,1 +1,0 @@
-export { useClientProfileQuery } from './useClientProfileQuery'

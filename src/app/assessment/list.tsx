@@ -15,8 +15,8 @@ import { SectionHeader } from '@/core/components/molecules/SectionHeader'
 import { useRefresh } from '@/core/hooks'
 import { formatDate } from '@/core/utils/formatDate'
 import {
-  useAssessmentListQuery,
   useMyAssessmentResultsQuery,
+  usePlayableAssessments,
   RESULT_LEVEL_CONFIG,
 } from '@/domains/assessment'
 
@@ -25,7 +25,7 @@ export default function AssessmentListScreen() {
   const insets = useSafeAreaInsets()
   const isDark = useColorScheme() === 'dark'
 
-  const assessmentsQuery = useAssessmentListQuery()
+  const assessmentsQuery = usePlayableAssessments()
   const { data: assessmentList, isLoading: listLoading } = assessmentsQuery
   const myResultsQuery = useMyAssessmentResultsQuery()
   const { isLoading: resultsLoading } = myResultsQuery
@@ -120,8 +120,7 @@ export default function AssessmentListScreen() {
                     {test.title}
                   </Text>
                   <Text variant="caption" color="tertiary">
-                    Ücretsiz · {test.questionCount} soru · ~{test.estimatedMinutes} dk · Kayıt
-                    gerekmez
+                    Ücretsiz · {test.questionCount} soru · ~{test.estimatedMinutes} dk
                   </Text>
                 </View>
                 <Icon name="ChevronRight" size={16} color={isDark ? '#525252' : '#A3A3A3'} />

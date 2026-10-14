@@ -31,6 +31,7 @@ export function useUploadExpertDocumentMutation(target: UploadTarget) {
   const queryClient = useQueryClient()
 
   return useMutation({
+    meta: { suppressErrorAlert: true },
     mutationFn: async (document: PickedDocument) => {
       // FormData ŞART, JSON değil: uçlar IFormFile bekliyor. Alan adı `file`
       // olmak zorunda — controller parametresi bu adla bağlanıyor, farklı bir

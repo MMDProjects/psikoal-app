@@ -113,12 +113,16 @@ jobs:
       - name: Install
         run: npm ci
 
-      # Temiz klonun gerçekten bundle üretebildiğini kanıtlar. mock-db repo dışındayken
+      # Temiz klonun gerçekten bundle üretebildiğini kanıtlar. Eskiden mock-db repo dışındayken
       # bu adım kırmızı dönerdi; repo-içi taşımanın regresyon siperi budur.
       - name: Expo export (android)
         env:
           EXPO_PUBLIC_API_URL: https://api.example.invalid
           EXPO_PUBLIC_APP_ENV: production
+          EXPO_PUBLIC_SUPPORT_EMAIL: destek@example.invalid
+          EXPO_PUBLIC_PRIVACY_URL: https://example.invalid/gizlilik
+          EXPO_PUBLIC_TERMS_URL: https://example.invalid/kosullar
+          EXPO_PUBLIC_KVKK_URL: https://example.invalid/kvkk
         run: npx expo export --platform android --output-dir dist
 
   enforce-promotion:

@@ -11,6 +11,7 @@ export function useCreateListingMutation() {
   const queryClient = useQueryClient()
 
   return useMutation({
+    meta: { suppressErrorAlert: true },
     mutationFn: async (data: CreateListingRequest) => {
       const raw = await post('/listings', data)
       return ListingSchema.parse(raw)

@@ -11,6 +11,7 @@ import { Text } from '@/core/components/atoms/Text'
 import { BackButton } from '@/core/components/molecules/BackButton'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { CreateListingForm, useCreateListingMutation } from '@/domains/listing'
+import { getErrorMessage } from '@/lib/api'
 
 export default function NewListingScreen() {
   const router = useRouter()
@@ -28,7 +29,7 @@ export default function NewListingScreen() {
     })
   }
 
-  const apiError = error instanceof Error ? error.message : undefined
+  const apiError = error ? getErrorMessage(error) : undefined
 
   return (
     <View className="flex-1 bg-sky-500 dark:bg-sky-950" style={{ overflow: 'hidden' }}>

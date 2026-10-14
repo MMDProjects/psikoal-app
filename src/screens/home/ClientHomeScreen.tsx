@@ -15,13 +15,12 @@ import { HeaderActions } from '@/core/components/molecules/HeaderActions'
 import { HeroQuickActions } from '@/core/components/organisms/HeroQuickActions'
 import { useRefresh } from '@/core/hooks'
 import { useThemeColors } from '@/core/theme'
-import { useAssessmentListQuery, useMyAssessmentResultsQuery } from '@/domains/assessment'
+import { useMyAssessmentResultsQuery, usePlayableAssessments } from '@/domains/assessment'
 import { useAuthStore } from '@/domains/auth'
 import { useBlogListQuery, BlogCarousel } from '@/domains/blog'
 import { useCategoriesQuery } from '@/domains/category'
 import { useMyListingsQuery } from '@/domains/listing'
 import { useUnreadNotificationCount } from '@/domains/notification'
-import { useSuggestionsQuery, SuggestionSlide } from '@/domains/suggestion'
 
 export function ClientHomeScreen() {
   const router = useRouter()
@@ -36,10 +35,7 @@ export function ClientHomeScreen() {
     router.push(url as never)
   }
 
-  const suggestionsQuery = useSuggestionsQuery('client')
-  const suggestions = suggestionsQuery.data
-
-  const assessmentsQuery = useAssessmentListQuery()
+  const assessmentsQuery = usePlayableAssessments()
   const assessmentList = assessmentsQuery.data
   const myResultsQuery = useMyAssessmentResultsQuery()
   const myResultCount = myResultsQuery.data?.meta.total ?? 0
@@ -54,7 +50,6 @@ export function ClientHomeScreen() {
 
   const { isRefreshing, onRefresh } = useRefresh(
     categoriesQuery,
-    suggestionsQuery,
     assessmentsQuery,
     myResultsQuery,
     myListingsQuery,
@@ -88,37 +83,34 @@ export function ClientHomeScreen() {
           firstName={user?.firstName}
           subtitle="Bugün nasıl hissediyorsunuz?"
           textRightInset={108}
-          pages={[
-            ...(suggestions ?? []).map((s) => <SuggestionSlide key={s.id} suggestion={s} />),
-            <HeroQuickActions
-              key="quick-actions"
-              actions={[
-                {
-                  icon: 'Brain',
-                  label: 'Testlerim',
-                  badge: myResultCount,
-                  onPress: () => router.push(lastResult ? '/assessment/list' : '/assessment'),
-                },
-                {
-                  icon: 'FileText',
-                  label: 'İlanlarım',
-                  badge: activeListingCount,
-                  onPress: () => router.push('/(tabs)/offers'),
-                },
-                {
-                  icon: 'PlusCircle',
-                  label: 'Yeni İlan',
-                  onPress: () => goToNewListing(),
-                },
-                {
-                  icon: 'ClipboardList',
-                  label: 'Test Çöz',
-                  onPress: () => router.push('/assessment'),
-                },
-              ]}
-            />,
-          ]}
-        />
+        >
+          <HeroQuickActions
+            actions={[
+              {
+                icon: 'Brain',
+                label: 'Testlerim',
+                badge: myResultCount,
+                onPress: () => router.push(lastResult ? '/assessment/list' : '/assessment'),
+              },
+              {
+                icon: 'FileText',
+                label: 'İlanlarım',
+                badge: activeListingCount,
+                onPress: () => router.push('/(tabs)/offers'),
+              },
+              {
+                icon: 'PlusCircle',
+                label: 'Yeni İlan',
+                onPress: () => goToNewListing(),
+              },
+              {
+                icon: 'ClipboardList',
+                label: 'Test Çöz',
+                onPress: () => router.push('/assessment'),
+              },
+            ]}
+          />
+        </HomeHero>
 
         <View className="pt-2">
           {assessmentList?.map((t, i) => (
@@ -133,7 +125,7 @@ export function ClientHomeScreen() {
                     {t.title}
                   </Text>
                   <Text variant="caption" color="tertiary">
-                    Ücretsiz · {t.questionCount} soru · ~{t.estimatedMinutes} dk · Kayıt gerekmez
+                    Ücretsiz · {t.questionCount} soru · ~{t.estimatedMinutes} dk
                   </Text>
                 </View>
                 <Icon name="ChevronRight" size={16} color={colors.contentDisabled} />

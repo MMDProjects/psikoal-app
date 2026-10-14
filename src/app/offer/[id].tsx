@@ -1,4 +1,4 @@
-import { Alert, ScrollView, View } from 'react-native'
+import { Alert, Pressable, ScrollView, View } from 'react-native'
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -57,7 +57,13 @@ export default function OfferDetailScreen() {
         { text: 'Vazgeç', style: 'cancel' },
         {
           text: 'Kabul Et',
-          onPress: () => acceptOffer(id, { onSuccess: () => router.replace('/(tabs)' as never) }),
+          onPress: () =>
+            acceptOffer(id, {
+              onSuccess: (accepted) =>
+                router.replace(
+                  (accepted.matchId ? `/match/${accepted.matchId}` : '/(tabs)/offers') as never
+                ),
+            }),
         },
       ]
     )
@@ -139,6 +145,18 @@ export default function OfferDetailScreen() {
                     <Text variant="caption" color="secondary" numberOfLines={1}>
                       {offer.expert.title}
                     </Text>
+                  ) : null}
+                  {isClient ? (
+                    <Pressable
+                      onPress={() => router.push(`/expert/${offer.expertId}` as never)}
+                      accessibilityRole="button"
+                      hitSlop={8}
+                      className="mt-1 self-start active:opacity-70"
+                    >
+                      <Text variant="caption" color="brand" className="font-semibold">
+                        Uzmanı İncele
+                      </Text>
+                    </Pressable>
                   ) : null}
                 </View>
               </View>

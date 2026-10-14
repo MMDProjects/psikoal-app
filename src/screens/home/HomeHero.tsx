@@ -1,23 +1,21 @@
 import type { ReactNode } from 'react'
 
-import { Image, View } from 'react-native'
+import { View } from 'react-native'
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
+import { BrandMark } from '@/core/components/atoms/BrandMark'
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Text } from '@/core/components/atoms/Text'
-import { HeroPager } from '@/core/components/organisms/HeroPager'
-
-const LOGO_PLACEHOLDER = require('../../../assets/images/brand/logo-placeholder.png')
 
 export type HomeHeroProps = {
   firstName?: string
   subtitle: string
-  pages: ReactNode[]
+  children: ReactNode
   textRightInset: number
 }
 
-export function HomeHero({ firstName, subtitle, pages, textRightInset }: HomeHeroProps) {
+export function HomeHero({ firstName, subtitle, children, textRightInset }: HomeHeroProps) {
   const insets = useSafeAreaInsets()
 
   return (
@@ -28,14 +26,7 @@ export function HomeHero({ firstName, subtitle, pages, textRightInset }: HomeHer
       <DecorCircles />
 
       <View style={{ paddingRight: textRightInset }}>
-        <View className="self-start rounded-xl bg-white px-3 py-1.5">
-          <Image
-            source={LOGO_PLACEHOLDER}
-            className="h-[34px] w-[146px]"
-            resizeMode="contain"
-            accessibilityLabel="PsikoAl"
-          />
-        </View>
+        <BrandMark size="sm" className="self-start" />
         <Text variant="subheading" className="mt-3 font-bold text-white">
           Merhaba{firstName ? `, ${firstName}` : ''}!
         </Text>
@@ -44,7 +35,7 @@ export function HomeHero({ firstName, subtitle, pages, textRightInset }: HomeHer
         </Text>
       </View>
 
-      <HeroPager pages={pages} />
+      <View className="mt-4">{children}</View>
     </View>
   )
 }

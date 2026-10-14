@@ -19,6 +19,7 @@ import { getFullName, getInitials } from '@/core/utils/personName'
 import { useAuthStore } from '@/domains/auth'
 import { useExpertApprovalGate } from '@/domains/expert'
 import { useListingDetailQuery, useCloseListingMutation, ListingDetail } from '@/domains/listing'
+import { usePushTokenRegistration } from '@/domains/notification'
 import { useListingOffersQuery, useOfferDetailQuery, OFFER_STATUS_CONFIG } from '@/domains/offer'
 
 export default function ListingDetailScreen() {
@@ -33,10 +34,17 @@ export default function ListingDetailScreen() {
   const { data: listing, isLoading, isError } = listingQuery
 
   const listingOffersQuery = useListingOffersQuery(isClient && !!id ? id : '')
-  const { isLoading: offersLoading } = listingOffersQuery
+  const {
+    isLoading: offersLoading,
+    isError: offersError,
+    refetch: refetchOffers,
+  } = listingOffersQuery
   const offers = listingOffersQuery.data?.data ?? []
 
   const { isRefreshing, onRefresh } = useRefresh(listingQuery, listingOffersQuery)
+
+  // Bildirim izni ilk teklif anında istenir (CLAUDE.md kural 7).
+  usePushTokenRegistration(isClient && offers.length > 0)
 
   const hasAlreadySentOffer = !isClient && (listing?.viewerHasOffered ?? false)
   const { data: myOffer } = useOfferDetailQuery(!isClient ? (listing?.viewerOfferId ?? '') : '')
@@ -144,7 +152,18 @@ export default function ListingDetailScreen() {
                     </View>
                   )}
 
-                  {!offersLoading && offers.length === 0 && (
+                  {!offersLoading && offersError && (
+                    <EmptyState
+                      icon="WifiOff"
+                      title="Teklifler yüklenemedi"
+                      description="Bağlantınızı kontrol edip tekrar deneyin."
+                      ctaLabel="Tekrar Dene"
+                      onCta={() => void refetchOffers()}
+                      className="py-4"
+                    />
+                  )}
+
+                  {!offersLoading && !offersError && offers.length === 0 && (
                     <View className="items-center gap-2 py-4">
                       <Icon name="Inbox" size={28} color="#A3A3A3" />
                       <Text variant="caption" color="secondary" align="center">
@@ -153,7 +172,7 @@ export default function ListingDetailScreen() {
                     </View>
                   )}
 
-                  {!offersLoading && offers.length > 0 && (
+                  {!offersLoading && !offersError && offers.length > 0 && (
                     <View>
                       {offers.map((offer, idx) => {
                         const expertInitials = offer.expert?.initials ?? '?'
@@ -177,6 +196,16 @@ export default function ListingDetailScreen() {
                                     {offer.expert.title}
                                   </Text>
                                 ) : null}
+                                <Pressable
+                                  onPress={() => router.push(`/expert/${offer.expertId}` as never)}
+                                  accessibilityRole="button"
+                                  hitSlop={8}
+                                  className="mt-0.5 self-start active:opacity-70"
+                                >
+                                  <Text variant="caption" color="brand" className="font-semibold">
+                                    Uzmanı İncele
+                                  </Text>
+                                </Pressable>
                               </View>
                               {offer.expert?.rating != null && (
                                 <View className="flex-row items-center gap-1">

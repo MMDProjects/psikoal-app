@@ -31,7 +31,6 @@ export const AssessmentAnswerSchema = z.object({
 export const SubmitAssessmentSchema = z.object({
   assessmentId: z.string(),
   answers: z.array(AssessmentAnswerSchema),
-  email: z.string().email().optional(),
 })
 
 export const AssessmentResultSchema = z.object({

@@ -28,7 +28,12 @@ export const MatchSchema = z.object({
       name: z.string(),
       title: z.string(),
       initials: z.string().nullable().optional(),
+      // Uzmanın iletişim bilgisi API tarafından henüz dönülmüyor; geldiğinde
+      // eşleşme ekranı ek değişiklik gerektirmeden gösterir.
+      email: z.string().nullable().optional(),
+      phone: z.string().nullable().optional(),
     })
+    .nullable()
     .optional(),
   listing: z
     .object({

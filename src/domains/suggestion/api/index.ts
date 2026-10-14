@@ -1,1 +1,0 @@
-export { useSuggestionsQuery } from './useSuggestionsQuery'

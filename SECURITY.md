@@ -29,6 +29,6 @@ açık değildir:
 - `EXPO_PUBLIC_*` ön ekli değişkenler bundle içinde görünür — tanım gereği geneldir.
 - Supabase `anon` anahtarı istemcide bulunur; veri erişimini **RLS politikaları** korur.
   RLS'i atlatan bir erişim bulursanız bu **geçerli bir bildirimdir**, lütfen iletin.
-- `mock-db/` altındaki veriler tamamen kurgusaldır, gerçek kullanıcı verisi içermez.
+- Test fikstürleri (`src/**/__fixtures__`) tamamen kurgusaldır, gerçek kullanıcı verisi içermez.
 
 Backend ve veritabanı `MMDProjects/psikoal-backend` (private) reposundadır.

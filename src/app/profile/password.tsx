@@ -14,6 +14,7 @@ import { InputField } from '@/core/components/molecules/InputField'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { useChangePasswordMutation, ChangePasswordSchema } from '@/domains/auth'
+import { getErrorMessage } from '@/lib/api'
 
 export default function PasswordScreen() {
   const router = useRouter()
@@ -31,7 +32,7 @@ export default function PasswordScreen() {
     defaultValues: { currentPassword: '', newPassword: '', confirmPassword: '' },
   })
 
-  const apiError = error instanceof Error ? error.message : undefined
+  const apiError = error ? getErrorMessage(error) : undefined
 
   const onSubmit = (data: ChangePasswordRequest) => {
     changePassword(data, {

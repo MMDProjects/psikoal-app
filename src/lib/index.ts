@@ -3,6 +3,9 @@ export { env } from './env'
 export {
   ApiError,
   NetworkError,
+  ERROR_MESSAGES,
+  getErrorMessage,
+  toApiError,
   registerUnauthenticatedHandler,
   get,
   post,

@@ -114,7 +114,7 @@ export default function MatchesScreen() {
                   ? isExpert
                     ? 'Fırsatlar sekmesinden ilanları inceleyin ve teklif gönderin.'
                     : 'İlanlarınıza gelen teklifleri kabul ettiğinizde eşleşmeler burada görünür.'
-                  : ''
+                  : 'Tamamlanan veya sonlandırılan eşleşmeleriniz burada listelenir.'
               }
               ctaLabel={
                 tab === 'active' ? (isExpert ? "İlan Feed'ine Git" : 'İlanlarıma Git') : undefined

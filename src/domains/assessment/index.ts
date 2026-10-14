@@ -26,6 +26,7 @@ export type {
   AnswerOption,
 } from './types/assessment.types'
 export { useAssessmentEngine } from './hooks/useAssessmentEngine'
+export { usePlayableAssessments } from './hooks/usePlayableAssessments'
 export { AssessmentResultCard } from './components/AssessmentResultCard'
 export type { AssessmentResultCardProps } from './components/AssessmentResultCard'
 export { AssessmentResultSummary } from './components/AssessmentResultSummary'

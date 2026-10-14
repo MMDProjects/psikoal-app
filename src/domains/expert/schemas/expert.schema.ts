@@ -7,8 +7,8 @@ export const ExpertOnboardingSchema = z.object({
   bio: z.string().min(50, 'Biyografi en az 50 karakter olmalı').max(1000),
   avatarUrl: z.string().url().nullable().optional(),
   education: z.string().nullable().optional(),
-  cvUrl: z.string().nullable().optional(),
-  certificates: z.array(z.string()).optional(),
+  // cvUrl / certificates burada YOK: backend profil POST/PATCH'te yok sayıyor;
+  // belgeler yalnız /experts/profile/cv ve /certificates uçlarıyla yüklenir.
   personalWebsite: z
     .string()
     .url('Geçerli bir URL giriniz')

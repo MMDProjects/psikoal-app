@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Image, Pressable, View } from 'react-native'
+import { Pressable, View } from 'react-native'
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -8,14 +8,13 @@ import { useRouter } from 'expo-router'
 
 import type { IconName } from '@/core/components/atoms/Icon'
 
+import { BrandMark } from '@/core/components/atoms/BrandMark'
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Icon } from '@/core/components/atoms/Icon'
 import { Text } from '@/core/components/atoms/Text'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { cn } from '@/core/utils/cn'
 import { useOnboardingStore } from '@/store/onboardingStore'
-
-const LOGO_PLACEHOLDER = require('../../../assets/images/brand/logo-placeholder.png')
 
 type WelcomeSlide = {
   icon: IconName
@@ -34,7 +33,7 @@ const SLIDES: WelcomeSlide[] = [
   {
     icon: 'ClipboardList',
     title: 'Önce kendini keşfet',
-    body: 'Ücretsiz psikolojik testlerle nasıl hissettiğini anla. Kayıt gerekmez, sonuçlarını dilersen ilanına ekleyebilirsin.',
+    body: 'Ücretsiz psikolojik testlerle nasıl hissettiğini anla. Sonuçların hesabında saklanır, dilersen ilanına ekleyebilirsin.',
   },
   {
     icon: 'ShieldCheck',
@@ -82,14 +81,7 @@ export default function WelcomeScreen() {
       </Pressable>
 
       <View className="items-center" style={{ paddingTop: insets.top + 12 }}>
-        <View className="rounded-xl bg-white px-3 py-1.5">
-          <Image
-            source={LOGO_PLACEHOLDER}
-            style={{ width: 146, height: 34 }}
-            resizeMode="contain"
-            accessibilityLabel="PsikoAl"
-          />
-        </View>
+        <BrandMark size="sm" />
       </View>
 
       <View className="flex-1 justify-center gap-6 px-8" style={{ paddingBottom: bottomBarHeight }}>
