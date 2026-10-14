@@ -33,7 +33,7 @@ const SLIDES: WelcomeSlide[] = [
   {
     icon: 'ClipboardList',
     title: 'Önce kendini keşfet',
-    body: 'Ücretsiz psikolojik testlerle nasıl hissettiğini anla. Kayıt gerekmez, sonuçlarını dilersen ilanına ekleyebilirsin.',
+    body: 'Ücretsiz psikolojik testlerle nasıl hissettiğini anla. Sonuçların hesabında saklanır, dilersen ilanına ekleyebilirsin.',
   },
   {
     icon: 'ShieldCheck',

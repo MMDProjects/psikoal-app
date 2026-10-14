@@ -125,7 +125,7 @@ export function ClientHomeScreen() {
                     {t.title}
                   </Text>
                   <Text variant="caption" color="tertiary">
-                    Ücretsiz · {t.questionCount} soru · ~{t.estimatedMinutes} dk · Kayıt gerekmez
+                    Ücretsiz · {t.questionCount} soru · ~{t.estimatedMinutes} dk
                   </Text>
                 </View>
                 <Icon name="ChevronRight" size={16} color={colors.contentDisabled} />
