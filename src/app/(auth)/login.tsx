@@ -1,4 +1,4 @@
-import { Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native'
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
@@ -8,13 +8,12 @@ import { useRouter } from 'expo-router'
 
 import type { LoginRequest } from '@/domains/auth'
 
+import { BrandMark } from '@/core/components/atoms/BrandMark'
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Text } from '@/core/components/atoms/Text'
 import { InputField } from '@/core/components/molecules/InputField'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { LoginRequestSchema, useLoginMutation } from '@/domains/auth'
-
-const LOGO_PLACEHOLDER = require('../../../assets/images/brand/logo-placeholder.png')
 
 export default function LoginScreen() {
   const router = useRouter()
@@ -60,14 +59,7 @@ export default function LoginScreen() {
           keyboardShouldPersistTaps="handled"
         >
           <View className="mb-10 items-center gap-3">
-            <View className="rounded-xl bg-white px-4 py-2">
-              <Image
-                source={LOGO_PLACEHOLDER}
-                style={{ width: 172, height: 40 }}
-                resizeMode="contain"
-                accessibilityLabel="PsikoAl"
-              />
-            </View>
+            <BrandMark />
             <Text variant="body" className="text-sky-100" align="center">
               Psikoloğunuza ulaşmanın en kolay yolu
             </Text>
