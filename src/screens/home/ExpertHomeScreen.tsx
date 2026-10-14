@@ -47,7 +47,6 @@ export function ExpertHomeScreen() {
   const listingsQuery = useListingListQuery(filters, sort)
   const { isLoading, isError, refetch } = listingsQuery
   const listings = listingsQuery.data?.data ?? []
-  const listingCount = listingsQuery.data?.meta.total ?? 0
 
   const { isRefreshing, onRefresh } = useRefresh(listingsQuery, offersQuery, matchesQuery)
 
@@ -91,11 +90,6 @@ export function ExpertHomeScreen() {
             >
               <HeroQuickActions
                 actions={[
-                  {
-                    icon: 'Briefcase',
-                    label: 'Fırsatlar',
-                    badge: listingCount,
-                  },
                   {
                     icon: 'SendHorizonal',
                     label: 'Tekliflerim',
