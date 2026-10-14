@@ -12,6 +12,7 @@ export function useLoginMutation() {
   const { setAuth } = useAuthStore()
 
   return useMutation({
+    meta: { suppressErrorAlert: true },
     mutationFn: async (credentials: LoginRequest) => {
       const raw = await post('/auth/login', credentials)
       return LoginResponseSchema.parse(raw)

@@ -16,6 +16,7 @@ import { InputField } from '@/core/components/molecules/InputField'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { ForgotPasswordSchema, useForgotPasswordMutation } from '@/domains/auth'
+import { getErrorMessage } from '@/lib/api'
 
 export default function ForgotPasswordScreen() {
   const insets = useSafeAreaInsets()
@@ -33,7 +34,7 @@ export default function ForgotPasswordScreen() {
     defaultValues: { email: '' },
   })
 
-  const apiErrorMessage = error instanceof Error ? error.message : undefined
+  const apiErrorMessage = error ? getErrorMessage(error) : undefined
 
   const onSubmit = (data: ForgotPasswordRequest) => {
     forgotPassword(data, { onSuccess: () => setSent(true) })

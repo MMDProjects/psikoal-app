@@ -19,6 +19,7 @@ import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { StepProgress } from '@/core/components/molecules/StepProgress'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { RegisterRequestSchema, useRegisterMutation, RoleCard } from '@/domains/auth'
+import { getErrorMessage } from '@/lib/api'
 import { useOnboardingStore } from '@/store/onboardingStore'
 
 const TOTAL_STEPS = 2
@@ -66,7 +67,7 @@ export default function RegisterScreen() {
     )
   }
 
-  const apiErrorMessage = error instanceof Error ? error.message : undefined
+  const apiErrorMessage = error ? getErrorMessage(error) : undefined
   const bottomBarHeight = 56 + insets.bottom
 
   return (

@@ -6,6 +6,7 @@ import { post } from '@/lib/api'
 
 export function useForgotPasswordMutation() {
   return useMutation({
+    meta: { suppressErrorAlert: true },
     mutationFn: async (data: ForgotPasswordRequest) => {
       return post<{ success: boolean }>('/auth/forgot-password', data)
     },

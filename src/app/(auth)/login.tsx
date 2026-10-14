@@ -14,6 +14,7 @@ import { Text } from '@/core/components/atoms/Text'
 import { InputField } from '@/core/components/molecules/InputField'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { LoginRequestSchema, useLoginMutation } from '@/domains/auth'
+import { getErrorMessage } from '@/lib/api'
 
 export default function LoginScreen() {
   const router = useRouter()
@@ -35,7 +36,7 @@ export default function LoginScreen() {
     })
   }
 
-  const apiErrorMessage = error instanceof Error ? error.message : undefined
+  const apiErrorMessage = error ? getErrorMessage(error) : undefined
   const bottomBarHeight = 56 + insets.bottom
 
   return (

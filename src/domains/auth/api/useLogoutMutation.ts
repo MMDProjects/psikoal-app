@@ -11,6 +11,7 @@ export function useLogoutMutation() {
   const { clearAuth } = useAuthStore()
 
   return useMutation({
+    meta: { suppressErrorAlert: true },
     mutationFn: async () => {
       await unregisterPushToken()
       try {

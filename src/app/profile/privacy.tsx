@@ -33,8 +33,6 @@ export default function PrivacyScreen() {
           onPress: () =>
             freezeAccount(undefined, {
               onSuccess: goToLogin,
-              onError: () =>
-                Alert.alert('İşlem Başarısız', 'Hesap dondurulamadı. Lütfen tekrar deneyin.'),
             }),
         },
       ]
@@ -62,8 +60,6 @@ export default function PrivacyScreen() {
                   onPress: () =>
                     deleteAccount(undefined, {
                       onSuccess: goToLogin,
-                      onError: () =>
-                        Alert.alert('İşlem Başarısız', 'Hesap silinemedi. Lütfen tekrar deneyin.'),
                     }),
                 },
               ]

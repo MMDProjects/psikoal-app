@@ -28,6 +28,7 @@ import {
   useUploadExpertDocumentMutation,
   pickExpertDocument,
 } from '@/domains/expert'
+import { getErrorMessage } from '@/lib/api'
 
 const TOTAL_STEPS = 7
 const STEP_LABELS = [
@@ -212,7 +213,7 @@ export default function ExpertOnboardingScreen() {
     )
   }
 
-  const apiErrorMessage = error instanceof Error ? error.message : undefined
+  const apiErrorMessage = error ? getErrorMessage(error) : undefined
   const bottomBarHeight = 56 + insets.bottom
 
   return (

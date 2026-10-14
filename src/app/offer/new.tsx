@@ -18,6 +18,7 @@ import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { useExpertApprovalGate } from '@/domains/expert'
 import { useSendOfferMutation, SendOfferSchema } from '@/domains/offer'
+import { getErrorMessage } from '@/lib/api'
 
 export default function NewOfferScreen() {
   const router = useRouter()
@@ -54,7 +55,7 @@ export default function NewOfferScreen() {
     })
   }
 
-  const apiError = error instanceof Error ? error.message : undefined
+  const apiError = error ? getErrorMessage(error) : undefined
 
   if (!canSendOffer) {
     return (

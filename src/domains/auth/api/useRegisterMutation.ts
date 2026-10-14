@@ -12,6 +12,7 @@ export function useRegisterMutation() {
   const { setAuth } = useAuthStore()
 
   return useMutation({
+    meta: { suppressErrorAlert: true },
     mutationFn: async (data: RegisterRequest) => {
       const raw = await post('/auth/register', data)
       return LoginResponseSchema.parse(raw)

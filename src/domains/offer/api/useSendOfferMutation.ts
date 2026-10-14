@@ -12,6 +12,7 @@ export function useSendOfferMutation() {
   const queryClient = useQueryClient()
 
   return useMutation({
+    meta: { suppressErrorAlert: true },
     mutationFn: async (data: SendOfferRequest) => {
       const raw = await post('/offers', data)
       return OfferSchema.parse(raw)
