@@ -33,7 +33,11 @@ export default function ListingDetailScreen() {
   const { data: listing, isLoading, isError } = listingQuery
 
   const listingOffersQuery = useListingOffersQuery(isClient && !!id ? id : '')
-  const { isLoading: offersLoading } = listingOffersQuery
+  const {
+    isLoading: offersLoading,
+    isError: offersError,
+    refetch: refetchOffers,
+  } = listingOffersQuery
   const offers = listingOffersQuery.data?.data ?? []
 
   const { isRefreshing, onRefresh } = useRefresh(listingQuery, listingOffersQuery)
@@ -144,7 +148,18 @@ export default function ListingDetailScreen() {
                     </View>
                   )}
 
-                  {!offersLoading && offers.length === 0 && (
+                  {!offersLoading && offersError && (
+                    <EmptyState
+                      icon="WifiOff"
+                      title="Teklifler yüklenemedi"
+                      description="Bağlantınızı kontrol edip tekrar deneyin."
+                      ctaLabel="Tekrar Dene"
+                      onCta={() => void refetchOffers()}
+                      className="py-4"
+                    />
+                  )}
+
+                  {!offersLoading && !offersError && offers.length === 0 && (
                     <View className="items-center gap-2 py-4">
                       <Icon name="Inbox" size={28} color="#A3A3A3" />
                       <Text variant="caption" color="secondary" align="center">
@@ -153,7 +168,7 @@ export default function ListingDetailScreen() {
                     </View>
                   )}
 
-                  {!offersLoading && offers.length > 0 && (
+                  {!offersLoading && !offersError && offers.length > 0 && (
                     <View>
                       {offers.map((offer, idx) => {
                         const expertInitials = offer.expert?.initials ?? '?'

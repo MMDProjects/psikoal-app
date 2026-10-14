@@ -33,7 +33,7 @@ export function ClientListingsScreen() {
   const [filter, setFilter] = useState<ListingStatus | 'ALL'>('ALL')
 
   const myListingsQuery = useMyListingsQuery(filter === 'ALL' ? undefined : filter)
-  const { isLoading } = myListingsQuery
+  const { isLoading, isError, refetch } = myListingsQuery
   const { isRefreshing, onRefresh } = useRefresh(myListingsQuery)
 
   const listings = myListingsQuery.data?.data ?? []
@@ -58,7 +58,7 @@ export function ClientListingsScreen() {
       />
 
       <FlatList
-        data={!isLoading ? listings : []}
+        data={!isLoading && !isError ? listings : []}
         keyExtractor={(item) => item.id}
         contentContainerClassName="pb-6"
         showsVerticalScrollIndicator={false}
@@ -103,6 +103,14 @@ export function ClientListingsScreen() {
                 </View>
               ))}
             </View>
+          ) : isError ? (
+            <EmptyState
+              icon="WifiOff"
+              title="Yüklenemedi"
+              description="İlanlarınız alınamadı. Bağlantınızı kontrol edip tekrar deneyin."
+              ctaLabel="Tekrar Dene"
+              onCta={() => void refetch()}
+            />
           ) : (
             <EmptyState
               icon="FileText"
