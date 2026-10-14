@@ -15,7 +15,7 @@ import { BackButton } from '@/core/components/molecules/BackButton'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { StepProgress } from '@/core/components/molecules/StepProgress'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
-import { useUpdateProfileMutation } from '@/domains/auth'
+import { useAuthStore, useChangeAvatar, useUpdateProfileMutation } from '@/domains/auth'
 import {
   useCreateExpertProfileMutation,
   OnboardingStepTitle,
@@ -82,6 +82,9 @@ export default function ExpertOnboardingScreen() {
   const [bioError, setBioError] = useState<string | undefined>()
   const [education, setEducation] = useState('')
   const [personalWebsite, setPersonalWebsite] = useState('')
+
+  const avatarUrl = useAuthStore((s) => s.user?.avatarUrl ?? null)
+  const { changeAvatar, isUploading: isUploadingAvatar } = useChangeAvatar()
 
   const isPending = isCreatingProfile || isUpdatingAuthProfile
 
@@ -302,7 +305,13 @@ export default function ExpertOnboardingScreen() {
             />
           )}
 
-          {step === 7 && <OnboardingStepPhoto />}
+          {step === 7 && (
+            <OnboardingStepPhoto
+              avatarUrl={avatarUrl}
+              isUploading={isUploadingAvatar}
+              onPickPhoto={() => void changeAvatar()}
+            />
+          )}
 
           {apiErrorMessage && (
             <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-950">

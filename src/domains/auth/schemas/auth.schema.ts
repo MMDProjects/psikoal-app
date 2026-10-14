@@ -37,6 +37,10 @@ export const AuthUserSchema = z.object({
   shareLocation: z.boolean().optional(),
 })
 
+export const AvatarUploadResponseSchema = z.object({
+  avatarUrl: z.string().url(),
+})
+
 export const LoginResponseSchema = z.object({
   user: AuthUserSchema,
   tokens: AuthTokensSchema,

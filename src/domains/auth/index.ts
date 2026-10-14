@@ -8,7 +8,16 @@ export {
   useForgotPasswordMutation,
   useFreezeAccountMutation,
   useDeleteAccountMutation,
+  useUploadAvatarMutation,
 } from './api'
+export { useChangeAvatar } from './hooks/useChangeAvatar'
+export {
+  pickAvatarImage,
+  resolveImageContentType,
+  AVATAR_CONTENT_TYPES,
+  AVATAR_MAX_BYTES,
+} from './utils/pickAvatarImage'
+export type { PickedImage, PickImageResult } from './utils/pickAvatarImage'
 export {
   LoginRequestSchema,
   RegisterRequestSchema,
