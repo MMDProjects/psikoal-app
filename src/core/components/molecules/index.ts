@@ -1,4 +1,5 @@
 export * from './BackButton'
+export * from './CheckboxRow'
 export * from './DiscoverMore'
 export * from './EmptyState'
 export * from './HeaderActions'

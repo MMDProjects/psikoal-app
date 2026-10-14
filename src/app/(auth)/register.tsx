@@ -14,12 +14,14 @@ import type { UserRole } from '@/domains/auth'
 import { DecorCircles } from '@/core/components/atoms/DecorCircles'
 import { Text } from '@/core/components/atoms/Text'
 import { BackButton } from '@/core/components/molecules/BackButton'
+import { CheckboxRow } from '@/core/components/molecules/CheckboxRow'
 import { InputField } from '@/core/components/molecules/InputField'
 import { ScreenTitle } from '@/core/components/molecules/ScreenTitle'
 import { StepProgress } from '@/core/components/molecules/StepProgress'
 import { BottomActionBar } from '@/core/components/organisms/BottomActionBar'
 import { RegisterRequestSchema, useRegisterMutation, RoleCard } from '@/domains/auth'
 import { getErrorMessage } from '@/lib/api'
+import { openLegalDocument } from '@/lib/externalLinks'
 import { useOnboardingStore } from '@/store/onboardingStore'
 
 const TOTAL_STEPS = 2
@@ -38,11 +40,22 @@ export default function RegisterScreen() {
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<RegisterRequest>({
     resolver: zodResolver(RegisterRequestSchema),
-    defaultValues: { email: '', password: '', firstName: '', lastName: '', role: 'client' },
+    defaultValues: {
+      email: '',
+      password: '',
+      firstName: '',
+      lastName: '',
+      role: 'client',
+      termsAccepted: false,
+      healthDataConsent: false,
+    },
   })
+
+  const hasAllConsents = watch('termsAccepted') && watch('healthDataConsent')
 
   const onSubmit = (data: RegisterRequest) => {
     if (!role) return
@@ -201,6 +214,69 @@ export default function RegisterScreen() {
                 )}
               />
 
+              <View className="mt-1 gap-3">
+                <Controller
+                  control={control}
+                  name="termsAccepted"
+                  render={({ field: { onChange, value } }) => (
+                    <CheckboxRow
+                      testID="register-terms"
+                      tone="onBrand"
+                      checked={value}
+                      onToggle={() => onChange(!value)}
+                      accessibilityLabel="Kullanım Koşulları ve Gizlilik Politikası'nı okudum, kabul ediyorum"
+                    >
+                      <Text
+                        variant="caption"
+                        className="font-semibold text-white underline"
+                        onPress={() => void openLegalDocument('terms')}
+                      >
+                        Kullanım Koşulları
+                      </Text>
+                      {' ve '}
+                      <Text
+                        variant="caption"
+                        className="font-semibold text-white underline"
+                        onPress={() => void openLegalDocument('privacy')}
+                      >
+                        Gizlilik Politikası
+                      </Text>
+                      {"'nı okudum, kabul ediyorum."}
+                    </CheckboxRow>
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name="healthDataConsent"
+                  render={({ field: { onChange, value } }) => (
+                    <CheckboxRow
+                      testID="register-health-consent"
+                      tone="onBrand"
+                      checked={value}
+                      onToggle={() => onChange(!value)}
+                      accessibilityLabel="Sağlık verilerimin işlenmesine açık rıza veriyorum"
+                    >
+                      {
+                        'Psikolojik test sonuçlarım ve ilanlarımdaki bilgiler dahil sağlık verilerimin, '
+                      }
+                      <Text
+                        variant="caption"
+                        className="font-semibold text-white underline"
+                        onPress={() => void openLegalDocument('kvkk')}
+                      >
+                        KVKK Aydınlatma Metni
+                      </Text>
+                      {' kapsamında uzmanlarla eşleşme amacıyla işlenmesine açık rıza veriyorum.'}
+                    </CheckboxRow>
+                  )}
+                />
+                {errors.termsAccepted?.message || errors.healthDataConsent?.message ? (
+                  <Text variant="caption" className="text-red-100">
+                    {errors.termsAccepted?.message ?? errors.healthDataConsent?.message}
+                  </Text>
+                ) : null}
+              </View>
+
               {apiErrorMessage && (
                 <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-950">
                   <Text variant="caption" className="text-red-600 dark:text-red-300">
@@ -240,6 +316,7 @@ export default function RegisterScreen() {
                     onPress: handleSubmit(onSubmit),
                     variant: 'inverse',
                     isLoading: isPending,
+                    isDisabled: !hasAllConsents,
                     loadingLabel: 'Kayıt yapılıyor...',
                   },
                 ]

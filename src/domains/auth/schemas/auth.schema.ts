@@ -13,6 +13,14 @@ export const RegisterRequestSchema = z.object({
   firstName: z.string().min(2, 'Ad en az 2 karakter olmalı'),
   lastName: z.string().min(2, 'Soyad en az 2 karakter olmalı'),
   role: UserRoleSchema,
+  // KVKK: iki onay da zorunlu ve ayrı ayrı alınır (sözleşme §1). Backend ikisi
+  // de true değilse 400 döner; burada da aynı kural, gönderimden önce.
+  termsAccepted: z
+    .boolean()
+    .refine((value) => value, 'Kullanım Koşulları ve Gizlilik Politikası onayı zorunludur'),
+  healthDataConsent: z
+    .boolean()
+    .refine((value) => value, 'Sağlık verilerinizin işlenmesine açık rıza zorunludur'),
 })
 
 export const AuthTokensSchema = z.object({
